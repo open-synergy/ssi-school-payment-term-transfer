@@ -186,6 +186,18 @@ class SchoolPaymentTermTransferLine(models.Model):
         leaves a line that looks fully transferred but technically
         is not, or vice versa.
 
+        ``currency_id`` is a related field on ``transfer_id``: a
+        newly added o2m line has no ``transfer_id`` yet while the
+        form is still being filled in, so ``currency_id.rounding``
+        reads as ``0.0`` at that point. ``float_is_zero`` asserts its
+        ``precision_rounding`` is strictly positive, so passing the
+        raw rounding through unguarded would crash on every new line
+        before the user finishes the form. Falling back to ``0.01``
+        (same fallback core uses for the same reason, see
+        ``odoo/addons/payment/wizards/payment_link_wizard.py:49``)
+        keeps the compute safe without changing the result once
+        ``transfer_id`` -- and therefore a real currency -- is set.
+
         :return: None
         """
         for record in self:
@@ -193,7 +205,7 @@ class SchoolPaymentTermTransferLine(models.Model):
             record.amount_after = amount_after
             record.full_transfer = float_is_zero(
                 amount_after,
-                precision_rounding=record.currency_id.rounding,
+                precision_rounding=record.currency_id.rounding or 0.01,
             )
 
     @api.constrains("amount")

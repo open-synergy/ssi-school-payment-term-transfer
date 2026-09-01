@@ -15,11 +15,17 @@ class TestUiSchoolPaymentTermTransfer(HttpSavepointCase):
     def setUpClass(cls):
         """Create the enrollment, terms, and fixture documents for the tours.
 
-        The enrollment is forced to ``open`` directly through the ORM --
-        exercising its own approval workflow is out of scope for this
-        module's tours. The edit/delete fixture documents get
-        ``user_id`` set explicitly to ``base.user_admin``: ``cls.env``
-        runs as superuser, and
+        The academic term's enrollment window is opened first through
+        its public ``action_open_enrollment()`` (see
+        ``ssi_school/tests/test_ui_school_academic_term.py``) --
+        ``school_enrollment._check_enrollment_window`` rejects an
+        enrollment reaching ``open`` while
+        ``academic_term_id.enrollment_state`` is still the model's
+        default ``close``. Only then is the enrollment itself forced
+        to ``open`` directly through the ORM -- exercising its own
+        approval workflow is out of scope for this module's tours. The
+        edit/delete fixture documents get ``user_id`` set explicitly
+        to ``base.user_admin``: ``cls.env`` runs as superuser, and
         ``school_payment_term_transfer_internal_user_rule`` would
         otherwise hide them from the ``admin`` session the tours log
         in as.
@@ -87,6 +93,7 @@ class TestUiSchoolPaymentTermTransfer(HttpSavepointCase):
                 "student_id": student.id,
             }
         )
+        academic_term.action_open_enrollment()
         cls.tour_enrollment.write({"state": "open"})
         account_type_income = cls.env.ref("account.data_account_type_revenue")
         income_account = cls.env["account.account"].create(
