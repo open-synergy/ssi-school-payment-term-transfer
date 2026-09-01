@@ -21,11 +21,33 @@ class TestUiSchoolPaymentTermTransfer(HttpSavepointCase):
         ``school_enrollment._check_enrollment_window`` rejects an
         enrollment reaching ``open`` while
         ``academic_term_id.enrollment_state`` is still the model's
-        default ``close``. Only then is the enrollment itself forced
-        to ``open`` directly through the ORM -- exercising its own
-        approval workflow is out of scope for this module's tours. The
-        edit/delete fixture documents get ``user_id`` set explicitly
-        to ``base.user_admin``: ``cls.env`` runs as superuser, and
+        default ``close``.
+
+        The enrollment itself is then given a literal ``name`` *before*
+        being opened, and is opened through its own
+        ``action_open()`` (``mixin.transaction_open``,
+        ``_after_approved_method = "action_open"`` on
+        ``school_enrollment``) with ``bypass_policy_check`` in the
+        context -- exercising its own approval workflow is out of
+        scope for this module's tours. ``write({"state": "open"})``
+        is deliberately NOT used: it skips ``sudo()``, the
+        ``_run_pre_open_check``/``_run_post_open_action`` decorator
+        hooks, and -- the part that matters for the create tour's
+        many2one dropdown below -- ``_prepare_open_data()``'s call to
+        ``_create_sequence()`` (see ``odoo-development-ui-test`` skill,
+        ``structure-and-runner.md`` §"Prasyarat state fixture", which
+        documents this exact PR). Skipping ``_create_sequence()``
+        leaves ``name`` at its default ``"/"``, and ``name_get()``
+        (``ssi_transaction_mixin/models/mixin_transaction.py:194-202``)
+        then reports every such record as ``"*" + id`` -- indistinguishable
+        from the m2o widget's own "Create '...'" entry. Pre-setting
+        ``name`` to a literal string (checked by
+        ``_create_sequence()`` against the sentinel ``"/"``) also
+        skips consuming an ``ir.sequence`` number, avoiding a
+        year-dependent ``display_name`` that a tour could not match
+        with a literal selector. The edit/delete fixture documents get
+        ``user_id`` set explicitly to ``base.user_admin``: ``cls.env``
+        runs as superuser, and
         ``school_payment_term_transfer_internal_user_rule`` would
         otherwise hide them from the ``admin`` session the tours log
         in as.
@@ -94,7 +116,8 @@ class TestUiSchoolPaymentTermTransfer(HttpSavepointCase):
             }
         )
         academic_term.action_open_enrollment()
-        cls.tour_enrollment.write({"state": "open"})
+        cls.tour_enrollment.write({"name": "TOUR PTT Enrollment"})
+        cls.tour_enrollment.with_context(bypass_policy_check=True).action_open()
         account_type_income = cls.env.ref("account.data_account_type_revenue")
         income_account = cls.env["account.account"].create(
             {

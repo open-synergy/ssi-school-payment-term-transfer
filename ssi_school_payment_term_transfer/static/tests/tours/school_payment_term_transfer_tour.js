@@ -61,12 +61,12 @@ odoo.define(
                     content: "Select the Enrollment",
                     trigger: ".o_field_many2one[name='enrollment_id'] input",
                     extra_trigger: ".o_form_view.o_form_editable",
-                    run: "text TOUR PTT Student",
+                    run: "text TOUR PTT Enrollment",
                 },
                 {
                     content: "Pick the Enrollment from the dropdown",
                     trigger:
-                        ".ui-autocomplete .ui-menu-item a:contains(TOUR PTT Student)",
+                        ".ui-autocomplete .ui-menu-item a:contains(TOUR PTT Enrollment)",
                     in_modal: false,
                 },
                 {
@@ -231,7 +231,8 @@ odoo.define(
                 // Flow 3 — Change the Note field
                 {
                     content: "Fill in Note",
-                    trigger: ".o_field_widget[name='note'] textarea",
+                    trigger:
+                        ".o_notebook .tab-pane.active textarea.o_field_widget[name='note']",
                     extra_trigger: ".o_form_view.o_form_editable",
                     run: "text Edited via tour",
                 },
