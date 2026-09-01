@@ -220,7 +220,7 @@ class TestUiSchoolPaymentTermTransfer(HttpSavepointCase):
         # and Restart every fixture below, and is the approval
         # template's approver.
         cls.tour_cancel_reason = cls.env["base.cancel_reason"].create(
-            {"name": "TOUR PTT Cancel Reason"}
+            {"name": "TOUR PTT Cancel Reason", "code": "/"}
         )
 
         def _create_transfer_doc(reason_name, detail_name, amount=25000.0):

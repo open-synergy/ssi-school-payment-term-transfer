@@ -599,7 +599,7 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "pt3a_doc"
         values:
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           enrollment_id: "REC: pt3_enrollment.id"
           reason_id: "REC: pt3_reason.id"
           source_term_id: "REC: pt3a_source_term.id"
@@ -736,7 +736,7 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "pt3b_doc"
         values:
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           enrollment_id: "REC: pt3_enrollment.id"
           reason_id: "REC: pt3_reason.id"
           source_term_id: "REC: pt3b_source_term.id"
@@ -833,7 +833,7 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "pt3c_doc"
         values:
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           enrollment_id: "REC: pt3_enrollment.id"
           reason_id: "REC: pt3_reason.id"
           source_term_id: "REC: pt3c_source_term.id"
@@ -945,7 +945,7 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "pt3d_doc"
         values:
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           enrollment_id: "REC: pt3_enrollment.id"
           reason_id: "REC: pt3_reason.id"
           source_term_id: "REC: pt3d_source_term.id"
@@ -1061,7 +1061,7 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "pt3e_doc"
         values:
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           enrollment_id: "REC: pt3_enrollment.id"
           reason_id: "REC: pt3_reason.id"
           source_term_id: "REC: pt3e_source_term.id"
@@ -1158,7 +1158,7 @@ scenarios:
           grade_id: "REC: pt3_grade.id"
           grade_class_id: "REC: pt3_grade_class.id"
           student_id: "REC: pt3inv_student.id"
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           currency_id: "REC: company.currency_id.id"
           receivable_journal_id: "REC: pt3inv_journal.id"
           receivable_account_id: "REC: pt3inv_receivable_account.id"
@@ -1230,7 +1230,7 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "pt3f_doc"
         values:
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           enrollment_id: "REC: pt3inv_enrollment.id"
           reason_id: "REC: pt3_reason.id"
           source_term_id: "REC: pt3f_source_term.id"
@@ -1289,7 +1289,7 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "pt3g_doc"
         values:
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           enrollment_id: "REC: pt3inv_enrollment.id"
           reason_id: "REC: pt3_reason.id"
           source_term_id: "REC: pt3g_source_term.id"
@@ -1376,7 +1376,7 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "pt3h_doc_1"
         values:
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           enrollment_id: "REC: pt3_enrollment.id"
           reason_id: "REC: pt3_reason.id"
           source_term_id: "REC: pt3h_source_term.id"
@@ -1407,7 +1407,7 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "pt3h_doc_2"
         values:
-          user_id: "REF: base.user_admin.id"
+          user_id: "REF: base.user_admin"
           enrollment_id: "REC: pt3_enrollment.id"
           reason_id: "REC: pt3_reason.id"
           source_term_id: "REC: pt3h_source_term.id"
