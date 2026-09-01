@@ -137,8 +137,15 @@ odoo.define(
                 },
                 {
                     content: "Commit the line by clicking another cell",
-                    trigger:
-                        ".o_data_row:contains(TOUR PTT Detail Create) .o_field_cell[name='amount_before']",
+                    // The row is still `.o_selected_row` at this point, and
+                    // `source_detail_id` (editable m2o) renders as an input
+                    // widget rather than plain text while selected, so
+                    // `:contains(TOUR PTT Detail Create)` cannot match yet.
+                    // Anchor on the currently selected row instead. The
+                    // `name` attribute lives on the inner field widget
+                    // (`.o_field_widget`), not on the `<td>` itself -- 14.0
+                    // `<td>` carries no `name` attribute at all.
+                    trigger: ".o_selected_row .o_field_widget[name='amount_before']",
                 },
 
                 // Flow 10 — Click Save
