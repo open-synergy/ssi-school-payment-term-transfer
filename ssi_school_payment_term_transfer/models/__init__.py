@@ -5,3 +5,4 @@
 from . import school_payment_term_transfer_reason  # noqa: F401
 from . import school_payment_term_transfer  # noqa: F401
 from . import school_payment_term_transfer_line  # noqa: F401
+from . import school_enrollment  # noqa: F401

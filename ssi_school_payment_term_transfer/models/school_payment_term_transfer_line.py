@@ -302,3 +302,49 @@ Solution: Select a different Source Detail, or edit the existing line instead
                     )
                 )
                 raise ValidationError(error_message)
+
+    @api.constrains("source_detail_id", "transfer_id")
+    def _check_source_detail_not_targeted_elsewhere(self):
+        """Enforce a source detail is targeted by at most one open transfer.
+
+        Runs on every create or write touching ``source_detail_id`` or
+        ``transfer_id``. While another payment term transfer document
+        is still ``draft`` or ``confirm``, its ``amount_before``
+        snapshot for this source detail has not been consumed yet --
+        letting a second document target the same source detail would
+        make that snapshot stale the moment the first document
+        reaches ``done``.
+
+        :raises ValidationError: another line, belonging to a
+            different transfer document still ``draft``/``confirm``,
+            already targets the same ``source_detail_id``.
+        """
+        for record in self.sudo():
+            if not record.source_detail_id or not record.transfer_id:
+                continue
+            conflicting = self.sudo().search(
+                [
+                    ("id", "!=", record.id),
+                    ("source_detail_id", "=", record.source_detail_id.id),
+                    ("transfer_id", "!=", record.transfer_id.id),
+                    ("transfer_id.state", "in", ["draft", "confirm"]),
+                ]
+            )
+            if conflicting:
+                error_message = (
+                    _(
+                        """
+Context: Set payment term transfer line source detail
+Database ID: %s
+Problem: Source Detail '%s' is already targeted by open document '%s'
+Solution: Wait until the other document is Done/Cancelled, or pick a
+different Source Detail
+"""
+                    )
+                    % (
+                        record.id,
+                        record.source_detail_id.display_name,
+                        conflicting[0].transfer_id.display_name,
+                    )
+                )
+                raise ValidationError(error_message)

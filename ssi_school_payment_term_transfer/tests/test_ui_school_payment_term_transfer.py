@@ -210,6 +210,112 @@ class TestUiSchoolPaymentTermTransfer(HttpSavepointCase):
             }
         )
 
+        # Fixtures for the confirm/approve/reject/cancel/restart/restart
+        # approval tours below. Each uses its own Source Detail (never
+        # shared) so ``_check_source_detail_not_targeted_elsewhere``
+        # never fires between these fixtures. ``base.user_admin`` is
+        # listed in ``school_payment_term_transfer_validator_group``'s
+        # ``users`` (see security/res_groups), which implies the user
+        # group -- so ``admin`` can Confirm, Approve, Reject, Cancel,
+        # and Restart every fixture below, and is the approval
+        # template's approver.
+        # ``global_use=True`` is required: the wizard's radio field
+        # (``base.select_cancel_reason.cancel_reason_id``) is domained
+        # to ``model_id.all_cancel_reason_ids``, which only merges
+        # reasons with ``global_use=True`` plus reasons explicitly
+        # linked to this model's ``ir.model.cancel_reason_ids`` (see
+        # ``ssi_transaction_cancel_mixin``'s ``ir_model.py``). Without
+        # this flag the reason never appears in the wizard's radiogroup
+        # and the tour's "Select the cancellation reason" step times
+        # out even though the wizard itself opens correctly.
+        cls.tour_cancel_reason = cls.env["base.cancel_reason"].create(
+            {
+                "name": "TOUR PTT Cancel Reason",
+                "code": "/",
+                "global_use": True,
+            }
+        )
+
+        def _create_transfer_doc(reason_name, detail_name, amount=25000.0):
+            """Create one draft transfer document for a workflow tour.
+
+            :param reason_name: value of the fixture Reason's ``name``.
+            :param detail_name: value of the fixture Source Detail's
+                ``name``.
+            :param amount: value written to the line's ``amount``.
+            :return: the created ``school_payment_term_transfer``
+                record.
+            """
+            reason = cls.env["school_payment_term_transfer_reason"].create(
+                {"name": reason_name, "code": "/"}
+            )
+            detail = cls.env["school_enrollment_payment_term_detail"].create(
+                dict(detail_vals, name=detail_name)
+            )
+            return cls.env["school_payment_term_transfer"].create(
+                {
+                    "user_id": admin.id,
+                    "enrollment_id": cls.tour_enrollment.id,
+                    "reason_id": reason.id,
+                    "source_term_id": cls.tour_source_term.id,
+                    "destination_term_id": cls.tour_destination_term.id,
+                    "line_ids": [
+                        (
+                            0,
+                            0,
+                            {
+                                "source_detail_id": detail.id,
+                                "amount_before": 100000.0,
+                                "amount": amount,
+                            },
+                        )
+                    ],
+                }
+            )
+
+        cls.tour_confirm_doc = _create_transfer_doc(
+            "TOUR PTT Reason Confirm", "TOUR PTT Detail Confirm"
+        )
+
+        cls.tour_approve_doc = _create_transfer_doc(
+            "TOUR PTT Reason Approve", "TOUR PTT Detail Approve"
+        )
+        cls.tour_approve_doc.with_context(bypass_policy_check=True).action_confirm()
+
+        cls.tour_reject_doc = _create_transfer_doc(
+            "TOUR PTT Reason Reject", "TOUR PTT Detail Reject"
+        )
+        cls.tour_reject_doc.with_context(bypass_policy_check=True).action_confirm()
+
+        cls.tour_cancel_doc = _create_transfer_doc(
+            "TOUR PTT Reason Cancel", "TOUR PTT Detail Cancel"
+        )
+
+        cls.tour_restart_doc = _create_transfer_doc(
+            "TOUR PTT Reason Restart", "TOUR PTT Detail Restart"
+        )
+        cls.tour_restart_doc.with_context(bypass_policy_check=True).action_cancel(
+            cancel_reason=cls.tour_cancel_reason
+        )
+
+        cls.tour_restart_approval_doc = _create_transfer_doc(
+            "TOUR PTT Reason Restart Approval", "TOUR PTT Detail Restart Approval"
+        )
+        cls.tour_restart_approval_doc.with_context(
+            bypass_policy_check=True
+        ).action_confirm()
+        # Simulate a stalled approval process: no approval template
+        # assigned. This is not a state transition (``state`` stays
+        # ``confirm``), it is exactly the precondition documented in
+        # ``14-restart-approval.md`` -- so a plain ``write()`` here
+        # matches what it is meant to set up, rather than working
+        # around a hook.
+        cls.tour_restart_approval_doc.write({"approval_template_id": False})
+
+        cls.tour_reload_template_doc = _create_transfer_doc(
+            "TOUR PTT Reason Reload Template", "TOUR PTT Detail Reload Template"
+        )
+
     def test_create(self):
         """Run the create tour for ``school_payment_term_transfer``.
 
@@ -240,5 +346,82 @@ class TestUiSchoolPaymentTermTransfer(HttpSavepointCase):
         self.start_tour(
             "/web",
             "ssi_school_payment_term_transfer_delete",
+            login="admin",
+        )
+
+    def test_confirm(self):
+        """Run the confirm tour for ``school_payment_term_transfer``.
+
+        IK: docs/school_payment_term_transfer/04-confirm.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_school_payment_term_transfer_confirm",
+            login="admin",
+        )
+
+    def test_approve(self):
+        """Run the approve tour for ``school_payment_term_transfer``.
+
+        IK: docs/school_payment_term_transfer/05-approve.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_school_payment_term_transfer_approve",
+            login="admin",
+        )
+
+    def test_reject(self):
+        """Run the reject tour for ``school_payment_term_transfer``.
+
+        IK: docs/school_payment_term_transfer/06-reject.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_school_payment_term_transfer_reject",
+            login="admin",
+        )
+
+    def test_cancel(self):
+        """Run the cancel tour for ``school_payment_term_transfer``.
+
+        IK: docs/school_payment_term_transfer/10-cancel.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_school_payment_term_transfer_cancel",
+            login="admin",
+        )
+
+    def test_restart(self):
+        """Run the restart tour for ``school_payment_term_transfer``.
+
+        IK: docs/school_payment_term_transfer/12-restart.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_school_payment_term_transfer_restart",
+            login="admin",
+        )
+
+    def test_restart_approval(self):
+        """Run the restart approval tour for ``school_payment_term_transfer``.
+
+        IK: docs/school_payment_term_transfer/14-restart-approval.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_school_payment_term_transfer_restart_approval",
+            login="admin",
+        )
+
+    def test_reload_template_policy(self):
+        """Run the reload template policy tour.
+
+        IK: docs/school_payment_term_transfer/15-reload-template-policy.md
+        """
+        self.start_tour(
+            "/web",
+            "ssi_school_payment_term_transfer_reload_template_policy",
             login="admin",
         )
