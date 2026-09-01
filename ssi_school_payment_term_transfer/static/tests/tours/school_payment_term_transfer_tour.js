@@ -165,7 +165,7 @@ odoo.define(
                 {
                     content: "Status is Draft",
                     trigger:
-                        ".o_statusbar_status button.o_arrow_button_current:contains(Draft)",
+                        ".o_statusbar_status .o_arrow_button[data-value='draft'].btn-primary",
                     run: function () {
                         // Assertion only.
                     },
