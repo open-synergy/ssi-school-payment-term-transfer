@@ -1444,3 +1444,430 @@ scenarios:
           source_detail_id: "REC: pt3h_detail.id"
           amount_before: 100000.0
           amount: 10000.0
+
+      # ── Group I: negative -- confirm rejected when line_ids is empty ─
+      - step: "Create source term I"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3i_source_term"
+        values:
+          enrollment_id: "REC: pt3_enrollment.id"
+          name: "PT3I Source Term"
+
+      - step: "Create destination term I"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3i_dest_term"
+        values:
+          enrollment_id: "REC: pt3_enrollment.id"
+          name: "PT3I Destination Term"
+
+      - step: "Create transfer document I with no lines"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt3i_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          enrollment_id: "REC: pt3_enrollment.id"
+          reason_id: "REC: pt3_reason.id"
+          source_term_id: "REC: pt3i_source_term.id"
+          destination_term_id: "REC: pt3i_dest_term.id"
+
+      - step: "Confirm must be rejected -- document has no line"
+        action: "call"
+        target: "pt3i_doc"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "Document has no line"
+
+      # ── Group J: negative -- a term does not belong to the transfer's Enrollment ─
+      - step: "Create source term J on the shared enrollment"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3j_source_term"
+        values:
+          enrollment_id: "REC: pt3_enrollment.id"
+          name: "PT3J Source Term"
+
+      - step: "Create source detail J"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt3j_detail"
+        values:
+          term_id: "REC: pt3j_source_term.id"
+          product_id: "REC: pt3_product_a.id"
+          name: "PT3J Fee"
+          account_id: "REC: pt3_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step:
+          "Create transfer document J, targeting Group F's Destination Term -- it
+          belongs to a different Enrollment (pt3inv_enrollment, not pt3_enrollment)"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt3j_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          enrollment_id: "REC: pt3_enrollment.id"
+          reason_id: "REC: pt3_reason.id"
+          source_term_id: "REC: pt3j_source_term.id"
+          destination_term_id: "REC: pt3f_dest_term.id"
+
+      - step: "Create line J"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pt3j_line"
+        values:
+          transfer_id: "REC: pt3j_doc.id"
+          source_detail_id: "REC: pt3j_detail.id"
+          amount_before: 100000.0
+          amount: 25000.0
+
+      - step:
+          "Confirm must be rejected -- Destination Term belongs to a different
+          Enrollment"
+        action: "call"
+        target: "pt3j_doc"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "does not belong to Enrollment"
+
+      # ── Group K: negative -- a line's Source Detail does not belong to the Source Term ─
+      - step: "Create source term K"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3k_source_term"
+        values:
+          enrollment_id: "REC: pt3_enrollment.id"
+          name: "PT3K Source Term"
+
+      - step: "Create destination term K"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3k_dest_term"
+        values:
+          enrollment_id: "REC: pt3_enrollment.id"
+          name: "PT3K Destination Term"
+
+      - step:
+          "Create a detail that belongs to the Destination Term, not the Source Term"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt3k_wrong_detail"
+        values:
+          term_id: "REC: pt3k_dest_term.id"
+          product_id: "REC: pt3_product_a.id"
+          name: "PT3K Wrong-Term Fee"
+          account_id: "REC: pt3_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create transfer document K"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt3k_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          enrollment_id: "REC: pt3_enrollment.id"
+          reason_id: "REC: pt3_reason.id"
+          source_term_id: "REC: pt3k_source_term.id"
+          destination_term_id: "REC: pt3k_dest_term.id"
+
+      - step: "Create line K pointing at the wrong-term detail"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pt3k_line"
+        values:
+          transfer_id: "REC: pt3k_doc.id"
+          source_detail_id: "REC: pt3k_wrong_detail.id"
+          amount_before: 100000.0
+          amount: 25000.0
+
+      - step:
+          "Confirm must be rejected -- Source Detail does not belong to the Source Term"
+        action: "call"
+        target: "pt3k_doc"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "does not belong to the Source Term"
+
+      # ── Group L: negative -- a line's Source Detail already has a Customer Invoice Line ─
+      - step: "Create helper term L on the invoice-capable enrollment"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3l_helper_term"
+        values:
+          enrollment_id: "REC: pt3inv_enrollment.id"
+          name: "PT3L Helper Term"
+
+      - step: "Create helper detail L"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt3l_helper_detail"
+        values:
+          term_id: "REC: pt3l_helper_term.id"
+          product_id: "REC: pt3_product_a.id"
+          name: "PT3L Helper Fee"
+          account_id: "REC: pt3_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Invoice the helper term L to obtain a real Customer Invoice Line"
+        action: "call"
+        target: "pt3l_helper_term"
+        method: "action_create_invoice"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "invoiced"
+
+      - step: "Create source term L (its own Term is never invoiced)"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3l_source_term"
+        values:
+          enrollment_id: "REC: pt3inv_enrollment.id"
+          name: "PT3L Source Term"
+
+      - step: "Create destination term L"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3l_dest_term"
+        values:
+          enrollment_id: "REC: pt3inv_enrollment.id"
+          name: "PT3L Destination Term"
+
+      - step: "Create source detail L"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt3l_detail"
+        values:
+          term_id: "REC: pt3l_source_term.id"
+          product_id: "REC: pt3_product_a.id"
+          name: "PT3L Fee"
+          account_id: "REC: pt3_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step:
+          "Graft the helper's Customer Invoice Line onto detail L directly -- detail L's
+          own Term (pt3l_source_term) stays uninvoiced, isolating this line-level check
+          from the term-level one already covered by Group F"
+        action: "write"
+        target: "pt3l_detail"
+        values:
+          customer_invoice_line_id:
+            "REC: pt3l_helper_detail.customer_invoice_line_id.id"
+
+      - step: "Create transfer document L"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt3l_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          enrollment_id: "REC: pt3inv_enrollment.id"
+          reason_id: "REC: pt3_reason.id"
+          source_term_id: "REC: pt3l_source_term.id"
+          destination_term_id: "REC: pt3l_dest_term.id"
+
+      - step: "Create line L against the grafted detail"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pt3l_line"
+        values:
+          transfer_id: "REC: pt3l_doc.id"
+          source_detail_id: "REC: pt3l_detail.id"
+          amount_before: 100000.0
+          amount: 25000.0
+
+      - step:
+          "Confirm must be rejected -- Source Detail already has a Customer Invoice Line"
+        action: "call"
+        target: "pt3l_doc"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "already has a Customer Invoice Line"
+
+      # ── Group M: negative -- a line's Source Detail is already voided ────
+      - step: "Create source term M"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3m_source_term"
+        values:
+          enrollment_id: "REC: pt3_enrollment.id"
+          name: "PT3M Source Term"
+
+      - step: "Create destination term M"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3m_dest_term"
+        values:
+          enrollment_id: "REC: pt3_enrollment.id"
+          name: "PT3M Destination Term"
+
+      - step: "Create source detail M"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt3m_detail"
+        values:
+          term_id: "REC: pt3m_source_term.id"
+          product_id: "REC: pt3_product_a.id"
+          name: "PT3M Fee"
+          account_id: "REC: pt3_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Void source detail M directly, before any transfer targets it"
+        action: "write"
+        target: "pt3m_detail"
+        values:
+          voided: true
+
+      - step: "Create transfer document M"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt3m_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          enrollment_id: "REC: pt3_enrollment.id"
+          reason_id: "REC: pt3_reason.id"
+          source_term_id: "REC: pt3m_source_term.id"
+          destination_term_id: "REC: pt3m_dest_term.id"
+
+      - step: "Create line M against the already-voided detail"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pt3m_line"
+        values:
+          transfer_id: "REC: pt3m_doc.id"
+          source_detail_id: "REC: pt3m_detail.id"
+          amount_before: 100000.0
+          amount: 25000.0
+
+      - step: "Confirm must be rejected -- Source Detail is already voided"
+        action: "call"
+        target: "pt3m_doc"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+          message_contains: "is already voided"
+
+      # ── Group N: transfer_count smart button reflects transfer_ids ───────
+      - step: "Create the student contact N"
+        action: "create"
+        model: "res.partner"
+        save_as: "pt3n_contact"
+        values:
+          name: "PT3N Contact"
+
+      - step: "Create the student N"
+        action: "create"
+        model: "school_student"
+        save_as: "pt3n_student"
+        values:
+          name: "PT3N Student"
+          code: "PT3NST"
+          contact_id: "REC: pt3n_contact.id"
+          school_id: "REC: pt3_school.id"
+
+      - step: "Create a dedicated enrollment N for the compute test"
+        action: "create"
+        model: "school_enrollment"
+        save_as: "pt3n_enrollment"
+        values:
+          academic_year_id: "REC: pt3_academic_year.id"
+          academic_term_id: "REC: pt3_academic_term.id"
+          school_id: "REC: pt3_school.id"
+          grade_id: "REC: pt3_grade.id"
+          grade_class_id: "REC: pt3_grade_class.id"
+          student_id: "REC: pt3n_student.id"
+
+      - step: "Assert transfer_count starts at zero"
+        action: "assert"
+        target: "pt3n_enrollment"
+        asserts:
+          transfer_count:
+            type: "value"
+            expected: 0
+
+      - step: "Create term N1"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3n_term_1"
+        values:
+          enrollment_id: "REC: pt3n_enrollment.id"
+          name: "PT3N Term 1"
+
+      - step: "Create term N2"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3n_term_2"
+        values:
+          enrollment_id: "REC: pt3n_enrollment.id"
+          name: "PT3N Term 2"
+
+      - step: "Create term N3"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt3n_term_3"
+        values:
+          enrollment_id: "REC: pt3n_enrollment.id"
+          name: "PT3N Term 3"
+
+      - step: "Create the first transfer document on enrollment N"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt3n_doc_1"
+        values:
+          user_id: "REF: base.user_admin"
+          enrollment_id: "REC: pt3n_enrollment.id"
+          reason_id: "REC: pt3_reason.id"
+          source_term_id: "REC: pt3n_term_1.id"
+          destination_term_id: "REC: pt3n_term_2.id"
+
+      - step: "Assert transfer_count follows the first document"
+        action: "assert"
+        target: "pt3n_enrollment"
+        asserts:
+          transfer_count:
+            type: "value"
+            expected: 1
+
+      - step: "Create the second transfer document on enrollment N"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt3n_doc_2"
+        values:
+          user_id: "REF: base.user_admin"
+          enrollment_id: "REC: pt3n_enrollment.id"
+          reason_id: "REC: pt3_reason.id"
+          source_term_id: "REC: pt3n_term_2.id"
+          destination_term_id: "REC: pt3n_term_3.id"
+
+      - step: "Assert transfer_count follows both documents"
+        action: "assert"
+        target: "pt3n_enrollment"
+        asserts:
+          transfer_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 2
+          transfer_count:
+            type: "value"
+            expected: 2
