@@ -14,6 +14,94 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Document has no line\n"
+"Solution: Add at least one line before continuing\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Payment Term '%s' already has a Customer Invoice\n"
+"Solution: Cancel this document; a term already invoiced can no longer be transferred\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Payment Term '%s' does not belong to Enrollment '%s'\n"
+"Solution: Select a Source/Destination Term that belongs to the same Enrollment\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' already has a Customer Invoice Line\n"
+"Solution: Cancel this document; an already-invoiced line can no longer be transferred\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' does not belong to the Source Term\n"
+"Solution: Select a Source Detail that belongs to the Source Term\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' has UoM Quantity %s, which is not 1\n"
+"Solution: Only source details with a UoM Quantity of exactly 1 can be transferred\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' is already voided\n"
+"Solution: Select a Source Detail that is not already voided\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Term and Destination Term must both be set and different\n"
+"Solution: Select a Source Term and a Destination Term that differ\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
 #: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
 #, python-format
 msgid ""
@@ -42,6 +130,18 @@ msgid ""
 "\n"
 "Context: Set payment term transfer line source detail\n"
 "Database ID: %s\n"
+"Problem: Source Detail '%s' is already targeted by open document '%s'\n"
+"Solution: Wait until the other document is Done/Cancelled, or pick a\n"
+"different Source Detail\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
 "Problem: Source Detail '%s' is already used by another line of this document\n"
 "Solution: Select a different Source Detail, or edit the existing line instead\n"
 msgstr ""
@@ -60,6 +160,12 @@ msgstr ""
 #. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__name
 msgid "# Document"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid "<li>%s: %s %s</li>"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -342,6 +448,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment__display_name
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__display_name
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__display_name
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__display_name
@@ -396,6 +503,7 @@ msgid "Group By"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment__id
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__id
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__id
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__id
@@ -435,6 +543,7 @@ msgid "Is Follower"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment____last_update
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer____last_update
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line____last_update
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason____last_update
@@ -579,6 +688,13 @@ msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_enrollment__transfer_count
+msgid ""
+"Number of payment term transfer documents targeting this enrollment, backing"
+" the Transfers smart button."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_unread_counter
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_unread_counter
 msgid "Number of unread messages"
@@ -587,6 +703,11 @@ msgstr ""
 #. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__note
 msgid "Optional free-form explanation for this transfer."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment__transfer_count
+msgid "Payment Term Transfer Count"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -602,8 +723,21 @@ msgstr ""
 
 #. module: ssi_school_payment_term_transfer
 #: model:ir.actions.act_window,name:ssi_school_payment_term_transfer.school_payment_term_transfer_action
+#: model:ir.actions.act_window,name:ssi_school_payment_term_transfer.school_payment_term_transfer_open_transfer_action
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment__transfer_ids
 #: model:ir.ui.menu,name:ssi_school_payment_term_transfer.school_payment_term_transfer_menu
 msgid "Payment Term Transfers"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid "Payment term transfer %s moved the following from %s to %s:<ul>%s</ul>"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_enrollment__transfer_ids
+msgid "Payment term transfer documents that target this enrollment."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -672,6 +806,11 @@ msgstr ""
 #. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reviewer_id
 msgid "Reviewer"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model,name:ssi_school_payment_term_transfer.model_school_enrollment
+msgid "School Enrollment"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -840,6 +979,11 @@ msgstr ""
 #. module: ssi_school_payment_term_transfer
 #: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_form
 msgid "Transfer Detail"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_enrollment_view_form_transfer
+msgid "Transfers"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
