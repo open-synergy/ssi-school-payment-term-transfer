@@ -17,7 +17,11 @@ Approval-based transfer of billed amounts between school payment terms
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[ssi_school_payment_term_transfer](ssi_school_payment_term_transfer/) | 14.0.1.0.0 |  | School Payment Term Transfer
 
 [//]: # (end addons)
 
