@@ -13,6 +13,10 @@
                 type="text/javascript"
                 src="/ssi_school_payment_term_transfer/static/tests/tours/school_payment_term_transfer_reason_tour.js"
             />
+            <script
+                type="text/javascript"
+                src="/ssi_school_payment_term_transfer/static/tests/tours/school_payment_term_transfer_tour.js"
+            />
         </xpath>
     </template>
 </odoo>

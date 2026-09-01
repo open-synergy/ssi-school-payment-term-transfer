@@ -3,3 +3,5 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import school_payment_term_transfer_reason  # noqa: F401
+from . import school_payment_term_transfer  # noqa: F401
+from . import school_payment_term_transfer_line  # noqa: F401
