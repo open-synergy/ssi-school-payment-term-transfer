@@ -697,18 +697,27 @@ scenarios:
       # message on the enrollment before the transfer ever runs (see
       # ``odoo/addons/mail/models/mail_thread.py``), so the chatter
       # always has at least that message regardless of whether the
-      # transfer notification was sent. What this scenario must prove
-      # is that ``_apply_transfer`` posted its own notification
-      # message -- searched directly on ``mail.message`` by
-      # ``message_type="notification"`` so the assertion is not
-      # coupled to however many messages `create()` happens to log.
+      # transfer notification was sent. ``message_type`` cannot be
+      # used as the distinguishing filter either: ``message_post``
+      # itself defaults to ``message_type="notification"``
+      # (``mail_thread.py:1823``), and so do both of the core logging
+      # paths that write the automatic "created" message
+      # (``_message_log``/``_message_log_batch``, ``:2066``/``:2093``)
+      # -- the "created" message and the transfer notification are the
+      # exact same ``message_type``. What actually distinguishes the
+      # transfer notification is its *content*: ``_prepare_transfer_
+      # notification`` (``models/school_payment_term_transfer.py``)
+      # links back to this document via
+      # ``/web#model=school_payment_term_transfer&id=...``, a string
+      # that never appears in the generic "created" log. Search
+      # ``mail.message`` directly for that substring in ``body``.
       - step: "Assert the transfer posted a notification on the enrollment"
         action: "search"
         model: "mail.message"
         domain:
           - ["model", "=", "school_enrollment"]
           - ["res_id", "=", "REC: pt3_enrollment.id"]
-          - ["message_type", "=", "notification"]
+          - ["body", "like", "model=school_payment_term_transfer"]
         save_as: "pt3_transfer_notification"
         expect_count: 1
 
