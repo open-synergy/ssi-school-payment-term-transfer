@@ -57,6 +57,7 @@
   document number yet.
 - **Total** on the header equals the sum of **Amount** across all lines.
 - The document does not write anything to the Source Term, Destination Term, or their
-  detail lines yet -- moving the amount is not part of this action. This item ships no
-  Confirm/Approve/Done workflow configuration, so those buttons are not usable on this
-  document yet; they are added by a later module.
+  detail lines yet -- moving the amount is not part of this action.
+- The **Confirm** button is visible in the header (usable once the prerequisites in
+  `04-confirm` are met), and the statusbar shows **Draft ‣ Waiting for Approval ‣
+  Done**.

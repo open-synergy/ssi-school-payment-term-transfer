@@ -30,8 +30,11 @@
         "security/ir_rule/school_payment_term_transfer.xml",
         "ir_sequence/school_payment_term_transfer.xml",
         "sequence_template/school_payment_term_transfer.xml",
+        "approval_template/school_payment_term_transfer.xml",
+        "policy_template/school_payment_term_transfer.xml",
         "views/school_payment_term_transfer_reason.xml",
         "views/school_payment_term_transfer.xml",
+        "views/school_enrollment.xml",
         "views/assets.xml",
     ],
 }

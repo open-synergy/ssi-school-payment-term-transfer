@@ -5,7 +5,8 @@
 from datetime import date as datetime_date
 
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import float_is_zero
 
 from odoo.addons.ssi_decorator import ssi_decorator
 
@@ -23,15 +24,15 @@ class SchoolPaymentTermTransfer(models.Model):
     not this document's concern; that is handled by
     ``ssi_school_fee_waiver``.
 
-    This item only installs the document's framework: header, lines
-    (``line_ids``), fields, compute/onchange/constraint, and CRUD
-    while still ``draft``. No ``policy.template``/``approval.template``
-    data is shipped here, so the Confirm/Approve/Done buttons stay
-    hidden for every user and the document cannot actually reach
-    ``done`` yet -- workflow policy and the code that applies the
-    transfer onto ``school_enrollment_payment_term``/
-    ``school_enrollment_payment_term_detail`` are added by a later
-    item in this repository.
+    Confirm/Approve/Reject/Restart Approval/Cancel/Restart are gated by
+    a ``policy.template`` (``policy_template/
+    school_payment_term_transfer.xml``); there is no manual Done
+    button (``_automatically_insert_done_button = False``) because
+    ``_after_approved_method = "action_done"`` reaches ``done``
+    automatically once approval completes. The prerequisites checked
+    before Confirm and again before Done, and the transfer applied on
+    Done, live in ``_check_transfer_prerequisites`` and
+    ``_apply_transfer`` below.
     """
 
     _name = "school_payment_term_transfer"
@@ -343,12 +344,11 @@ Solution: Select a different payment term as the transfer destination
 
         Adds every ``*_ok`` field contributed by the confirm/done/
         cancel workflow mixins, so ``mixin.policy._compute_policy``
-        can assign them from a matching ``policy.template`` -- without
-        this override the fields would never be assigned by their own
-        compute method and Odoo would raise a cache error the first
-        time a view reads them. No ``policy.template`` data is shipped
-        by this item, so every field simply evaluates to ``False``
-        until a later item adds the matching template records.
+        can assign them from the matching ``policy.template``
+        (``policy_template/school_payment_term_transfer.xml``) --
+        without this override the fields would never be assigned by
+        their own compute method and Odoo would raise a cache error
+        the first time a view reads them.
 
         :return: list of policy field names.
         """
@@ -365,6 +365,263 @@ Solution: Select a different payment term as the transfer destination
         ]
         res += policy_field
         return res
+
+    def _check_transfer_prerequisites(self):
+        """Enforce every prerequisite a transfer must meet to proceed.
+
+        Shared by the ``pre_confirm_check`` and ``pre_done_check``
+        hooks below -- the exact same checks run again right before
+        ``done`` because a customer invoice may have been created on
+        either term (e.g. via Create Due Invoice) in the window
+        between Confirm and Approve, after Confirm already passed.
+
+        :raises UserError: ``line_ids`` is empty; the source and
+            destination terms are not both set and different; either
+            term does not belong to ``enrollment_id``; either term
+            already has a customer invoice; a line's source detail
+            does not belong to the source term, already has a
+            customer invoice line, or is already voided; or a line's
+            source detail has a UoM Quantity other than 1.
+        :return: None
+        """
+        self.ensure_one()
+        if not self.line_ids:
+            error_message = (
+                _(
+                    """
+Context: Confirm/Done payment term transfer
+Database ID: %s
+Problem: Document has no line
+Solution: Add at least one line before continuing
+"""
+                )
+                % (self.id,)
+            )
+            raise UserError(error_message)
+
+        source_term = self._get_source_term()
+        destination_term = self._get_destination_term()
+        if not source_term or not destination_term or source_term == destination_term:
+            error_message = (
+                _(
+                    """
+Context: Confirm/Done payment term transfer
+Database ID: %s
+Problem: Source Term and Destination Term must both be set and different
+Solution: Select a Source Term and a Destination Term that differ
+"""
+                )
+                % (self.id,)
+            )
+            raise UserError(error_message)
+
+        for term in (source_term, destination_term):
+            if term.enrollment_id != self.enrollment_id:
+                error_message = (
+                    _(
+                        """
+Context: Confirm/Done payment term transfer
+Database ID: %s
+Problem: Payment Term '%s' does not belong to Enrollment '%s'
+Solution: Select a Source/Destination Term that belongs to the same Enrollment
+"""
+                    )
+                    % (self.id, term.display_name, self.enrollment_id.display_name)
+                )
+                raise UserError(error_message)
+            if term.customer_invoice_id:
+                error_message = (
+                    _(
+                        """
+Context: Confirm/Done payment term transfer
+Database ID: %s
+Problem: Payment Term '%s' already has a Customer Invoice
+Solution: Cancel this document; a term already invoiced can no longer be transferred
+"""
+                    )
+                    % (self.id, term.display_name)
+                )
+                raise UserError(error_message)
+
+        for line in self.line_ids:
+            detail = line.source_detail_id
+            if detail.term_id != source_term:
+                error_message = (
+                    _(
+                        """
+Context: Confirm/Done payment term transfer
+Database ID: %s
+Problem: Source Detail '%s' does not belong to the Source Term
+Solution: Select a Source Detail that belongs to the Source Term
+"""
+                    )
+                    % (self.id, detail.display_name)
+                )
+                raise UserError(error_message)
+            if detail.customer_invoice_line_id:
+                error_message = (
+                    _(
+                        """
+Context: Confirm/Done payment term transfer
+Database ID: %s
+Problem: Source Detail '%s' already has a Customer Invoice Line
+Solution: Cancel this document; an already-invoiced line can no longer be transferred
+"""
+                    )
+                    % (self.id, detail.display_name)
+                )
+                raise UserError(error_message)
+            if detail.voided:
+                error_message = (
+                    _(
+                        """
+Context: Confirm/Done payment term transfer
+Database ID: %s
+Problem: Source Detail '%s' is already voided
+Solution: Select a Source Detail that is not already voided
+"""
+                    )
+                    % (self.id, detail.display_name)
+                )
+                raise UserError(error_message)
+            if not float_is_zero(detail.uom_quantity - 1.0, precision_digits=2):
+                error_message = (
+                    _(
+                        """
+Context: Confirm/Done payment term transfer
+Database ID: %s
+Problem: Source Detail '%s' has UoM Quantity %s, which is not 1
+Solution: Only source details with a UoM Quantity of exactly 1 can be transferred
+"""
+                    )
+                    % (self.id, detail.display_name, detail.uom_quantity)
+                )
+                raise UserError(error_message)
+
+    @ssi_decorator.pre_confirm_check()
+    def _10_check_transfer_prerequisites_on_confirm(self):
+        """Run the transfer prerequisites before Confirm.
+
+        :return: None
+        """
+        self._check_transfer_prerequisites()
+
+    @ssi_decorator.pre_done_check()
+    def _10_check_transfer_prerequisites_on_done(self):
+        """Re-run the transfer prerequisites before Done.
+
+        Between Confirm and Approve someone else may run Create Due
+        Invoice on either term, so the same checks run again here --
+        see ``_check_transfer_prerequisites``.
+
+        :return: None
+        """
+        self._check_transfer_prerequisites()
+
+    @ssi_decorator.post_done_action()
+    def _10_apply_transfer(self):
+        """Apply the transfer once Done is reached.
+
+        Runs in ``sudo()`` with ``bypass_addendum_lock`` in context --
+        the only sanctioned way through the payment term detail's
+        addendum lock, and it only opens after approval. For every
+        line, in order: (1) create the destination detail via
+        ``_prepare_destination_detail_vals``; (2) adjust the source
+        detail (``voided = True`` when ``full_transfer``, otherwise
+        ``price_unit = amount_after``); (3) record
+        ``destination_detail_id`` on the line. Afterwards
+        ``enrollment_id._recompute_product_summaries()`` is called and
+        a chatter message summarising the move is posted on the
+        enrollment.
+
+        :return: None
+        """
+        self.ensure_one()
+        context_self = self.sudo().with_context(bypass_addendum_lock=True)
+        for line in context_self.line_ids:
+            detail = line.source_detail_id
+            destination_detail = context_self.env[
+                "school_enrollment_payment_term_detail"
+            ].create(context_self._prepare_destination_detail_vals(line))
+            if line.full_transfer:
+                detail.write({"voided": True})
+            else:
+                detail.write({"price_unit": line.amount_after})
+            line.write({"destination_detail_id": destination_detail.id})
+        # pylint: disable=protected-access
+        context_self.enrollment_id._recompute_product_summaries()
+        context_self.enrollment_id.message_post(
+            body=context_self._prepare_transfer_notification(),
+            message_type="notification",
+            subtype_xmlid="mail.mt_note",
+        )
+
+    def _prepare_destination_detail_vals(self, line):
+        """Build the destination detail's create values for one line.
+
+        Extension point of ``_apply_transfer``: override to add extra
+        values (e.g. an Operating Unit) on the detail created at the
+        destination term. ``uom_quantity`` is always 1 and
+        ``price_unit`` is the moved ``amount`` -- ``tax_ids`` is
+        copied from the source detail so the enrollment's total stays
+        unchanged, and the new detail is locked immediately since it
+        is born on an already-locked term.
+
+        :param line: ``school_payment_term_transfer_line`` record
+            being applied.
+        :return: dict of ``school_enrollment_payment_term_detail``
+            create values.
+        """
+        self.ensure_one()
+        detail = line.source_detail_id
+        return {
+            "term_id": self._get_destination_term().id,
+            "product_id": detail.product_id.id,
+            "name": detail.name,
+            "account_id": detail.account_id.id,
+            "uom_id": detail.uom_id.id,
+            "uom_quantity": 1.0,
+            "price_unit": line.amount,
+            "tax_ids": [(6, 0, detail.tax_ids.ids)],
+            "locked": True,
+        }
+
+    def _prepare_transfer_notification(self):
+        """Build the chatter message posted on the enrollment on Done.
+
+        Summarises, per line, the product and amount moved from the
+        source term to the destination term, and links back to this
+        transfer document. The link is a plain ``/web#model=...``
+        backend URL rather than a mixin helper -- Odoo 14's
+        ``mail.thread`` has no ``_get_html_link``, that method only
+        exists from later series onward.
+
+        :return: HTML-safe message body.
+        :raises ValueError: ``self`` is not a single record.
+        """
+        self.ensure_one()
+        document_url = "/web#model=%s&id=%d&view_type=form" % (
+            self._name,
+            self.id,
+        )
+        document_link = '<a href="%s">%s</a>' % (document_url, self.display_name)
+        lines_html = "".join(
+            _("<li>%s: %s %s</li>")
+            % (
+                line.product_id.display_name,
+                line.amount,
+                self.currency_id.symbol,
+            )
+            for line in self.line_ids
+        )
+        return _(
+            "Payment term transfer %s moved the following from %s to %s:" "<ul>%s</ul>"
+        ) % (
+            document_link,
+            self._get_source_term().display_name,
+            self._get_destination_term().display_name,
+            lines_html,
+        )
 
     @ssi_decorator.insert_on_form_view()
     def _insert_form_element(self, view_arch):

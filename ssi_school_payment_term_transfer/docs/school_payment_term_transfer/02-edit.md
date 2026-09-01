@@ -28,3 +28,5 @@
 
 - The changes are saved.
 - **Total**, **Amount After**, and **Full Transfer** recompute to reflect the change.
+- The record still shows **Draft** on the statusbar, with the **Confirm** button
+  available in the header.
