@@ -14,6 +14,68 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line amount\n"
+"Database ID: %s\n"
+"Problem: Amount %s exceeds Amount Before %s\n"
+"Solution: Enter an amount no greater than Amount Before\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line amount\n"
+"Database ID: %s\n"
+"Problem: Amount %s is not greater than zero\n"
+"Solution: Enter an amount greater than zero\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' is already used by another line of this document\n"
+"Solution: Select a different Source Detail, or edit the existing line instead\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer source/destination\n"
+"Database ID: %s\n"
+"Problem: Destination Term '%s' is the same as the Source Term\n"
+"Solution: Select a different payment term as the transfer destination\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__name
+msgid "# Document"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__academic_term_id
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Academic Term"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__academic_year_id
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Academic Year"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_needaction
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_needaction
 msgid "Action Needed"
 msgstr ""
@@ -24,28 +86,169 @@ msgid "Active"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__active_approval_ids
+msgid "Active Approvals"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__active_approver_partner_ids
+msgid "Active Partners"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__active_approver_user_ids
+msgid "Active Users"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_ids
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_ids
 msgid "Activities"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_exception_decoration
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_exception_decoration
 msgid "Activity Exception Decoration"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_state
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_state
 msgid "Activity State"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_type_icon
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_type_icon
 msgid "Activity Type Icon"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_all_group
+msgid "All"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__allowed_term_ids
+msgid "Allowed Payment Terms"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__allowed_policy_template_ids
+msgid "Allowed Policy Templates"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__allowed_source_detail_ids
+msgid "Allowed Source Details"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount
+msgid "Amount"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount_after
+msgid "Amount After"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount_before
+msgid "Amount Before"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount_after
+msgid "Amount Before minus Amount: what stays on the source term."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approval_template_id
+msgid "Approval Configuration"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approval_template_id
+msgid "Approval Template"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approval_ids
+msgid "Approvals"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approve_ok
+msgid ""
+"Approve policy\n"
+"\n"
+"* If active user can see and execute 'Approve' button"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approved
+msgid "Approved"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_attachment_count
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_attachment_count
 msgid "Attachment Count"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approve_ok
+msgid "Can Approve"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__cancel_ok
+msgid "Can Cancel"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__confirm_ok
+msgid "Can Confirm"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__done_ok
+msgid "Can Finished"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__manual_number_ok
+msgid "Can Input Manual Document Number"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reject_ok
+msgid "Can Reject"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__restart_ok
+msgid "Can Restart"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__restart_approval_ok
+msgid "Can Restart Approval"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__cancel_reason_id
+msgid "Cancel Reason"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__cancel_ok
+msgid ""
+"Cancel policy\n"
+"\n"
+"* If active user can see and execute 'Cancel' button"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -54,89 +257,221 @@ msgid "Code"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__company_id
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_company_group
+msgid "Company"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__company_currency_id
+msgid "Company Currency"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__company_partner_id
+msgid "Company Partner"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_company_child_group
+msgid "Company and All Child Companies"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__company_id
+msgid ""
+"Company that own the document\n"
+"\n"
+"* Automatically filled with user's company.\n"
+"  Default company can be changed"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__confirm_ok
+msgid ""
+"Confirm policy\n"
+"\n"
+"* If active user can see and execute 'Confirm' button"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__create_uid
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__create_uid
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__create_date
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__create_date
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__create_date
 msgid "Created on"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__currency_id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__currency_id
+msgid "Currency"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__date
+msgid "Date"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__date
+msgid "Date this payment term transfer document was created."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__destination_detail_id
+msgid "Destination Detail"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_id
+msgid "Destination Term"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__allowed_source_detail_ids
+msgid ""
+"Detail lines of the transfer's Source Term that are not yet invoiced and not"
+" already voided, eligible to be selected on this line."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__display_name
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__display_name
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__done_ok
+msgid ""
+"Done policy\n"
+"\n"
+"* If active user can see and execute 'Done' button"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__enrollment_id
+msgid "Enrollment"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_follower_ids
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_follower_ids
 msgid "Followers"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_channel_ids
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_channel_ids
 msgid "Followers (Channels)"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_partner_ids
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_partner_ids
 msgid "Followers (Partners)"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_type_icon
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__full_transfer
+msgid "Full Transfer"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Group By"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__id
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__id
 msgid "ID"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_exception_icon
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_exception_icon
 msgid "Icon"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_exception_icon
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_exception_icon
 msgid "Icon to indicate an exception activity."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_needaction
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_unread
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_needaction
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_unread
 msgid "If checked, new messages require your attention."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_has_error
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_is_follower
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_is_follower
 msgid "Is Follower"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer____last_update
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line____last_update
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason____last_update
 msgid "Last Modified on"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__write_uid
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__write_uid
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__write_date
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__write_date
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__write_date
 msgid "Last Updated on"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__line_ids
+msgid "Line"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_main_attachment_id
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_main_attachment_id
 msgid "Main Attachment"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__manual_number_ok
+msgid ""
+"Manual number assignment policy\n"
+"\n"
+"* If active user can edit document number"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -162,16 +497,19 @@ msgid ""
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_has_error
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_has_error
 msgid "Message Delivery error"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_ids
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_ids
 msgid "Messages"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__my_activity_date_deadline
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__my_activity_date_deadline
 msgid "My Activity Deadline"
 msgstr ""
@@ -182,48 +520,73 @@ msgid "Name"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__need_validation
+msgid "Need Validation"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_date_deadline
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_date_deadline
 msgid "Next Activity Deadline"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_summary
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_summary
 msgid "Next Activity Summary"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_type_id
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_type_id
 msgid "Next Activity Type"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__next_approval_ids
+msgid "Next Approvals"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__note
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__note
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_form
 msgid "Note"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_needaction_counter
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_needaction_counter
 msgid "Number of Actions"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_has_error_counter
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_has_error_counter
 msgid "Number of errors"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_needaction_counter
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_needaction_counter
 msgid "Number of messages which requires an action"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_has_error_counter
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_unread_counter
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_unread_counter
 msgid "Number of unread messages"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__note
+msgid "Optional free-form explanation for this transfer."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -238,14 +601,89 @@ msgid "Payment Term Transfer Reasons"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.actions.act_window,name:ssi_school_payment_term_transfer.school_payment_term_transfer_action
+#: model:ir.ui.menu,name:ssi_school_payment_term_transfer.school_payment_term_transfer_menu
+msgid "Payment Term Transfers"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__allowed_term_ids
+msgid ""
+"Payment terms of the selected enrollment that have no customer invoice yet, "
+"eligible as the source or destination of this transfer."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__policy_template_id
+msgid "Policy Template"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__product_id
+msgid "Product"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reason_id
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Reason"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reject_ok
+msgid ""
+"Reject policy\n"
+"\n"
+"* If active user can see and execute 'Reject' button"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__rejected
+msgid "Rejected"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__user_id
+msgid "Responsible"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_user_id
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_user_id
 msgid "Responsible User"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__restart_approval_ok
+msgid ""
+"Restart approval policy\n"
+"\n"
+"* If active user can see and execute 'Restart Approval' button"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__restart_ok
+msgid ""
+"Restart policy\n"
+"\n"
+"* If active user can see and execute 'Restart' button"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reviewer_id
+msgid "Reviewer"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model,name:ssi_school_payment_term_transfer.model_school_payment_term_transfer
 #: model:ir.module.category,name:ssi_school_payment_term_transfer.school_payment_term_transfer_data_ownership_module_category
 #: model:ir.module.category,name:ssi_school_payment_term_transfer.school_payment_term_transfer_workflow_module_category
 msgid "School Payment Term Transfer"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model,name:ssi_school_payment_term_transfer.model_school_payment_term_transfer_line
+msgid "School Payment Term Transfer Line"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -254,6 +692,31 @@ msgid "School Payment Term Transfer Reason"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount_before
+msgid ""
+"Snapshot of the source detail line's billed amount at the moment it was "
+"selected, filled automatically by onchange. Never changes afterwards, even "
+"if the source detail's own amount is later modified -- this is what keeps "
+"this line a reliable trace of where the amount moved from."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__source_detail_id
+msgid "Source Detail"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_id
+msgid "Source Term"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__state
+msgid "State"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_state
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_state
 msgid ""
 "Status based on activities\n"
@@ -263,26 +726,196 @@ msgid ""
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__student_id
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Student"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__amount_total
+msgid "Sum of the amount moved by every line of this document."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__academic_term_id
+msgid "The academic term of the enrollment."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__academic_year_id
+msgid "The academic year of the enrollment."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__currency_id
+msgid "The billing currency, taken from the enrollment."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__currency_id
+msgid "The billing currency, taken from the transfer document."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__destination_detail_id
+msgid ""
+"The fee line created on the Destination Term to hold the moved amount. Left "
+"empty by this item -- it is only filled once the actual transfer is applied,"
+" added by a later item in this repository."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__line_ids
+msgid "The individual fee lines being moved by this transfer."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__enrollment_id
+msgid ""
+"The open enrollment whose billed amount is being moved between payment "
+"terms."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__source_detail_id
+msgid ""
+"The original fee line the amount is being moved from. Selecting it fills "
+"Amount Before automatically."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_id
+msgid "The payment term the amount is being moved into."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_id
+msgid "The payment term the amount is being moved out of."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__transfer_id
+msgid "The payment term transfer document that owns this line."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount
+msgid "The portion of Amount Before being moved to the destination term."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__product_id
+msgid "The product of the source detail line, shown for reference."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__student_id
+msgid "The student being billed, taken from the enrollment."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__amount_total
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_tree
+msgid "Total"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__name
+msgid ""
+"Transaction/document number\n"
+"\n"
+"* Unique indentifer of transaction\n"
+"* Leave '/' to automatically generate number\n"
+"* Change '/' into any number/identifier to manually assign number.\n"
+"  Manual number assignment can be done in 'Draft' state\n"
+"  Only user with 'Can Manualy Assign Number' policy can manually assign number.\n"
+"* Transaction with number other than '/' can not be deleted."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__transfer_id
+msgid "Transfer"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_form
+msgid "Transfer Detail"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_exception_decoration
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_exception_decoration
 msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_unread
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_unread
 msgid "Unread Messages"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_unread_counter
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_unread_counter
 msgid "Unread Messages Counter"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_user_group
+msgid "User"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__user_id
+msgid ""
+"User that responsible for document\n"
+"\n"
+"* Create user can be different with responsible user\n"
+"* Automatically filled with user that initiate document creation.\n"
+"  Default responsible can be changed."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reviewer_id
+msgid ""
+"User that responsible to review document\n"
+"\n"
+"* Unless it configured to approve reviewer does not equal to approver"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__active_approver_user_ids
+msgid "Users that can approve/reject document"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_validator_group
+msgid "Validator"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_viewer_group
+msgid "Viewer"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__website_message_ids
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__website_message_ids
 msgid "Website Messages"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__website_message_ids
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__website_message_ids
 msgid "Website communication history"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__full_transfer
+msgid "Whether Amount After is zero: the entire line was moved."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reason_id
+msgid "Why this amount is being moved between payment terms."
 msgstr ""
