@@ -1,0 +1,126 @@
+scenarios:
+  - name: "Create Payment Term Transfer Reason"
+    steps:
+      - step: "Create reason with name and code"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        save_as: "reason"
+        values:
+          name: "Renegotiation with Parent"
+          code: "PTTR001"
+      - step: "Assert reason created and active"
+        action: "assert"
+        target: "reason"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Renegotiation with Parent"
+          code:
+            type: "value"
+            expected: "PTTR001"
+          active:
+            type: "value"
+            expected: true
+
+  - name: "Edit Payment Term Transfer Reason Name"
+    steps:
+      - step: "Create reason"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        save_as: "reason"
+        values:
+          name: "Scheduling Mistake"
+          code: "PTTR002"
+      - step: "Write new name"
+        action: "write"
+        target: "reason"
+        values:
+          name: "Scheduling Mistake (Corrected)"
+      - step: "Assert name updated"
+        action: "assert"
+        target: "reason"
+        asserts:
+          name:
+            type: "value"
+            expected: "Scheduling Mistake (Corrected)"
+
+  - name: "Archive Payment Term Transfer Reason"
+    steps:
+      - step: "Create reason"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        save_as: "reason"
+        values:
+          name: "Archived Reason"
+          code: "PTTR003"
+      - step: "Archive the reason"
+        action: "write"
+        target: "reason"
+        values:
+          active: false
+      - step: "Assert record still exists but inactive"
+        action: "assert"
+        target: "reason"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          active:
+            type: "value"
+            expected: false
+      - step: "Verify hidden from default search"
+        action: "search"
+        model: "school_payment_term_transfer_reason"
+        domain: [["code", "=", "PTTR003"]]
+        save_as: "default_search_result"
+        expect_count: 0
+      - step: "Verify still findable with active_test disabled"
+        action: "search"
+        model: "school_payment_term_transfer_reason"
+        domain: [["code", "=", "PTTR003"]]
+        context:
+          active_test: false
+        save_as: "inactive_search_result"
+        expect_count: 1
+
+  - name: "Delete Payment Term Transfer Reason"
+    steps:
+      - step: "Create reason"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        save_as: "reason"
+        values:
+          name: "To Be Deleted"
+          code: "PTTR004"
+      - step: "Delete the reason"
+        action: "unlink"
+        target: "reason"
+      - step: "Verify record no longer exists"
+        action: "search"
+        model: "school_payment_term_transfer_reason"
+        domain: [["code", "=", "PTTR004"]]
+        save_as: "deleted_search_result"
+        expect_count: 0
+
+  - name: "Create Payment Term Transfer Reason without configurator access"
+    steps:
+      - step: "Create a plain internal user without the configurator group"
+        action: "create"
+        model: "res.users"
+        save_as: "plain_user"
+        values:
+          name: "Non Configurator User"
+          login: "non_configurator_pttr@example.com"
+          groups_id: [[6, 0, ["REF: base.group_user"]]]
+      - step: "Create reason as the plain user must be denied"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        as_user: "plain_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          name: "Denied Reason"
+          code: "PTTR005"

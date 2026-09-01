@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<!-- These two categories are pre-created here so that the transactional
+     "School Payment Term Transfer" document (added by a later item in
+     this repository) does not have to insert a category in the middle
+     of an already-released chain. They are not used by this item's own
+     master data model, which uses ssi_school's shared configurator
+     category instead. -->
+<record
+        id="school_payment_term_transfer_workflow_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">School Payment Term Transfer</field>
+    <field name="parent_id" ref="ssi_school.school_workflow_module_category" />
+    <field name="sequence">6</field>
+</record>
+
+<record
+        id="school_payment_term_transfer_data_ownership_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">School Payment Term Transfer</field>
+    <field name="parent_id" ref="ssi_school.school_data_ownership_module_category" />
+    <field name="sequence">6</field>
+</record>
+</odoo>
