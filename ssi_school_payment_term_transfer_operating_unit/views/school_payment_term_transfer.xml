@@ -53,13 +53,13 @@
         />
     <field name="arch" type="xml">
         <data>
-            <xpath expr="//search" position="inside">
+            <xpath expr="//field[@name='company_id']" position="after">
                 <field
                         name="operating_unit_id"
                         groups="operating_unit.group_multi_operating_unit"
                     />
             </xpath>
-            <xpath expr="//group[@string='Group By']" position="inside">
+            <xpath expr="//filter[@name='grp_company']" position="after">
                 <filter
                         name="grp_ou"
                         string="Operating Unit"
