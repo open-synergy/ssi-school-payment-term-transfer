@@ -1,0 +1,417 @@
+scenarios:
+  - name: "Payment Term Transfer - Fields, Compute, and Constraints"
+    steps:
+      # ── Shared fixture chain (prefix PT2) ────────────────────────
+      - step: "Create the grade type"
+        action: "create"
+        model: "school_grade_type"
+        save_as: "pt2_grade_type"
+        values:
+          name: "PT2 Grade Type"
+          code: "PT2GT"
+
+      - step: "Create the school"
+        action: "create"
+        model: "school"
+        save_as: "pt2_school"
+        values:
+          name: "PT2 School"
+          code: "PT2SC"
+          grade_type_id: "REC: pt2_grade_type.id"
+
+      - step: "Create the academic year"
+        action: "create"
+        model: "school_academic_year"
+        save_as: "pt2_academic_year"
+        values:
+          name: "PT2 Academic Year"
+          code: "PT2AY"
+          date_start: 2026-07-01
+          date_end: 2027-06-30
+
+      - step: "Create the academic term"
+        action: "create"
+        model: "school_academic_term"
+        save_as: "pt2_academic_term"
+        values:
+          name: "PT2 Term"
+          code: "PT2TM"
+          date_start: 2026-07-01
+          date_end: 2026-12-31
+          year_id: "REC: pt2_academic_year.id"
+
+      - step: "Create the grade"
+        action: "create"
+        model: "school_grade"
+        save_as: "pt2_grade"
+        values:
+          name: "PT2 Grade"
+          code: "PT2GR"
+          type_id: "REC: pt2_grade_type.id"
+
+      - step: "Create the grade class"
+        action: "create"
+        model: "school_grade_class"
+        save_as: "pt2_grade_class"
+        values:
+          name: "PT2 Class"
+          code: "PT2CL"
+          school_id: "REC: pt2_school.id"
+          grade_id: "REC: pt2_grade.id"
+
+      - step: "Create the student contact"
+        action: "create"
+        model: "res.partner"
+        save_as: "pt2_contact"
+        values:
+          name: "PT2 Contact"
+
+      - step: "Create the student"
+        action: "create"
+        model: "school_student"
+        save_as: "pt2_student"
+        values:
+          name: "PT2 Student"
+          code: "PT2ST"
+          contact_id: "REC: pt2_contact.id"
+          school_id: "REC: pt2_school.id"
+
+      - step: "Create the enrollment"
+        action: "create"
+        model: "school_enrollment"
+        save_as: "pt2_enrollment"
+        values:
+          academic_year_id: "REC: pt2_academic_year.id"
+          academic_term_id: "REC: pt2_academic_term.id"
+          school_id: "REC: pt2_school.id"
+          grade_id: "REC: pt2_grade.id"
+          grade_class_id: "REC: pt2_grade_class.id"
+          student_id: "REC: pt2_student.id"
+
+      - step: "Get the account.account.type Income reference"
+        action: "ref"
+        xml_id: "account.data_account_type_revenue"
+        save_as: "pt2_account_type_income"
+
+      - step: "Create the income account used by payment term details"
+        action: "create"
+        model: "account.account"
+        save_as: "pt2_income_account"
+        values:
+          name: "PT2 Income Account"
+          code: "PT2IA"
+          user_type_id: "REC: pt2_account_type_income.id"
+          reconcile: false
+
+      - step: "Create the product used by payment term details"
+        action: "create"
+        model: "product.product"
+        save_as: "pt2_product"
+        values:
+          name: "PT2 Product"
+          type: "service"
+
+      - step: "Create the transfer reason"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        save_as: "pt2_reason"
+        values:
+          name: "PT2 Reason"
+          code: "PT2RS"
+
+      - step: "Create the source payment term"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt2_source_term"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          name: "PT2 Source Term"
+
+      - step: "Create the destination payment term"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt2_destination_term"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          name: "PT2 Destination Term"
+
+      # Seven 100,000 detail lines on the source term -- one per
+      # assertion group below, so no group has to share a source
+      # detail with another (the uniqueness constraint is scoped
+      # per document, but keeping each group's fixture independent
+      # avoids any cross-group coupling).
+      - step: "Create source detail A (25,000 partial transfer)"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt2_detail_a"
+        values:
+          term_id: "REC: pt2_source_term.id"
+          product_id: "REC: pt2_product.id"
+          name: "PT2 Fee A"
+          account_id: "REC: pt2_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create source detail B (full transfer)"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt2_detail_b"
+        values:
+          term_id: "REC: pt2_source_term.id"
+          product_id: "REC: pt2_product.id"
+          name: "PT2 Fee B"
+          account_id: "REC: pt2_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create source detail C (amount_total line 1)"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt2_detail_c"
+        values:
+          term_id: "REC: pt2_source_term.id"
+          product_id: "REC: pt2_product.id"
+          name: "PT2 Fee C"
+          account_id: "REC: pt2_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create source detail D (amount_total line 2)"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt2_detail_d"
+        values:
+          term_id: "REC: pt2_source_term.id"
+          product_id: "REC: pt2_product.id"
+          name: "PT2 Fee D"
+          account_id: "REC: pt2_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create source detail E (snapshot stability)"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt2_detail_e"
+        values:
+          term_id: "REC: pt2_source_term.id"
+          product_id: "REC: pt2_product.id"
+          name: "PT2 Fee E"
+          account_id: "REC: pt2_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create source detail F (negative: zero amount)"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt2_detail_f"
+        values:
+          term_id: "REC: pt2_source_term.id"
+          product_id: "REC: pt2_product.id"
+          name: "PT2 Fee F"
+          account_id: "REC: pt2_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create source detail G (negative: amount exceeds before)"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pt2_detail_g"
+        values:
+          term_id: "REC: pt2_source_term.id"
+          product_id: "REC: pt2_product.id"
+          name: "PT2 Fee G"
+          account_id: "REC: pt2_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      # ── Group 1: onchange fills amount_before ────────────────────
+      - step: "Open a new line form and pick the source detail"
+        action: "form"
+        model: "school_payment_term_transfer_line"
+        save: false
+        values:
+          source_detail_id: "REC: pt2_detail_a"
+        asserts:
+          amount_before:
+            type: "value"
+            expected: 100000.0
+
+      # ── Group 2/3: amount_after and full_transfer ────────────────
+      - step: "Create the main transfer document"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt2_doc_main"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          reason_id: "REC: pt2_reason.id"
+          source_term_id: "REC: pt2_source_term.id"
+          destination_term_id: "REC: pt2_destination_term.id"
+
+      - step: "Create a partial-transfer line (25,000 of 100,000)"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pt2_line_partial"
+        values:
+          transfer_id: "REC: pt2_doc_main.id"
+          source_detail_id: "REC: pt2_detail_a.id"
+          amount_before: 100000.0
+          amount: 25000.0
+
+      - step: "Assert partial-transfer amount_after and full_transfer"
+        action: "assert"
+        target: "pt2_line_partial"
+        asserts:
+          amount_after:
+            type: "value"
+            expected: 75000.0
+          full_transfer:
+            type: "value"
+            expected: false
+
+      - step: "Create a full-transfer line (100,000 of 100,000)"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pt2_line_full"
+        values:
+          transfer_id: "REC: pt2_doc_main.id"
+          source_detail_id: "REC: pt2_detail_b.id"
+          amount_before: 100000.0
+          amount: 100000.0
+
+      - step: "Assert full-transfer amount_after and full_transfer"
+        action: "assert"
+        target: "pt2_line_full"
+        asserts:
+          amount_after:
+            type: "value"
+            expected: 0.0
+          full_transfer:
+            type: "value"
+            expected: true
+
+      # ── Group 4: amount_total sums the lines ─────────────────────
+      - step: "Create the amount_total transfer document"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt2_doc_total"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          reason_id: "REC: pt2_reason.id"
+          source_term_id: "REC: pt2_source_term.id"
+          destination_term_id: "REC: pt2_destination_term.id"
+          line_ids:
+            - - 0
+              - 0
+              - source_detail_id: "REC: pt2_detail_c.id"
+                amount_before: 100000.0
+                amount: 25000.0
+            - - 0
+              - 0
+              - source_detail_id: "REC: pt2_detail_d.id"
+                amount_before: 100000.0
+                amount: 10000.0
+
+      - step: "Assert amount_total is the sum of both lines"
+        action: "assert"
+        target: "pt2_doc_total"
+        asserts:
+          amount_total:
+            type: "value"
+            expected: 35000.0
+
+      # ── Group 5: amount_before is a stable snapshot ──────────────
+      - step: "Create the snapshot-stability transfer document"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt2_doc_snapshot"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          reason_id: "REC: pt2_reason.id"
+          source_term_id: "REC: pt2_source_term.id"
+          destination_term_id: "REC: pt2_destination_term.id"
+
+      - step: "Create a line snapshotting source detail E"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pt2_line_snapshot"
+        values:
+          transfer_id: "REC: pt2_doc_snapshot.id"
+          source_detail_id: "REC: pt2_detail_e.id"
+          amount_before: 100000.0
+          amount: 40000.0
+
+      - step: "Change the source detail's own price_unit via the ORM"
+        action: "write"
+        target: "pt2_detail_e"
+        values:
+          price_unit: 60000.0
+
+      - step: "Assert amount_before on the line did not move"
+        action: "assert"
+        target: "pt2_line_snapshot"
+        asserts:
+          amount_before:
+            type: "value"
+            expected: 100000.0
+
+      # ── Group 6: student_id/currency_id come from enrollment_id ──
+      - step: "Create a transfer document without student_id/currency_id"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt2_doc_meta"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          reason_id: "REC: pt2_reason.id"
+          source_term_id: "REC: pt2_source_term.id"
+          destination_term_id: "REC: pt2_destination_term.id"
+
+      - step: "Assert student_id and currency_id follow the enrollment"
+        action: "assert"
+        target: "pt2_doc_meta"
+        asserts:
+          student_id:
+            type: "m2o"
+            expected: "REC: pt2_enrollment.student_id"
+          currency_id:
+            type: "m2o"
+            expected: "REC: pt2_enrollment.currency_id"
+
+      # ── Group 7: negative paths ───────────────────────────────────
+      - step: "Create the negative-path transfer document"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt2_doc_negative"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          reason_id: "REC: pt2_reason.id"
+          source_term_id: "REC: pt2_source_term.id"
+          destination_term_id: "REC: pt2_destination_term.id"
+
+      - step: "Reject a line whose amount is zero"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        expect_error:
+          type: "ValidationError"
+        values:
+          transfer_id: "REC: pt2_doc_negative.id"
+          source_detail_id: "REC: pt2_detail_f.id"
+          amount_before: 100000.0
+          amount: 0.0
+
+      - step: "Reject a line whose amount exceeds amount_before"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        expect_error:
+          type: "ValidationError"
+        values:
+          transfer_id: "REC: pt2_doc_negative.id"
+          source_detail_id: "REC: pt2_detail_g.id"
+          amount_before: 100000.0
+          amount: 150000.0

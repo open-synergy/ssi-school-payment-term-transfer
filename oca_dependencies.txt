@@ -1,0 +1,3 @@
+# See https://github.com/OCA/odoo-community.org/blob/master/website/Contribution/CONTRIBUTING.rst#oca_dependencies-txt
+
+ssi-school https://github.com/open-synergy/ssi-school.git 14.0
