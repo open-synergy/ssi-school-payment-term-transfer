@@ -692,14 +692,25 @@ scenarios:
             check: "count"
             expected_count: 1
 
-      - step: "Assert the enrollment's chatter got exactly one message"
-        action: "assert"
-        target: "pt3_enrollment"
-        asserts:
-          message_ids:
-            type: "o2m"
-            check: "count"
-            expected_count: 1
+      # ``message_ids`` cannot be asserted with ``expected_count: 1``:
+      # ``mail.thread.create()`` already posts one "<Document> created"
+      # message on the enrollment before the transfer ever runs (see
+      # ``odoo/addons/mail/models/mail_thread.py``), so the chatter
+      # always has at least that message regardless of whether the
+      # transfer notification was sent. What this scenario must prove
+      # is that ``_apply_transfer`` posted its own notification
+      # message -- searched directly on ``mail.message`` by
+      # ``message_type="notification"`` so the assertion is not
+      # coupled to however many messages `create()` happens to log.
+      - step: "Assert the transfer posted a notification on the enrollment"
+        action: "search"
+        model: "mail.message"
+        domain:
+          - ["model", "=", "school_enrollment"]
+          - ["res_id", "=", "REC: pt3_enrollment.id"]
+          - ["message_type", "=", "notification"]
+        save_as: "pt3_transfer_notification"
+        expect_count: 1
 
       # ── Group B: full transfer voids the source detail ───────────
       - step: "Create source term B"

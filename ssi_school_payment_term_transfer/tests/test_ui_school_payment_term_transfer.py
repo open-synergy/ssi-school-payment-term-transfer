@@ -219,8 +219,21 @@ class TestUiSchoolPaymentTermTransfer(HttpSavepointCase):
         # group -- so ``admin`` can Confirm, Approve, Reject, Cancel,
         # and Restart every fixture below, and is the approval
         # template's approver.
+        # ``global_use=True`` is required: the wizard's radio field
+        # (``base.select_cancel_reason.cancel_reason_id``) is domained
+        # to ``model_id.all_cancel_reason_ids``, which only merges
+        # reasons with ``global_use=True`` plus reasons explicitly
+        # linked to this model's ``ir.model.cancel_reason_ids`` (see
+        # ``ssi_transaction_cancel_mixin``'s ``ir_model.py``). Without
+        # this flag the reason never appears in the wizard's radiogroup
+        # and the tour's "Select the cancellation reason" step times
+        # out even though the wizard itself opens correctly.
         cls.tour_cancel_reason = cls.env["base.cancel_reason"].create(
-            {"name": "TOUR PTT Cancel Reason", "code": "/"}
+            {
+                "name": "TOUR PTT Cancel Reason",
+                "code": "/",
+                "global_use": True,
+            }
         )
 
         def _create_transfer_doc(reason_name, detail_name, amount=25000.0):
