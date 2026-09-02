@@ -65,6 +65,21 @@ class TestExtensionPointSchoolPaymentTermTransfer(YamlTransactionCase):
                 "year_id": academic_year.id,
             }
         )
+        grade = self.env["school_grade"].create(
+            {
+                "name": "Grade for Extension Point Test",
+                "code": "GREXTPT",
+                "type_id": grade_type.id,
+            }
+        )
+        grade_class = self.env["school_grade_class"].create(
+            {
+                "name": "Grade Class for Extension Point Test",
+                "code": "GCEXTPT",
+                "school_id": school.id,
+                "grade_id": grade.id,
+            }
+        )
         contact = self.env["res.partner"].create(
             {"name": "Extension Point Student Contact"}
         )
@@ -81,6 +96,8 @@ class TestExtensionPointSchoolPaymentTermTransfer(YamlTransactionCase):
                 "academic_year_id": academic_year.id,
                 "academic_term_id": academic_term.id,
                 "school_id": school.id,
+                "grade_id": grade.id,
+                "grade_class_id": grade_class.id,
                 "student_id": student.id,
             }
         )
