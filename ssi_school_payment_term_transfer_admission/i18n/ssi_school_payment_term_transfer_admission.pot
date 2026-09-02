@@ -14,7 +14,53 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: ssi_school_payment_term_transfer_admission
+#: code:addons/ssi_school_payment_term_transfer_admission/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
+"Problem: Source Type is Admission but Source Detail is also set\n"
+"Solution: Clear Source Detail, or select Admission Source Detail instead\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: code:addons/ssi_school_payment_term_transfer_admission/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
+"Problem: Source Type is Enrollment but Admission Source Detail is also set\n"
+"Solution: Clear Admission Source Detail, or select Source Detail instead\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: code:addons/ssi_school_payment_term_transfer_admission/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer source/destination\n"
+"Database ID: %s\n"
+"Problem: Source Type is Admission but an Enrollment-path field is also set\n"
+"Solution: Clear Enrollment, Source Term and Destination Term\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: code:addons/ssi_school_payment_term_transfer_admission/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer source/destination\n"
+"Database ID: %s\n"
+"Problem: Source Type is Enrollment but an Admission-path field is also set\n"
+"Solution: Clear Admission, Admission Source Term and Admission\n"
+"Destination Term\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_id
+#: model:ir.model.fields.selection,name:ssi_school_payment_term_transfer_admission.selection__school_payment_term_transfer__source_type__admission
 msgid "Admission"
 msgstr ""
 
@@ -39,8 +85,11 @@ msgid "Admission Source Term"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
-#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__destination_term_id
-msgid "Destination Term"
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__source_type
+msgid ""
+"Billing source this transfer moves an amount against. This module only "
+"registers Enrollment -- extension modules add further values with "
+"``selection_add`` and override the ``_get_*`` extension points to match."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
@@ -48,11 +97,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__display_name
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__display_name
 msgid "Display Name"
-msgstr ""
-
-#. module: ssi_school_payment_term_transfer_admission
-#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__enrollment_id
-msgid "Enrollment"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
@@ -82,10 +126,8 @@ msgid "Payment Term Transfer Count"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
-#: model:ir.actions.act_window,name:ssi_school_payment_term_transfer_admission.school_payment_term_transfer_action_admission
 #: model:ir.actions.act_window,name:ssi_school_payment_term_transfer_admission.school_payment_term_transfer_open_transfer_action_admission
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission__transfer_ids
-#: model:ir.ui.menu,name:ssi_school_payment_term_transfer_admission.school_payment_term_transfer_menu_admission
 msgid "Payment Term Transfers"
 msgstr ""
 
@@ -110,13 +152,8 @@ msgid "School Payment Term Transfer Line"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
-#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__source_detail_id
-msgid "Source Detail"
-msgstr ""
-
-#. module: ssi_school_payment_term_transfer_admission
-#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__source_term_id
-msgid "Source Term"
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__source_type
+msgid "Source Type"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
@@ -130,33 +167,23 @@ msgstr ""
 #. module: ssi_school_payment_term_transfer_admission
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_destination_term_id
 msgid ""
-"The Admission payment term the amount is being moved into. Only shown when "
-"Admission is set."
+"The Admission payment term the amount is being moved into. Shown, and "
+"required, only when Source Type is Admission."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_source_term_id
 msgid ""
-"The Admission payment term the amount is being moved out of. Only shown when"
-" Admission is set."
+"The Admission payment term the amount is being moved out of. Shown, and "
+"required, only when Source Type is Admission."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_id
 msgid ""
 "The open admission whose billed amount is being moved between payment terms."
-" Mutually exclusive with Enrollment -- exactly one of the two must be set."
-msgstr ""
-
-#. module: ssi_school_payment_term_transfer_admission
-#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__enrollment_id
-msgid ""
-"The open enrollment whose billed amount is being moved between payment "
-"terms. Must be set for a document whose billing source is not otherwise "
-"resolved -- enforced by ``_check_source_document``, not by this field "
-"itself, so an extension module's own billing source is not forced to also be"
-" a required field. Source Term/Destination Term requiredness is not yet "
-"enforced here; that follows in a later item."
+" Shown, and required, only when Source Type is Admission -- enforced by "
+"``_check_source_type_consistency``, not by this field itself."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
@@ -164,32 +191,6 @@ msgstr ""
 msgid ""
 "The original Admission fee line the amount is being moved from. Selecting it"
 " fills Amount Before automatically. Mutually exclusive with Source Detail."
-msgstr ""
-
-#. module: ssi_school_payment_term_transfer_admission
-#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__source_detail_id
-msgid ""
-"The original fee line the amount is being moved from. Selecting it fills "
-"Amount Before automatically. Required when the owning document's Source Type"
-" is Enrollment -- enforced by ``_check_source_detail``, not by this field "
-"itself, so an extension module's own source detail is not forced to also be "
-"a required field."
-msgstr ""
-
-#. module: ssi_school_payment_term_transfer_admission
-#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__destination_term_id
-msgid ""
-"The payment term the amount is being moved into. Not yet enforced as "
-"required here -- that follows in a later item; the Confirm/Done "
-"prerequisites in ``_check_transfer_prerequisites`` still require it."
-msgstr ""
-
-#. module: ssi_school_payment_term_transfer_admission
-#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__source_term_id
-msgid ""
-"The payment term the amount is being moved out of. Not yet enforced as "
-"required here -- that follows in a later item; the Confirm/Done "
-"prerequisites in ``_check_transfer_prerequisites`` still require it."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
