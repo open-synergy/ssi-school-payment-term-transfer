@@ -388,3 +388,176 @@ scenarios:
           - ["id"]
         expect_error:
           type: "AccessError"
+
+  - name: "School Payment Term Transfer - Enrollment without its own Operating Unit"
+    steps:
+      # ---------------------------------------------------------------
+      # Fixtures — self-contained (scenarios do not share the REC:
+      # registry). A single School/Enrollment chain, with
+      # operating_unit_id explicitly set to False on the enrollment so
+      # the school->operating_unit_ids derivation from
+      # ssi_school_operating_unit never applies (it only fires when
+      # "operating_unit_id" is absent from vals).
+      # ---------------------------------------------------------------
+      - step: "Create grade type"
+        action: "create"
+        model: "school_grade_type"
+        save_as: "grade_type"
+        values:
+          name: "PTTOU No-OU Grade Type"
+          code: "PTTOUNOGT"
+
+      - step: "Create School, with no Operating Unit restriction"
+        action: "create"
+        model: "school"
+        save_as: "school"
+        values:
+          name: "PTTOU No-OU School"
+          code: "PTTOUNOSC"
+          grade_type_id: "REC: grade_type.id"
+
+      - step: "Create academic year"
+        action: "create"
+        model: "school_academic_year"
+        save_as: "academic_year"
+        values:
+          name: "PTTOU No-OU Academic Year"
+          code: "PTTOUNOAY"
+          date_start: "2026-07-01"
+          date_end: "2027-06-30"
+
+      - step: "Create academic term"
+        action: "create"
+        model: "school_academic_term"
+        save_as: "academic_term"
+        values:
+          name: "PTTOU No-OU Academic Term"
+          code: "PTTOUNOTM"
+          date_start: "2026-07-01"
+          date_end: "2026-12-31"
+          year_id: "REC: academic_year.id"
+
+      - step: "Create grade"
+        action: "create"
+        model: "school_grade"
+        save_as: "grade"
+        values:
+          name: "PTTOU No-OU Grade"
+          code: "PTTOUNOGR"
+          type_id: "REC: grade_type.id"
+
+      - step: "Create Grade Class"
+        action: "create"
+        model: "school_grade_class"
+        save_as: "grade_class"
+        values:
+          name: "PTTOU No-OU Class"
+          code: "PTTOUNOCL"
+          school_id: "REC: school.id"
+          grade_id: "REC: grade.id"
+
+      - step: "Create Student's contact"
+        action: "create"
+        model: "res.partner"
+        save_as: "contact"
+        values:
+          name: "PTTOU No-OU Contact"
+
+      - step: "Create Student"
+        action: "create"
+        model: "school_student"
+        save_as: "student"
+        values:
+          name: "PTTOU No-OU Student"
+          code: "PTTOUNOST"
+          contact_id: "REC: contact.id"
+          school_id: "REC: school.id"
+
+      - step: "Create Enrollment with operating_unit_id explicitly False"
+        action: "create"
+        model: "school_enrollment"
+        save_as: "enrollment"
+        values:
+          academic_year_id: "REC: academic_year.id"
+          academic_term_id: "REC: academic_term.id"
+          school_id: "REC: school.id"
+          grade_id: "REC: grade.id"
+          grade_class_id: "REC: grade_class.id"
+          student_id: "REC: student.id"
+          operating_unit_id: false
+
+      - step: "The premise -- Enrollment has no Operating Unit of its own"
+        action: "assert"
+        target: "enrollment"
+        asserts:
+          operating_unit_id:
+            type: "value"
+            operator: "is_falsy"
+
+      - step: "Create shared transfer reason"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        save_as: "reason"
+        values:
+          name: "PTTOU No-OU Reason"
+          code: "/"
+
+      - step: "Create Source Term on the Enrollment"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "source_term"
+        values:
+          enrollment_id: "REC: enrollment.id"
+          name: "PTTOU No-OU Source Term"
+
+      - step: "Create Destination Term on the Enrollment"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "destination_term"
+        values:
+          enrollment_id: "REC: enrollment.id"
+          name: "PTTOU No-OU Destination Term"
+
+      # ---------------------------------------------------------------
+      # Positive — no Operating Unit to derive from the Enrollment
+      # means derive_operating_unit_from_enrollment_vals leaves
+      # operating_unit_id out of vals entirely (get_operating_unit_id_
+      # from_enrollment returns None -- line 30's "or None" side --
+      # so the "if operating_unit_id:" check at line 53 takes its
+      # untested else, never touching vals).
+      #
+      # operating_unit_id is left OUT of values: here on purpose, so
+      # the create()/write() override under test still runs its own
+      # derivation logic on a genuinely missing key -- setting it to
+      # false explicitly here would short-circuit that logic via its
+      # own "operating_unit_id in vals" early-return and cover nothing
+      # new. But leaving the key out also means the ORM's *own*
+      # mixin.single_operating_unit field default applies afterwards,
+      # and base.user_root (the super-user this test runs as) has
+      # default_operating_unit_id set to "Main Operating Unit" by
+      # operating_unit's own (non-demo) data
+      # (data/operating_unit_data.xml) -- so without suppressing it,
+      # the created document would end up with that Operating Unit,
+      # not falsy. context.default_operating_unit_id below suppresses
+      # only that unrelated field default, which plays no part in the
+      # branches under test.
+      # ---------------------------------------------------------------
+      - step: "Create a transfer on the Enrollment without an Operating Unit"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "doc_no_ou"
+        context:
+          default_operating_unit_id: false
+        values:
+          enrollment_id: "REC: enrollment.id"
+          reason_id: "REC: reason.id"
+          source_term_id: "REC: source_term.id"
+          destination_term_id: "REC: destination_term.id"
+
+      - step: "The transfer document also has no Operating Unit"
+        action: "assert"
+        target: "doc_no_ou"
+        asserts:
+          operating_unit_id:
+            type: "value"
+            operator: "is_falsy"
