@@ -217,6 +217,60 @@ scenarios:
           code: "/"
 
       # ---------------------------------------------------------------
+      # Payment term pairs -- every document created below carries
+      # both its Source Term and Destination Term (Enrollment or
+      # Admission, matching its own path), so the term-requiredness
+      # follow-up item lands against this file unchanged.
+      # ---------------------------------------------------------------
+      - step: "Create Admission A's source term"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "admission_a_source_term"
+        values:
+          admission_id: "REC: admission_a.id"
+          name: "PTTAOU Admission A Source Term"
+
+      - step: "Create Admission A's destination term"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "admission_a_dest_term"
+        values:
+          admission_id: "REC: admission_a.id"
+          name: "PTTAOU Admission A Destination Term"
+
+      - step: "Create Admission B's source term"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "admission_b_source_term"
+        values:
+          admission_id: "REC: admission_b.id"
+          name: "PTTAOU Admission B Source Term"
+
+      - step: "Create Admission B's destination term"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "admission_b_dest_term"
+        values:
+          admission_id: "REC: admission_b.id"
+          name: "PTTAOU Admission B Destination Term"
+
+      - step: "Create Enrollment A's source term"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "enrollment_a_source_term"
+        values:
+          enrollment_id: "REC: enrollment_a.id"
+          name: "PTTAOU Enrollment A Source Term"
+
+      - step: "Create Enrollment A's destination term"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "enrollment_a_dest_term"
+        values:
+          enrollment_id: "REC: enrollment_a.id"
+          name: "PTTAOU Enrollment A Destination Term"
+
+      # ---------------------------------------------------------------
       # Positive — deriving operating_unit_id from admission_id
       # ---------------------------------------------------------------
       - step: "Create a transfer on Admission A without operating_unit_id"
@@ -224,8 +278,11 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "doc_derive_a"
         values:
+          source_type: "admission"
           admission_id: "REC: admission_a.id"
           reason_id: "REC: reason.id"
+          admission_source_term_id: "REC: admission_a_source_term.id"
+          admission_destination_term_id: "REC: admission_a_dest_term.id"
 
       - step: "It derived Operating Unit A from the Admission"
         action: "assert"
@@ -244,8 +301,11 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "doc_explicit"
         values:
+          source_type: "admission"
           admission_id: "REC: admission_a.id"
           reason_id: "REC: reason.id"
+          admission_source_term_id: "REC: admission_a_source_term.id"
+          admission_destination_term_id: "REC: admission_a_dest_term.id"
           operating_unit_id: "REC: operating_unit_b.id"
 
       - step: "The explicit value is kept, not overridden by derivation"
@@ -283,8 +343,11 @@ scenarios:
         model: "school_payment_term_transfer"
         save: false
         values:
+          source_type: "admission"
           admission_id: "REC: admission_a"
           reason_id: "REC: reason"
+          admission_source_term_id: "REC: admission_a_source_term"
+          admission_destination_term_id: "REC: admission_a_dest_term"
         asserts:
           operating_unit_id:
             type: "m2o"
@@ -299,8 +362,11 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "doc_enrollment_a"
         values:
+          source_type: "enrollment"
           enrollment_id: "REC: enrollment_a.id"
           reason_id: "REC: reason.id"
+          source_term_id: "REC: enrollment_a_source_term.id"
+          destination_term_id: "REC: enrollment_a_dest_term.id"
 
       - step: "It still derived Operating Unit A from the Enrollment"
         action: "assert"
@@ -320,16 +386,22 @@ scenarios:
         model: "school_payment_term_transfer"
         save_as: "doc_vis_a"
         values:
+          source_type: "admission"
           admission_id: "REC: admission_a.id"
           reason_id: "REC: reason.id"
+          admission_source_term_id: "REC: admission_a_source_term.id"
+          admission_destination_term_id: "REC: admission_a_dest_term.id"
 
       - step: "Create the Operating Unit B visibility fixture document"
         action: "create"
         model: "school_payment_term_transfer"
         save_as: "doc_vis_b"
         values:
+          source_type: "admission"
           admission_id: "REC: admission_b.id"
           reason_id: "REC: reason.id"
+          admission_source_term_id: "REC: admission_b_source_term.id"
+          admission_destination_term_id: "REC: admission_b_dest_term.id"
 
       - step: "Create a user restricted to Operating Unit A only"
         action: "create"
