@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="school_payment_term_transfer_view_form_admission" model="ir.ui.view">
+    <field name="name">school_payment_term_transfer - form - admission</field>
+    <field name="model">school_payment_term_transfer</field>
+    <field
+            name="inherit_id"
+            ref="ssi_school_payment_term_transfer.school_payment_term_transfer_view_form"
+        />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='enrollment_id']" position="after">
+                <field name="admission_id" />
+            </xpath>
+            <xpath expr="//field[@name='destination_term_id']" position="after">
+                <field name="admission_source_term_id" />
+                <field name="admission_destination_term_id" />
+            </xpath>
+            <xpath
+                    expr="//field[@name='line_ids']/tree/field[@name='source_detail_id']"
+                    position="after"
+                >
+                <field name="admission_source_detail_id" />
+            </xpath>
+            <xpath
+                    expr="//field[@name='line_ids']/tree/field[@name='destination_detail_id']"
+                    position="after"
+                >
+                <field name="admission_destination_detail_id" />
+            </xpath>
+            <xpath
+                    expr="//field[@name='line_ids']/form//field[@name='source_detail_id']"
+                    position="after"
+                >
+                <field name="admission_source_detail_id" />
+            </xpath>
+            <xpath
+                    expr="//field[@name='line_ids']/form//field[@name='destination_detail_id']"
+                    position="after"
+                >
+                <field name="admission_destination_detail_id" />
+            </xpath>
+        </data>
+    </field>
+</record>
+</odoo>

@@ -1,0 +1,841 @@
+options:
+  auto_refresh: true
+
+scenarios:
+  - name: "Payment Term Transfer Admission - Approval, Done, and Negative Paths"
+    steps:
+      # ── Shared fixture chain (prefix pta) ────────────────────────
+      - step: "Create the grade type"
+        action: "create"
+        model: "school_grade_type"
+        save_as: "pta_grade_type"
+        values:
+          name: "PTA Grade Type"
+          code: "PTAGT"
+
+      - step: "Create the school"
+        action: "create"
+        model: "school"
+        save_as: "pta_school"
+        values:
+          name: "PTA School"
+          code: "PTASC"
+          grade_type_id: "REC: pta_grade_type.id"
+
+      - step: "Create the academic year"
+        action: "create"
+        model: "school_academic_year"
+        save_as: "pta_academic_year"
+        values:
+          name: "PTA Academic Year"
+          code: "PTAAY"
+          date_start: 2026-07-01
+          date_end: 2027-06-30
+
+      - step: "Create the academic term"
+        action: "create"
+        model: "school_academic_term"
+        save_as: "pta_academic_term"
+        values:
+          name: "PTA Term"
+          code: "PTATM"
+          date_start: 2026-07-01
+          date_end: 2026-12-31
+          year_id: "REC: pta_academic_year.id"
+
+      - step: "Create the grade"
+        action: "create"
+        model: "school_grade"
+        save_as: "pta_grade"
+        values:
+          name: "PTA Grade"
+          code: "PTAGR"
+          type_id: "REC: pta_grade_type.id"
+
+      - step: "Create the student partner (Admission's Student is res.partner)"
+        action: "create"
+        model: "res.partner"
+        save_as: "pta_student"
+        values:
+          name: "PTA Student"
+
+      - step: "Get the account.account.type Income reference"
+        action: "ref"
+        xml_id: "account.data_account_type_revenue"
+        save_as: "pta_account_type_income"
+
+      - step: "Create the income account used by payment term details"
+        action: "create"
+        model: "account.account"
+        save_as: "pta_income_account"
+        values:
+          name: "PTA Income Account"
+          code: "PTAIA"
+          user_type_id: "REC: pta_account_type_income.id"
+          reconcile: false
+
+      - step: "Create product A (partial transfer, taxed)"
+        action: "create"
+        model: "product.product"
+        save_as: "pta_product_a"
+        values:
+          name: "PTA Product A"
+          type: "service"
+
+      - step: "Create product B (full transfer)"
+        action: "create"
+        model: "product.product"
+        save_as: "pta_product_b"
+        values:
+          name: "PTA Product B"
+          type: "service"
+
+      - step: "Create a 10% tax"
+        action: "create"
+        model: "account.tax"
+        save_as: "pta_tax_10"
+        values:
+          name: "PTA Tax 10%"
+          amount_type: "percent"
+          amount: 10.0
+          type_tax_use: "sale"
+          invoice_repartition_line_ids:
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "base"
+            - - 0
+              - 0
+              - factor_percent: 100
+                repartition_type: "tax"
+
+      - step: "Create the transfer reason"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        save_as: "pta_reason"
+        values:
+          name: "PTA Reason"
+          code: "PTARS"
+
+      - step: "Create the admission (no invoicing capability needed for groups A-D)"
+        action: "create"
+        model: "school_admission"
+        save_as: "pta_admission"
+        values:
+          user_id: "REF: base.user_admin"
+          academic_year_id: "REC: pta_academic_year.id"
+          academic_term_id: "REC: pta_academic_term.id"
+          school_id: "REC: pta_school.id"
+          grade_id: "REC: pta_grade.id"
+          student_id: "REC: pta_student.id"
+          currency_id: "REC: company.currency_id.id"
+
+      - step: "Confirm the admission"
+        action: "call"
+        target: "pta_admission"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve the admission, reaching Open"
+        action: "call"
+        target: "pta_admission"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      # ── Group A: partial transfer, taxed, Done, and total conservation ──
+      - step: "Create source term A"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "pta_a_source_term"
+        values:
+          admission_id: "REC: pta_admission.id"
+          name: "PTA A Source Term"
+
+      - step: "Create destination term A"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "pta_a_dest_term"
+        values:
+          admission_id: "REC: pta_admission.id"
+          name: "PTA A Destination Term"
+
+      - step: "Create source detail A with a 10% tax"
+        action: "create"
+        model: "school_admission_payment_term_detail"
+        save_as: "pta_a_detail"
+        values:
+          term_id: "REC: pta_a_source_term.id"
+          product_id: "REC: pta_product_a.id"
+          name: "PTA A Fee"
+          account_id: "REC: pta_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+          tax_ids:
+            - - 6
+              - 0
+              - - "REC: pta_tax_10.id"
+
+      - step: "Create transfer document A, Admission path"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pta_a_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          admission_id: "REC: pta_admission.id"
+          reason_id: "REC: pta_reason.id"
+          admission_source_term_id: "REC: pta_a_source_term.id"
+          admission_destination_term_id: "REC: pta_a_dest_term.id"
+
+      - step:
+          "Onchange - setting Admission Source Detail fills Amount Before automatically
+          (not saved, so it does not interfere with Group A's own line below)"
+        action: "form"
+        model: "school_payment_term_transfer_line"
+        save: false
+        ops:
+          - set: {transfer_id: "REC: pta_a_doc"}
+          - set: {admission_source_detail_id: "REC: pta_a_detail"}
+          - assert:
+              amount_before:
+                type: "value"
+                expected: 100000.0
+
+      - step: "Create the partial-transfer line A (40,000 of 100,000, taxed)"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pta_a_line"
+        values:
+          transfer_id: "REC: pta_a_doc.id"
+          admission_source_detail_id: "REC: pta_a_detail.id"
+          amount_before: 100000.0
+          amount: 40000.0
+
+      - step: "Confirm transfer document A"
+        action: "call"
+        target: "pta_a_doc"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve transfer document A, reaching Done automatically"
+        action: "call"
+        target: "pta_a_doc"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step: "Assert the source detail A was adjusted, not voided"
+        action: "assert"
+        target: "pta_a_detail"
+        asserts:
+          price_unit:
+            type: "value"
+            expected: 60000.0
+          voided:
+            type: "value"
+            expected: false
+
+      - step: "Assert the line A got its Admission destination detail, tax included"
+        action: "assert"
+        target: "pta_a_line"
+        asserts:
+          admission_destination_detail_id.id:
+            type: "value"
+            operator: "is_truthy"
+          admission_destination_detail_id.price_unit:
+            type: "value"
+            expected: 40000.0
+          admission_destination_detail_id.uom_quantity:
+            type: "value"
+            expected: 1.0
+          admission_destination_detail_id.locked:
+            type: "value"
+            expected: true
+          admission_destination_detail_id.product_id:
+            type: "m2o"
+            expected: "REC: pta_product_a"
+          admission_destination_detail_id.tax_ids:
+            type: "m2m"
+            check: "exact"
+            expected_records:
+              - "REC: pta_tax_10"
+
+      - step:
+          "Assert source/destination term A totals (kekekalan with tax: 66,000 + 44,000
+          = 110,000)"
+        action: "assert"
+        target: "pta_a_source_term"
+        asserts:
+          amount_total:
+            type: "value"
+            expected: 66000.0
+
+      - step: "Assert destination term A total"
+        action: "assert"
+        target: "pta_a_dest_term"
+        asserts:
+          amount_total:
+            type: "value"
+            expected: 44000.0
+
+      # ── Group B: full transfer voids the source detail, and the ──
+      # ── Admission's product summary recompute excludes it ────────
+      - step: "Create source term B"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "pta_b_source_term"
+        values:
+          admission_id: "REC: pta_admission.id"
+          name: "PTA B Source Term"
+
+      - step: "Create destination term B"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "pta_b_dest_term"
+        values:
+          admission_id: "REC: pta_admission.id"
+          name: "PTA B Destination Term"
+
+      - step: "Create source detail B"
+        action: "create"
+        model: "school_admission_payment_term_detail"
+        save_as: "pta_b_detail"
+        values:
+          term_id: "REC: pta_b_source_term.id"
+          product_id: "REC: pta_product_b.id"
+          name: "PTA B Fee"
+          account_id: "REC: pta_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create transfer document B, Admission path"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pta_b_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          admission_id: "REC: pta_admission.id"
+          reason_id: "REC: pta_reason.id"
+          admission_source_term_id: "REC: pta_b_source_term.id"
+          admission_destination_term_id: "REC: pta_b_dest_term.id"
+
+      - step: "Create the full-transfer line B (100,000 of 100,000)"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pta_b_line"
+        values:
+          transfer_id: "REC: pta_b_doc.id"
+          admission_source_detail_id: "REC: pta_b_detail.id"
+          amount_before: 100000.0
+          amount: 100000.0
+
+      - step: "Confirm transfer document B"
+        action: "call"
+        target: "pta_b_doc"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve transfer document B, reaching Done automatically"
+        action: "call"
+        target: "pta_b_doc"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step: "Assert the source detail B was voided, price_unit unchanged"
+        action: "assert"
+        target: "pta_b_detail"
+        asserts:
+          price_unit:
+            type: "value"
+            expected: 100000.0
+          voided:
+            type: "value"
+            expected: true
+
+      - step:
+          "Find the Admission's product summary line for Product B -- this only exists
+          if _recompute_product_summary() actually ran again after Done voided the
+          source detail (school_admission_payment_term_detail.write() calls it
+          unconditionally on every write, including this module's own
+          detail.write({'voided': True}) in _10_apply_transfer)"
+        action: "search"
+        model: "school_admission_product_summary"
+        domain:
+          - ["admission_id", "=", "REC: pta_admission.id"]
+          - ["product_id", "=", "REC: pta_product_b.id"]
+        save_as: "pta_b_summary"
+        limit: 1
+
+      - step:
+          "Assert the summary counts only the new (non-voided) destination detail's
+          100,000 -- not 200,000, which is what a broken voided exclusion would show
+          since the voided source detail shares the same product"
+        action: "assert"
+        target: "pta_b_summary"
+        asserts:
+          amount_untaxed:
+            type: "value"
+            expected: 100000.0
+
+      # ── Group C: negative -- both Enrollment and Admission set ──────
+      - step: "Create the grade class needed by a minimal Enrollment fixture"
+        action: "create"
+        model: "school_grade_class"
+        save_as: "pta_grade_class"
+        values:
+          name: "PTA Class"
+          code: "PTACL"
+          school_id: "REC: pta_school.id"
+          grade_id: "REC: pta_grade.id"
+
+      - step: "Create a second student contact for the minimal Enrollment"
+        action: "create"
+        model: "res.partner"
+        save_as: "pta_enr_contact"
+        values:
+          name: "PTA Enrollment Contact"
+
+      - step: "Create the school_student for the minimal Enrollment"
+        action: "create"
+        model: "school_student"
+        save_as: "pta_enr_student"
+        values:
+          name: "PTA Enrollment Student"
+          code: "PTAENST"
+          contact_id: "REC: pta_enr_contact.id"
+          school_id: "REC: pta_school.id"
+
+      - step:
+          "Create a minimal Enrollment (stays draft -- only its id is needed to exercise
+          the exclusivity constraint, not its own workflow)"
+        action: "create"
+        model: "school_enrollment"
+        save_as: "pta_enrollment"
+        values:
+          academic_year_id: "REC: pta_academic_year.id"
+          academic_term_id: "REC: pta_academic_term.id"
+          school_id: "REC: pta_school.id"
+          grade_id: "REC: pta_grade.id"
+          grade_class_id: "REC: pta_grade_class.id"
+          student_id: "REC: pta_enr_student.id"
+
+      - step: "Reject a document setting both Enrollment and Admission"
+        action: "create"
+        model: "school_payment_term_transfer"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Exactly one of Enrollment or Admission must be set"
+        values:
+          user_id: "REF: base.user_admin"
+          enrollment_id: "REC: pta_enrollment.id"
+          admission_id: "REC: pta_admission.id"
+          reason_id: "REC: pta_reason.id"
+
+      # ── Group D: negative -- neither Enrollment nor Admission set ───
+      - step: "Reject a document setting neither Enrollment nor Admission"
+        action: "create"
+        model: "school_payment_term_transfer"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Exactly one of Enrollment or Admission must be set"
+        values:
+          user_id: "REF: base.user_admin"
+          reason_id: "REC: pta_reason.id"
+
+      # ── Invoice-capable admission (prefix ptainv), for Group E ──────
+      - step: "Setup - get sale journal"
+        action: "search"
+        model: "account.journal"
+        domain: [["type", "=", "sale"]]
+        save_as: "ptainv_journal"
+        limit: 1
+
+      - step: "Setup - get receivable account type"
+        action: "ref"
+        xml_id: "account.data_account_type_receivable"
+        save_as: "ptainv_receivable_type"
+
+      - step: "Setup - create receivable account"
+        action: "create"
+        model: "account.account"
+        save_as: "ptainv_receivable_account"
+        values:
+          name: "PTAINV Receivable Account"
+          code: "PTAINVREC"
+          user_type_id: "REC: ptainv_receivable_type.id"
+          reconcile: true
+
+      - step: "Setup - create customer invoice type"
+        action: "create"
+        model: "customer_invoice_type"
+        save_as: "ptainv_ci_type"
+        values:
+          name: "PTAINV Customer Invoice Type"
+          code: "PTAINVCIT"
+          journal_id: "REC: ptainv_journal.id"
+          receivable_account_id: "REC: ptainv_receivable_account.id"
+
+      - step: "Setup - create the student partner for the invoice-capable admission"
+        action: "create"
+        model: "res.partner"
+        save_as: "ptainv_student"
+        values:
+          name: "PTAINV Student"
+
+      - step: "Setup - create the invoice-capable admission"
+        action: "create"
+        model: "school_admission"
+        save_as: "ptainv_admission"
+        values:
+          user_id: "REF: base.user_admin"
+          academic_year_id: "REC: pta_academic_year.id"
+          academic_term_id: "REC: pta_academic_term.id"
+          school_id: "REC: pta_school.id"
+          grade_id: "REC: pta_grade.id"
+          student_id: "REC: ptainv_student.id"
+          currency_id: "REC: company.currency_id.id"
+          receivable_journal_id: "REC: ptainv_journal.id"
+          receivable_account_id: "REC: ptainv_receivable_account.id"
+          customer_invoice_type_id: "REC: ptainv_ci_type.id"
+          auto_confirm_customer_invoice: false
+
+      - step: "Confirm the invoice-capable admission"
+        action: "call"
+        target: "ptainv_admission"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve the invoice-capable admission, reaching Open"
+        action: "call"
+        target: "ptainv_admission"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      # ── Group E: negative -- destination term invoiced between ──────
+      # ── Confirm and Approve ──────────────────────────────────────
+      - step: "Create source term E on the invoice-capable admission"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "pta_e_source_term"
+        values:
+          admission_id: "REC: ptainv_admission.id"
+          name: "PTA E Source Term"
+
+      - step: "Create destination term E (uninvoiced for now)"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "pta_e_dest_term"
+        values:
+          admission_id: "REC: ptainv_admission.id"
+          name: "PTA E Destination Term"
+
+      - step: "Create source detail E"
+        action: "create"
+        model: "school_admission_payment_term_detail"
+        save_as: "pta_e_detail"
+        values:
+          term_id: "REC: pta_e_source_term.id"
+          product_id: "REC: pta_product_a.id"
+          name: "PTA E Fee"
+          account_id: "REC: pta_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create transfer document E, Admission path"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pta_e_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          admission_id: "REC: ptainv_admission.id"
+          reason_id: "REC: pta_reason.id"
+          admission_source_term_id: "REC: pta_e_source_term.id"
+          admission_destination_term_id: "REC: pta_e_dest_term.id"
+
+      - step: "Create line E"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "pta_e_line"
+        values:
+          transfer_id: "REC: pta_e_doc.id"
+          admission_source_detail_id: "REC: pta_e_detail.id"
+          amount_before: 100000.0
+          amount: 25000.0
+
+      - step: "Confirm transfer document E -- both terms still uninvoiced here"
+        action: "call"
+        target: "pta_e_doc"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Invoice the destination term E in between Confirm and Approve"
+        action: "call"
+        target: "pta_e_dest_term"
+        method: "action_create_invoice"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "invoiced"
+
+      - step: "Approve must be rejected -- Destination Term got invoiced after Confirm"
+        action: "call"
+        target: "pta_e_doc"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        expect_error:
+          type: "UserError"
+
+  - name: "Payment Term Transfer Admission - Enrollment Path Still Works"
+    steps:
+      # ── Shared fixture chain (prefix ptae), Enrollment path only ─
+      - step: "Create the grade type"
+        action: "create"
+        model: "school_grade_type"
+        save_as: "ptae_grade_type"
+        values:
+          name: "PTAE Grade Type"
+          code: "PTAEGT"
+
+      - step: "Create the school"
+        action: "create"
+        model: "school"
+        save_as: "ptae_school"
+        values:
+          name: "PTAE School"
+          code: "PTAESC"
+          grade_type_id: "REC: ptae_grade_type.id"
+
+      - step: "Create the academic year"
+        action: "create"
+        model: "school_academic_year"
+        save_as: "ptae_academic_year"
+        values:
+          name: "PTAE Academic Year"
+          code: "PTAEAY"
+          date_start: 2026-07-01
+          date_end: 2027-06-30
+
+      - step: "Create the academic term"
+        action: "create"
+        model: "school_academic_term"
+        save_as: "ptae_academic_term"
+        values:
+          name: "PTAE Term"
+          code: "PTAETM"
+          date_start: 2026-07-01
+          date_end: 2026-12-31
+          year_id: "REC: ptae_academic_year.id"
+
+      - step: "Create the grade"
+        action: "create"
+        model: "school_grade"
+        save_as: "ptae_grade"
+        values:
+          name: "PTAE Grade"
+          code: "PTAEGR"
+          type_id: "REC: ptae_grade_type.id"
+
+      - step: "Create the grade class"
+        action: "create"
+        model: "school_grade_class"
+        save_as: "ptae_grade_class"
+        values:
+          name: "PTAE Class"
+          code: "PTAECL"
+          school_id: "REC: ptae_school.id"
+          grade_id: "REC: ptae_grade.id"
+
+      - step: "Create the student contact"
+        action: "create"
+        model: "res.partner"
+        save_as: "ptae_contact"
+        values:
+          name: "PTAE Contact"
+
+      - step: "Create the student"
+        action: "create"
+        model: "school_student"
+        save_as: "ptae_student"
+        values:
+          name: "PTAE Student"
+          code: "PTAEST"
+          contact_id: "REC: ptae_contact.id"
+          school_id: "REC: ptae_school.id"
+
+      - step: "Create the enrollment"
+        action: "create"
+        model: "school_enrollment"
+        save_as: "ptae_enrollment"
+        values:
+          academic_year_id: "REC: ptae_academic_year.id"
+          academic_term_id: "REC: ptae_academic_term.id"
+          school_id: "REC: ptae_school.id"
+          grade_id: "REC: ptae_grade.id"
+          grade_class_id: "REC: ptae_grade_class.id"
+          student_id: "REC: ptae_student.id"
+
+      - step: "Get the account.account.type Income reference"
+        action: "ref"
+        xml_id: "account.data_account_type_revenue"
+        save_as: "ptae_account_type_income"
+
+      - step: "Create the income account used by payment term details"
+        action: "create"
+        model: "account.account"
+        save_as: "ptae_income_account"
+        values:
+          name: "PTAE Income Account"
+          code: "PTAEIA"
+          user_type_id: "REC: ptae_account_type_income.id"
+          reconcile: false
+
+      - step: "Create the product"
+        action: "create"
+        model: "product.product"
+        save_as: "ptae_product"
+        values:
+          name: "PTAE Product"
+          type: "service"
+
+      - step: "Create the transfer reason"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        save_as: "ptae_reason"
+        values:
+          name: "PTAE Reason"
+          code: "PTAERS"
+
+      - step: "Create the source payment term"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "ptae_source_term"
+        values:
+          enrollment_id: "REC: ptae_enrollment.id"
+          name: "PTAE Source Term"
+
+      - step: "Create the destination payment term"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "ptae_dest_term"
+        values:
+          enrollment_id: "REC: ptae_enrollment.id"
+          name: "PTAE Destination Term"
+
+      - step: "Create the source detail"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "ptae_detail"
+        values:
+          term_id: "REC: ptae_source_term.id"
+          product_id: "REC: ptae_product.id"
+          name: "PTAE Fee"
+          account_id: "REC: ptae_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 100000.0
+
+      - step: "Create the Enrollment-path transfer document"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "ptae_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          enrollment_id: "REC: ptae_enrollment.id"
+          reason_id: "REC: ptae_reason.id"
+          source_term_id: "REC: ptae_source_term.id"
+          destination_term_id: "REC: ptae_dest_term.id"
+
+      - step: "Create the partial-transfer line (25,000 of 100,000)"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        save_as: "ptae_line"
+        values:
+          transfer_id: "REC: ptae_doc.id"
+          source_detail_id: "REC: ptae_detail.id"
+          amount_before: 100000.0
+          amount: 25000.0
+
+      - step: "Confirm the Enrollment-path document"
+        action: "call"
+        target: "ptae_doc"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve the Enrollment-path document, reaching Done automatically"
+        action: "call"
+        target: "ptae_doc"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+      - step:
+          "Assert the Enrollment path still behaves exactly as before this module was
+          installed: source detail adjusted, not voided"
+        action: "assert"
+        target: "ptae_detail"
+        asserts:
+          price_unit:
+            type: "value"
+            expected: 75000.0
+          voided:
+            type: "value"
+            expected: false
+
+      - step: "Assert the line got its (Enrollment-side) destination detail"
+        action: "assert"
+        target: "ptae_line"
+        asserts:
+          destination_detail_id.id:
+            type: "value"
+            operator: "is_truthy"
+          destination_detail_id.price_unit:
+            type: "value"
+            expected: 25000.0
+          admission_destination_detail_id:
+            type: "value"
+            operator: "is_falsy"
