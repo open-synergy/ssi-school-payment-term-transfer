@@ -152,7 +152,11 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__enrollment_id
 msgid ""
 "The open enrollment whose billed amount is being moved between payment "
-"terms."
+"terms. Must be set for a document whose billing source is not otherwise "
+"resolved -- enforced by ``_check_source_document``, not by this field "
+"itself, so an extension module's own billing source is not forced to also be"
+" a required field. Source Term/Destination Term requiredness is not yet "
+"enforced here; that follows in a later item."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
@@ -166,17 +170,26 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__source_detail_id
 msgid ""
 "The original fee line the amount is being moved from. Selecting it fills "
-"Amount Before automatically."
+"Amount Before automatically. Required when the owning document's Source Type"
+" is Enrollment -- enforced by ``_check_source_detail``, not by this field "
+"itself, so an extension module's own source detail is not forced to also be "
+"a required field."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__destination_term_id
-msgid "The payment term the amount is being moved into."
+msgid ""
+"The payment term the amount is being moved into. Not yet enforced as "
+"required here -- that follows in a later item; the Confirm/Done "
+"prerequisites in ``_check_transfer_prerequisites`` still require it."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__source_term_id
-msgid "The payment term the amount is being moved out of."
+msgid ""
+"The payment term the amount is being moved out of. Not yet enforced as "
+"required here -- that follows in a later item; the Confirm/Done "
+"prerequisites in ``_check_transfer_prerequisites`` still require it."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer_admission
