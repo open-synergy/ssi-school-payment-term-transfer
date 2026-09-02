@@ -129,11 +129,13 @@ class SchoolPaymentTermTransfer(models.Model):
         domain=[("state", "=", "open")],
         help=(
             "The open enrollment whose billed amount is being moved "
-            "between payment terms. Required when Source Type is "
-            "Enrollment -- enforced by ``_check_billing_source``, not "
-            "by this field itself, so an extension module's own "
-            "billing source is not forced to also be a required "
-            "field."
+            "between payment terms. Must be set for a document whose "
+            "billing source is not otherwise resolved -- enforced by "
+            "``_check_source_document``, not by this field itself, "
+            "so an extension module's own billing source is not "
+            "forced to also be a required field. Source Term/"
+            "Destination Term requiredness is not yet enforced here; "
+            "that follows in a later item."
         ),
     )
     reason_id = fields.Many2one(
@@ -216,9 +218,10 @@ class SchoolPaymentTermTransfer(models.Model):
             ],
         },
         help=(
-            "The payment term the amount is being moved out of. "
-            "Required when Source Type is Enrollment -- enforced by "
-            "``_check_billing_source``."
+            "The payment term the amount is being moved out of. Not "
+            "yet enforced as required here -- that follows in a "
+            "later item; the Confirm/Done prerequisites in "
+            "``_check_transfer_prerequisites`` still require it."
         ),
     )
     destination_term_id = fields.Many2one(
@@ -231,9 +234,10 @@ class SchoolPaymentTermTransfer(models.Model):
             ],
         },
         help=(
-            "The payment term the amount is being moved into. "
-            "Required when Source Type is Enrollment -- enforced by "
-            "``_check_billing_source``."
+            "The payment term the amount is being moved into. Not "
+            "yet enforced as required here -- that follows in a "
+            "later item; the Confirm/Done prerequisites in "
+            "``_check_transfer_prerequisites`` still require it."
         ),
     )
     line_ids = fields.One2many(
@@ -530,39 +534,36 @@ Solution: Select a different payment term as the transfer destination
                 )
                 raise ValidationError(error_message)
 
-    @api.constrains("enrollment_id", "source_term_id", "destination_term_id")
-    def _check_billing_source(self):
-        """Require a billing source and its terms for the source type.
+    @api.constrains("enrollment_id")
+    def _check_source_document(self):
+        """Require a billing source document to be set.
 
-        The requiredness of ``enrollment_id``/``source_term_id``/
-        ``destination_term_id`` lives here rather than on the fields
-        themselves, so an extension module's own Source Type value is
-        not forced to also key off these fields: each is validated
-        through ``_get_owner_document()``/``_get_source_term()``/
-        ``_get_destination_term()`` instead, which an extension
-        module overrides to resolve its own fields first.
+        The requiredness of ``enrollment_id`` lives here rather than
+        on the field itself, so an extension module's own Source
+        Type value is not forced to also key off it: it is validated
+        through ``_get_owner_document()`` instead, which an
+        extension module overrides to resolve its own field first.
 
-        Deliberately **not** triggered by ``source_type`` alone (it
-        always carries a default, so it would fire on every create --
-        including ones that touch neither ``enrollment_id`` nor a
-        term field at all, which is exactly what a module adding a
-        second, mutually-exclusive billing source needs room to
-        reject with its own message before this method ever runs).
-        And the Source Term/Destination Term half is only enforced
-        when ``_get_owner_document()`` actually resolved through
-        ``enrollment_id`` -- when an extension module's own field
-        resolves the owner instead, that module owns validating its
-        own term fields; this method has nothing of its own left to
-        check.
+        **Named ``_check_source_document``, not ``_check_billing_
+        source``, on purpose.** Odoo runs ``@api.constrains`` methods
+        in alphabetical order by method name (``inspect.getmembers``)
+        and stops at the first one that raises. An extension module
+        adding a second, mutually-exclusive billing source needs its
+        own ``_check_single_source_term``-style check to run BEFORE
+        this one whenever both are candidates (e.g. a write touching
+        only ``enrollment_id``, clearing it while the alternate field
+        is also unset) -- "source_document" sorts after "single_
+        source_term" while "billing_source" would have sorted before
+        it. Source Term/Destination Term requiredness is deliberately
+        NOT checked here (regressed a sibling module's existing
+        negative test on PR #19's first CI round); it returns in a
+        later item once the routing rules for a second Source Type
+        are in place.
 
-        :raises ValidationError: ``_get_owner_document()`` is empty,
-            or it resolved through ``enrollment_id`` and either
-            ``_get_source_term()`` or ``_get_destination_term()`` is
-            empty.
+        :raises ValidationError: ``_get_owner_document()`` is empty.
         """
         for record in self.sudo():
-            owner = record._get_owner_document()
-            if not owner:
+            if not record._get_owner_document():
                 error_message = (
                     _(
                         """
@@ -570,24 +571,6 @@ Context: Set payment term transfer billing source
 Database ID: %s
 Problem: No billing source record set for Source Type '%s'
 Solution: Select the record matching the selected Source Type
-"""
-                    )
-                    % (
-                        record.id,
-                        record.source_type,
-                    )
-                )
-                raise ValidationError(error_message)
-            if owner == record.enrollment_id and (
-                not record._get_source_term() or not record._get_destination_term()
-            ):
-                error_message = (
-                    _(
-                        """
-Context: Set payment term transfer billing source
-Database ID: %s
-Problem: Source Term and Destination Term must both be set for Source Type '%s'
-Solution: Select a Source Term and a Destination Term
 """
                     )
                     % (

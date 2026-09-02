@@ -500,35 +500,23 @@ scenarios:
             expected: "REC: pt2_enrollment_alt.display_name"
 
       # ── Group 9: negative -- billing source requiredness ─────────
-      - step: "Reject a header without enrollment_id"
+      - step: "Create a header to clear enrollment_id from"
         action: "create"
         model: "school_payment_term_transfer"
-        expect_error:
-          type: "ValidationError"
-        values:
-          reason_id: "REC: pt2_reason.id"
-          source_term_id: "REC: pt2_source_term.id"
-          destination_term_id: "REC: pt2_destination_term.id"
-
-      - step: "Reject a header without source_term_id"
-        action: "create"
-        model: "school_payment_term_transfer"
-        expect_error:
-          type: "ValidationError"
-        values:
-          enrollment_id: "REC: pt2_enrollment.id"
-          reason_id: "REC: pt2_reason.id"
-          destination_term_id: "REC: pt2_destination_term.id"
-
-      - step: "Reject a header without destination_term_id"
-        action: "create"
-        model: "school_payment_term_transfer"
-        expect_error:
-          type: "ValidationError"
+        save_as: "pt2_doc_clear_enrollment"
         values:
           enrollment_id: "REC: pt2_enrollment.id"
           reason_id: "REC: pt2_reason.id"
           source_term_id: "REC: pt2_source_term.id"
+          destination_term_id: "REC: pt2_destination_term.id"
+
+      - step: "Reject clearing enrollment_id on an Enrollment-sourced document"
+        action: "write"
+        target: "pt2_doc_clear_enrollment"
+        expect_error:
+          type: "ValidationError"
+        values:
+          enrollment_id: false
 
       - step: "Create a header to hold a line without source_detail_id"
         action: "create"

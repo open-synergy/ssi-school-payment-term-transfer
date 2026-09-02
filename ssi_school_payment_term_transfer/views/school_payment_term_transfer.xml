@@ -86,7 +86,7 @@
                 <field name="source_type" />
                 <field
                         name="enrollment_id"
-                        attrs="{'required': [('source_type', '=', 'enrollment')], 'invisible': [('source_type', '!=', 'enrollment')]}"
+                        attrs="{'invisible': [('source_type', '!=', 'enrollment')]}"
                     />
                 <field name="academic_year_id" />
                 <field name="academic_term_id" />
@@ -103,12 +103,12 @@
                         <field
                                 name="source_term_id"
                                 domain="[('id','in',allowed_term_ids)]"
-                                attrs="{'required': [('source_type', '=', 'enrollment')], 'invisible': [('source_type', '!=', 'enrollment')]}"
+                                attrs="{'invisible': [('source_type', '!=', 'enrollment')]}"
                             />
                         <field
                                 name="destination_term_id"
                                 domain="[('id','in',allowed_term_ids)]"
-                                attrs="{'required': [('source_type', '=', 'enrollment')], 'invisible': [('source_type', '!=', 'enrollment')]}"
+                                attrs="{'invisible': [('source_type', '!=', 'enrollment')]}"
                             />
                     </group>
                     <field name="line_ids">
@@ -121,7 +121,7 @@
                             <field
                                     name="source_detail_id"
                                     domain="[('id','in',allowed_source_detail_ids)]"
-                                    attrs="{'column_invisible': [('parent.source_type', '!=', 'enrollment')], 'required': [('parent.source_type', '=', 'enrollment')]}"
+                                    attrs="{'column_invisible': [('parent.source_type', '!=', 'enrollment')]}"
                                 />
                             <field name="product_id" readonly="1" />
                             <field name="amount_before" readonly="1" force_save="1" />
@@ -140,7 +140,7 @@
                                 <field
                                         name="source_detail_id"
                                         domain="[('id','in',allowed_source_detail_ids)]"
-                                        attrs="{'invisible': [('parent.source_type', '!=', 'enrollment')], 'required': [('parent.source_type', '=', 'enrollment')]}"
+                                        attrs="{'invisible': [('parent.source_type', '!=', 'enrollment')]}"
                                     />
                                 <field name="product_id" readonly="1" />
                                 <field
