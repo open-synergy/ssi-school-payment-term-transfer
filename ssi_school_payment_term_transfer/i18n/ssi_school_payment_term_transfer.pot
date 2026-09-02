@@ -102,6 +102,17 @@ msgid ""
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer billing source\n"
+"Database ID: %s\n"
+"Problem: No billing source record set for Source Type '%s'\n"
+"Solution: Select the record matching the selected Source Type\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
 #: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
 #, python-format
 msgid ""
@@ -121,6 +132,17 @@ msgid ""
 "Database ID: %s\n"
 "Problem: Amount %s is not greater than zero\n"
 "Solution: Enter an amount greater than zero\n"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
+"Problem: No source detail set for this line\n"
+"Solution: Select the source detail this line moves the amount from\n"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -305,6 +327,14 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_type
+msgid ""
+"Billing source this transfer moves an amount against. This module only "
+"registers Enrollment -- extension modules add further values with "
+"``selection_add`` and override the ``_get_*`` extension points to match."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approve_ok
 msgid "Can Approve"
 msgstr ""
@@ -437,6 +467,7 @@ msgstr ""
 
 #. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_name
 msgid "Destination Term"
 msgstr ""
 
@@ -456,6 +487,31 @@ msgid "Display Name"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_name
+msgid ""
+"Display name of the payment term returned by ``_get_destination_term()``. "
+"Shown on the tree instead of Destination Term so the column keeps working "
+"regardless of Source Type."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_name
+msgid ""
+"Display name of the payment term returned by ``_get_source_term()``. Shown "
+"on the tree instead of Source Term so the column keeps working regardless of"
+" Source Type."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_document
+msgid ""
+"Display name of this transfer's billing source -- the Enrollment today, "
+"whichever ``_get_owner_document()`` returns once an extension module adds "
+"another Source Type. Replaces the Enrollment column on the tree so a single "
+"column keeps working regardless of which Source Type a row uses."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__done_ok
 msgid ""
 "Done policy\n"
@@ -465,6 +521,7 @@ msgstr ""
 
 #. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__enrollment_id
+#: model:ir.model.fields.selection,name:ssi_school_payment_term_transfer.selection__school_payment_term_transfer__source_type__enrollment
 msgid "Enrollment"
 msgstr ""
 
@@ -845,8 +902,20 @@ msgid "Source Detail"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_document
+msgid "Source Document"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_name
 msgid "Source Term"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_type
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Source Type"
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
@@ -912,24 +981,37 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__enrollment_id
 msgid ""
 "The open enrollment whose billed amount is being moved between payment "
-"terms."
+"terms. Must be set for a document whose billing source is not otherwise "
+"resolved -- enforced by ``_check_source_document``, not by this field "
+"itself, so an extension module's own billing source is not forced to also be"
+" a required field. Source Term/Destination Term requiredness is not yet "
+"enforced here; that follows in a later item."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__source_detail_id
 msgid ""
 "The original fee line the amount is being moved from. Selecting it fills "
-"Amount Before automatically."
+"Amount Before automatically. Required when the owning document's Source Type"
+" is Enrollment -- enforced by ``_check_source_detail``, not by this field "
+"itself, so an extension module's own source detail is not forced to also be "
+"a required field."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_id
-msgid "The payment term the amount is being moved into."
+msgid ""
+"The payment term the amount is being moved into. Not yet enforced as "
+"required here -- that follows in a later item; the Confirm/Done "
+"prerequisites in ``_check_transfer_prerequisites`` still require it."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
 #: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_id
-msgid "The payment term the amount is being moved out of."
+msgid ""
+"The payment term the amount is being moved out of. Not yet enforced as "
+"required here -- that follows in a later item; the Confirm/Done "
+"prerequisites in ``_check_transfer_prerequisites`` still require it."
 msgstr ""
 
 #. module: ssi_school_payment_term_transfer
