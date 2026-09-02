@@ -416,6 +416,128 @@ scenarios:
           amount_before: 100000.0
           amount: 150000.0
 
+      # ── Group 8: source_document/source_term_name/destination_term_name ──
+      - step: "Create the compute-fields transfer document"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt2_doc_compute"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          reason_id: "REC: pt2_reason.id"
+          source_term_id: "REC: pt2_source_term.id"
+          destination_term_id: "REC: pt2_destination_term.id"
+
+      - step: "Assert source_type defaults to enrollment without being set"
+        action: "assert"
+        target: "pt2_doc_compute"
+        asserts:
+          source_type:
+            type: "value"
+            expected: "enrollment"
+
+      - step:
+          "Assert source_document/source_term_name/destination_term_name follow the M2O
+          display names"
+        action: "assert"
+        target: "pt2_doc_compute"
+        asserts:
+          source_document:
+            type: "value"
+            expected: "REC: pt2_enrollment.display_name"
+          source_term_name:
+            type: "value"
+            expected: "REC: pt2_source_term.display_name"
+          destination_term_name:
+            type: "value"
+            expected: "REC: pt2_destination_term.display_name"
+
+      - step: "Create a second payment term on the same enrollment"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pt2_source_term_alt"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          name: "PT2 Source Term Alt"
+
+      - step: "Write source_term_id to the alternate term"
+        action: "write"
+        target: "pt2_doc_compute"
+        values:
+          source_term_id: "REC: pt2_source_term_alt.id"
+
+      - step: "Assert source_term_name followed the write"
+        action: "assert"
+        target: "pt2_doc_compute"
+        asserts:
+          source_term_name:
+            type: "value"
+            expected: "REC: pt2_source_term_alt.display_name"
+
+      - step: "Create a second enrollment for the enrollment_id write"
+        action: "create"
+        model: "school_enrollment"
+        save_as: "pt2_enrollment_alt"
+        values:
+          academic_year_id: "REC: pt2_academic_year.id"
+          academic_term_id: "REC: pt2_academic_term.id"
+          school_id: "REC: pt2_school.id"
+          grade_id: "REC: pt2_grade.id"
+          grade_class_id: "REC: pt2_grade_class.id"
+          student_id: "REC: pt2_student.id"
+
+      - step: "Write enrollment_id to the alternate enrollment"
+        action: "write"
+        target: "pt2_doc_compute"
+        values:
+          enrollment_id: "REC: pt2_enrollment_alt.id"
+
+      - step: "Assert source_document followed the write"
+        action: "assert"
+        target: "pt2_doc_compute"
+        asserts:
+          source_document:
+            type: "value"
+            expected: "REC: pt2_enrollment_alt.display_name"
+
+      # ── Group 9: negative -- billing source requiredness ─────────
+      - step: "Create a header to clear enrollment_id from"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt2_doc_clear_enrollment"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          reason_id: "REC: pt2_reason.id"
+          source_term_id: "REC: pt2_source_term.id"
+          destination_term_id: "REC: pt2_destination_term.id"
+
+      - step: "Reject clearing enrollment_id on an Enrollment-sourced document"
+        action: "write"
+        target: "pt2_doc_clear_enrollment"
+        expect_error:
+          type: "ValidationError"
+        values:
+          enrollment_id: false
+
+      - step: "Create a header to hold a line without source_detail_id"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pt2_doc_no_detail"
+        values:
+          enrollment_id: "REC: pt2_enrollment.id"
+          reason_id: "REC: pt2_reason.id"
+          source_term_id: "REC: pt2_source_term.id"
+          destination_term_id: "REC: pt2_destination_term.id"
+
+      - step: "Reject a line without source_detail_id"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        expect_error:
+          type: "ValidationError"
+        values:
+          transfer_id: "REC: pt2_doc_no_detail.id"
+          amount_before: 100000.0
+          amount: 25000.0
+
   - name: "Payment Term Transfer - Approval, Done, and Total Conservation"
     options: {auto_refresh: true}
     steps:

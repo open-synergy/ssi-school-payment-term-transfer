@@ -55,10 +55,13 @@ class SchoolPaymentTermTransferLine(models.Model):
     source_detail_id = fields.Many2one(
         string="Source Detail",
         comodel_name="school_enrollment_payment_term_detail",
-        required=True,
         help=(
             "The original fee line the amount is being moved from. "
-            "Selecting it fills Amount Before automatically."
+            "Selecting it fills Amount Before automatically. Required "
+            "when the owning document's Source Type is Enrollment -- "
+            "enforced by ``_check_source_detail``, not by this field "
+            "itself, so an extension module's own source detail is "
+            "not forced to also be a required field."
         ),
     )
     product_id = fields.Many2one(
@@ -231,6 +234,39 @@ class SchoolPaymentTermTransferLine(models.Model):
                 amount_after,
                 precision_rounding=record.currency_id.rounding or 0.01,
             )
+
+    @api.constrains("source_detail_id", "transfer_id")
+    def _check_source_detail(self):
+        """Require a source detail for the owning document's source type.
+
+        The requiredness of ``source_detail_id`` lives here rather
+        than on the field itself, so an extension module's own
+        source detail field is not forced to also be required. Reads
+        through ``_get_source_detail()`` rather than
+        ``source_detail_id`` directly, so an extension module
+        overriding that method to resolve its own field first is
+        checked automatically. ``transfer_id`` is a trigger even
+        though it is not read here, because every line create passes
+        it, so this still runs when ``source_detail_id`` is omitted
+        from ``vals`` entirely (as opposed to merely written as
+        empty).
+
+        :raises ValidationError: ``_get_source_detail()`` is empty.
+        """
+        for record in self.sudo():
+            if not record._get_source_detail():
+                error_message = (
+                    _(
+                        """
+Context: Set payment term transfer line source detail
+Database ID: %s
+Problem: No source detail set for this line
+Solution: Select the source detail this line moves the amount from
+"""
+                    )
+                    % (record.id,)
+                )
+                raise ValidationError(error_message)
 
     @api.constrains("amount")
     def _check_amount_positive(self):

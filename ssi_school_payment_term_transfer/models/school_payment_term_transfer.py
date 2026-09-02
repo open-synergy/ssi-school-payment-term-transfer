@@ -97,10 +97,29 @@ class SchoolPaymentTermTransfer(models.Model):
         },
         help="Date this payment term transfer document was created.",
     )
+    source_type = fields.Selection(
+        string="Source Type",
+        selection=[
+            ("enrollment", "Enrollment"),
+        ],
+        default="enrollment",
+        required=True,
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
+        help=(
+            "Billing source this transfer moves an amount against. "
+            "This module only registers Enrollment -- extension "
+            "modules add further values with ``selection_add`` and "
+            "override the ``_get_*`` extension points to match."
+        ),
+    )
     enrollment_id = fields.Many2one(
         string="Enrollment",
         comodel_name="school_enrollment",
-        required=True,
         readonly=True,
         states={
             "draft": [
@@ -110,7 +129,13 @@ class SchoolPaymentTermTransfer(models.Model):
         domain=[("state", "=", "open")],
         help=(
             "The open enrollment whose billed amount is being moved "
-            "between payment terms."
+            "between payment terms. Must be set for a document whose "
+            "billing source is not otherwise resolved -- enforced by "
+            "``_check_source_document``, not by this field itself, "
+            "so an extension module's own billing source is not "
+            "forced to also be a required field. Source Term/"
+            "Destination Term requiredness is not yet enforced here; "
+            "that follows in a later item."
         ),
     )
     reason_id = fields.Many2one(
@@ -186,26 +211,34 @@ class SchoolPaymentTermTransfer(models.Model):
     source_term_id = fields.Many2one(
         string="Source Term",
         comodel_name="school_enrollment_payment_term",
-        required=True,
         readonly=True,
         states={
             "draft": [
                 ("readonly", False),
             ],
         },
-        help="The payment term the amount is being moved out of.",
+        help=(
+            "The payment term the amount is being moved out of. Not "
+            "yet enforced as required here -- that follows in a "
+            "later item; the Confirm/Done prerequisites in "
+            "``_check_transfer_prerequisites`` still require it."
+        ),
     )
     destination_term_id = fields.Many2one(
         string="Destination Term",
         comodel_name="school_enrollment_payment_term",
-        required=True,
         readonly=True,
         states={
             "draft": [
                 ("readonly", False),
             ],
         },
-        help="The payment term the amount is being moved into.",
+        help=(
+            "The payment term the amount is being moved into. Not "
+            "yet enforced as required here -- that follows in a "
+            "later item; the Confirm/Done prerequisites in "
+            "``_check_transfer_prerequisites`` still require it."
+        ),
     )
     line_ids = fields.One2many(
         string="Line",
@@ -221,6 +254,44 @@ class SchoolPaymentTermTransfer(models.Model):
         store=True,
         compute_sudo=True,
         help="Sum of the amount moved by every line of this document.",
+    )
+    source_document = fields.Char(
+        string="Source Document",
+        compute="_compute_source_document",
+        store=True,
+        compute_sudo=True,
+        help=(
+            "Display name of this transfer's billing source -- the "
+            "Enrollment today, whichever ``_get_owner_document()`` "
+            "returns once an extension module adds another Source "
+            "Type. Replaces the Enrollment column on the tree so a "
+            "single column keeps working regardless of which Source "
+            "Type a row uses."
+        ),
+    )
+    source_term_name = fields.Char(
+        string="Source Term",
+        compute="_compute_source_term_name",
+        store=True,
+        compute_sudo=True,
+        help=(
+            "Display name of the payment term returned by "
+            "``_get_source_term()``. Shown on the tree instead of "
+            "Source Term so the column keeps working regardless of "
+            "Source Type."
+        ),
+    )
+    destination_term_name = fields.Char(
+        string="Destination Term",
+        compute="_compute_destination_term_name",
+        store=True,
+        compute_sudo=True,
+        help=(
+            "Display name of the payment term returned by "
+            "``_get_destination_term()``. Shown on the tree instead "
+            "of Destination Term so the column keeps working "
+            "regardless of Source Type."
+        ),
     )
 
     @api.depends("enrollment_id")
@@ -275,6 +346,53 @@ class SchoolPaymentTermTransfer(models.Model):
                 result += line.amount
             record.amount_total = result
 
+    @api.depends("source_type", "enrollment_id", "enrollment_id.name")
+    def _compute_source_document(self):
+        """Compute the display name of this transfer's billing source.
+
+        Reads through ``_get_owner_document()`` rather than
+        ``enrollment_id`` directly, so an extension module adding
+        another Source Type is picked up automatically once it
+        overrides that extension point.
+
+        :return: None
+        """
+        for record in self:
+            result = record._get_owner_document().display_name
+            record.source_document = result
+
+    @api.depends("source_type", "source_term_id", "source_term_id.name")
+    def _compute_source_term_name(self):
+        """Compute the display name of the transfer's source term.
+
+        Reads through ``_get_source_term()`` rather than
+        ``source_term_id`` directly, for the same reason as
+        ``_compute_source_document``.
+
+        :return: None
+        """
+        for record in self:
+            result = record._get_source_term().display_name
+            record.source_term_name = result
+
+    @api.depends(
+        "source_type",
+        "destination_term_id",
+        "destination_term_id.name",
+    )
+    def _compute_destination_term_name(self):
+        """Compute the display name of the transfer's destination term.
+
+        Reads through ``_get_destination_term()`` rather than
+        ``destination_term_id`` directly, for the same reason as
+        ``_compute_source_document``.
+
+        :return: None
+        """
+        for record in self:
+            result = record._get_destination_term().display_name
+            record.destination_term_name = result
+
     def _get_source_term(self):
         """Return the payment term this document moves the amount out of.
 
@@ -282,14 +400,21 @@ class SchoolPaymentTermTransfer(models.Model):
         source field overrides this to return that field instead. All
         other code reads the source term through this method rather
         than ``source_term_id`` directly, so the admission side can
-        reuse the same logic without duplicating it.
+        reuse the same logic without duplicating it. Gated on
+        ``source_type`` rather than the field's own truthiness, so an
+        extension module can tell apart "Source Type is Enrollment
+        but not filled in yet" from "Source Type is not Enrollment at
+        all".
 
         :return: ``school_enrollment_payment_term`` record, or an
-            empty recordset when unset.
+            empty recordset when ``source_type`` is not ``"enrollment"``
+            or the field is unset.
         :raises ValueError: ``self`` is not a single record.
         """
         self.ensure_one()
-        return self.source_term_id
+        if self.source_type == "enrollment":
+            return self.source_term_id
+        return self.env["school_enrollment_payment_term"]
 
     def _get_destination_term(self):
         """Return the payment term this document moves the amount into.
@@ -298,13 +423,17 @@ class SchoolPaymentTermTransfer(models.Model):
         destination field overrides this to return that field
         instead. All other code reads the destination term through
         this method rather than ``destination_term_id`` directly.
+        Gated on ``source_type`` -- see ``_get_source_term``.
 
         :return: ``school_enrollment_payment_term`` record, or an
-            empty recordset when unset.
+            empty recordset when ``source_type`` is not ``"enrollment"``
+            or the field is unset.
         :raises ValueError: ``self`` is not a single record.
         """
         self.ensure_one()
-        return self.destination_term_id
+        if self.source_type == "enrollment":
+            return self.destination_term_id
+        return self.env["school_enrollment_payment_term"]
 
     def _get_owner_document(self):
         """Return the document that owns this transfer's payment terms.
@@ -314,13 +443,17 @@ class SchoolPaymentTermTransfer(models.Model):
         instead. All other code reads the owner through this method
         rather than ``enrollment_id`` directly, so a non-enrollment
         transfer module can reuse the same logic without duplicating
-        it.
+        it. Gated on ``source_type`` -- see ``_get_source_term``.
 
-        :return: ``school_enrollment`` record.
+        :return: ``school_enrollment`` record, or an empty recordset
+            when ``source_type`` is not ``"enrollment"`` or the field
+            is unset.
         :raises ValueError: ``self`` is not a single record.
         """
         self.ensure_one()
-        return self.enrollment_id
+        if self.source_type == "enrollment":
+            return self.enrollment_id
+        return self.env["school_enrollment"]
 
     def _get_term_owner(self, term):
         """Return the document that owns a given payment term.
@@ -365,22 +498,26 @@ class SchoolPaymentTermTransfer(models.Model):
         # pylint: disable=protected-access
         self._get_owner_document()._recompute_product_summaries()
 
-    @api.constrains("source_term_id", "destination_term_id")
+    @api.constrains("source_type", "source_term_id", "destination_term_id")
     def _check_term_distinct(self):
         """Enforce that the transfer really moves the amount somewhere.
 
-        Runs on every create or write touching ``source_term_id`` or
-        ``destination_term_id``: the two must differ, otherwise this
-        document would move an amount to the term it already sits on.
+        Runs on every create or write touching ``source_type``,
+        ``source_term_id`` or ``destination_term_id``: the source and
+        destination term must differ, otherwise this document would
+        move an amount to the term it already sits on. Compares
+        ``_get_source_term()``/``_get_destination_term()`` rather
+        than the fields directly, and only when both are set, so an
+        extension module widening ``@api.constrains`` gets the check
+        for free without duplicating it.
 
         :raises ValidationError: source and destination are the same
             payment term.
         """
         for record in self.sudo():
-            if (
-                record.source_term_id
-                and record.source_term_id == record.destination_term_id
-            ):
+            source_term = record._get_source_term()
+            destination_term = record._get_destination_term()
+            if source_term and destination_term and source_term == destination_term:
                 error_message = (
                     _(
                         """
@@ -392,10 +529,85 @@ Solution: Select a different payment term as the transfer destination
                     )
                     % (
                         record.id,
-                        record.destination_term_id.name,
+                        destination_term.display_name,
                     )
                 )
                 raise ValidationError(error_message)
+
+    @api.constrains("enrollment_id")
+    def _check_source_document(self):
+        """Require a billing source document to be set.
+
+        The requiredness of ``enrollment_id`` lives here rather than
+        on the field itself, so an extension module's own Source
+        Type value is not forced to also key off it: it is validated
+        through ``_get_owner_document()`` instead, which an
+        extension module overrides to resolve its own field first.
+
+        **Named ``_check_source_document``, not ``_check_billing_
+        source``, on purpose.** Odoo runs ``@api.constrains`` methods
+        in alphabetical order by method name (``inspect.getmembers``)
+        and stops at the first one that raises. An extension module
+        adding a second, mutually-exclusive billing source needs its
+        own ``_check_single_source_term``-style check to run BEFORE
+        this one whenever both are candidates (e.g. a write touching
+        only ``enrollment_id``, clearing it while the alternate field
+        is also unset) -- "source_document" sorts after "single_
+        source_term" while "billing_source" would have sorted before
+        it. Source Term/Destination Term requiredness is deliberately
+        NOT checked here (regressed a sibling module's existing
+        negative test on PR #19's first CI round); it returns in a
+        later item once the routing rules for a second Source Type
+        are in place.
+
+        :raises ValidationError: ``_get_owner_document()`` is empty.
+        """
+        for record in self.sudo():
+            if not record._get_owner_document():
+                error_message = (
+                    _(
+                        """
+Context: Set payment term transfer billing source
+Database ID: %s
+Problem: No billing source record set for Source Type '%s'
+Solution: Select the record matching the selected Source Type
+"""
+                    )
+                    % (
+                        record.id,
+                        record.source_type,
+                    )
+                )
+                raise ValidationError(error_message)
+
+    @api.onchange("source_type")
+    def onchange_enrollment_id(self):
+        """Clear Enrollment when Source Type moves away from Enrollment."""
+        if self.source_type != "enrollment":
+            self.enrollment_id = False
+
+    @api.onchange("source_type")
+    def onchange_source_term_id(self):
+        """Clear Source Term when Source Type moves away from Enrollment."""
+        if self.source_type != "enrollment":
+            self.source_term_id = False
+
+    @api.onchange("source_type")
+    def onchange_destination_term_id(self):
+        """Clear Destination Term when Source Type leaves Enrollment."""
+        if self.source_type != "enrollment":
+            self.destination_term_id = False
+
+    @api.onchange("source_type")
+    def onchange_line_ids(self):
+        """Clear the lines when Source Type moves away from Enrollment.
+
+        Every line's Source Detail belongs to the Enrollment path's
+        Source Term, so the lines are no longer valid once Source
+        Type points somewhere else.
+        """
+        if self.source_type != "enrollment":
+            self.line_ids = [(5, 0, 0)]
 
     @api.model
     def _get_policy_field(self):

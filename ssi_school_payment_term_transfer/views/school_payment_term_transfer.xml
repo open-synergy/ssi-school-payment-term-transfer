@@ -15,11 +15,18 @@
         <data>
             <xpath expr="//search" position="inside">
                 <field name="student_id" />
+                <field name="source_type" />
+                <field name="source_document" />
                 <field name="enrollment_id" />
                 <field name="reason_id" />
                 <field name="academic_year_id" />
                 <field name="academic_term_id" />
                 <group expand="0" string="Group By">
+                    <filter
+                            name="group_by_source_type"
+                            string="Source Type"
+                            context="{'group_by': 'source_type'}"
+                        />
                     <filter
                             name="group_by_reason_id"
                             string="Reason"
@@ -56,10 +63,11 @@
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="date" />
                 <field name="student_id" />
-                <field name="enrollment_id" />
+                <field name="source_type" />
+                <field name="source_document" />
+                <field name="source_term_name" />
+                <field name="destination_term_name" />
                 <field name="reason_id" />
-                <field name="source_term_id" />
-                <field name="destination_term_id" />
                 <field name="amount_total" sum="Total" />
             </xpath>
         </data>
@@ -75,7 +83,11 @@
         <data>
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="student_id" />
-                <field name="enrollment_id" />
+                <field name="source_type" />
+                <field
+                        name="enrollment_id"
+                        attrs="{'invisible': [('source_type', '!=', 'enrollment')]}"
+                    />
                 <field name="academic_year_id" />
                 <field name="academic_term_id" />
                 <field name="reason_id" />
@@ -91,25 +103,36 @@
                         <field
                                 name="source_term_id"
                                 domain="[('id','in',allowed_term_ids)]"
+                                attrs="{'invisible': [('source_type', '!=', 'enrollment')]}"
                             />
                         <field
                                 name="destination_term_id"
                                 domain="[('id','in',allowed_term_ids)]"
+                                attrs="{'invisible': [('source_type', '!=', 'enrollment')]}"
                             />
                     </group>
                     <field name="line_ids">
                         <tree editable="bottom">
-                            <field name="allowed_source_detail_ids" invisible="1" />
+                            <field
+                                    name="allowed_source_detail_ids"
+                                    invisible="1"
+                                    attrs="{'column_invisible': [('parent.source_type', '!=', 'enrollment')]}"
+                                />
                             <field
                                     name="source_detail_id"
                                     domain="[('id','in',allowed_source_detail_ids)]"
+                                    attrs="{'column_invisible': [('parent.source_type', '!=', 'enrollment')]}"
                                 />
                             <field name="product_id" readonly="1" />
                             <field name="amount_before" readonly="1" force_save="1" />
                             <field name="amount" />
                             <field name="amount_after" readonly="1" />
                             <field name="full_transfer" readonly="1" />
-                            <field name="destination_detail_id" readonly="1" />
+                            <field
+                                    name="destination_detail_id"
+                                    readonly="1"
+                                    attrs="{'column_invisible': [('parent.source_type', '!=', 'enrollment')]}"
+                                />
                         </tree>
                         <form>
                             <group>
@@ -117,6 +140,7 @@
                                 <field
                                         name="source_detail_id"
                                         domain="[('id','in',allowed_source_detail_ids)]"
+                                        attrs="{'invisible': [('parent.source_type', '!=', 'enrollment')]}"
                                     />
                                 <field name="product_id" readonly="1" />
                                 <field
@@ -127,7 +151,11 @@
                                 <field name="amount" />
                                 <field name="amount_after" readonly="1" />
                                 <field name="full_transfer" readonly="1" />
-                                <field name="destination_detail_id" readonly="1" />
+                                <field
+                                        name="destination_detail_id"
+                                        readonly="1"
+                                        attrs="{'invisible': [('parent.source_type', '!=', 'enrollment')]}"
+                                    />
                             </group>
                         </form>
                     </field>

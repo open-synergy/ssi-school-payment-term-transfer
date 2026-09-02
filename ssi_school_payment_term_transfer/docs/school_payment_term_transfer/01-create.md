@@ -26,6 +26,8 @@
 1. Open the **School ‣ Student Activities ‣ Payment Term Transfers** menu.
 2. Click the **New** button. **(14.0: "Create")**
 3. Fill in the required fields:
+   - **Source Type** _(required)_: Leave it as **Enrollment** -- this module only offers
+     that value. It controls which fields below are shown and required.
    - **Enrollment** _(required)_: Select the open enrollment whose billed amount is
      being moved. Selecting it fills Student, Academic Year, and Academic Term
      automatically.
@@ -61,3 +63,6 @@
 - The **Confirm** button is visible in the header (usable once the prerequisites in
   `04-confirm` are met), and the statusbar shows **Draft ‣ Waiting for Approval ‣
   Done**.
+- The list view shows this document's **Source Document**, **Source Term**, and
+  **Destination Term** columns filled with the Enrollment, Source Term, and Destination
+  Term's names, instead of separate Enrollment/Source Term/Destination Term columns.
