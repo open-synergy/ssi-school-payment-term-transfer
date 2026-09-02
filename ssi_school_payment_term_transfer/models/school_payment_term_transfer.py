@@ -306,6 +306,65 @@ class SchoolPaymentTermTransfer(models.Model):
         self.ensure_one()
         return self.destination_term_id
 
+    def _get_owner_document(self):
+        """Return the document that owns this transfer's payment terms.
+
+        Extension point: a module giving payment term transfers a
+        different kind of owner overrides this to return that owner
+        instead. All other code reads the owner through this method
+        rather than ``enrollment_id`` directly, so a non-enrollment
+        transfer module can reuse the same logic without duplicating
+        it.
+
+        :return: ``school_enrollment`` record.
+        :raises ValueError: ``self`` is not a single record.
+        """
+        self.ensure_one()
+        return self.enrollment_id
+
+    def _get_term_owner(self, term):
+        """Return the document that owns a given payment term.
+
+        Extension point: a module whose payment term model tracks its
+        owner through a field other than ``enrollment_id`` overrides
+        this to return that field instead. Used by
+        ``_check_transfer_prerequisites`` to verify a term belongs to
+        this document's owner, without hard-coding ``enrollment_id``.
+
+        :param term: ``school_enrollment_payment_term`` record (or
+            the equivalent model of a module overriding this method).
+        :return: the owner record of ``term``.
+        """
+        return term.enrollment_id
+
+    def _get_destination_detail_model(self):
+        """Return the model name of the destination detail to create.
+
+        Extension point of ``_10_apply_transfer``: a module whose
+        owner document is not an enrollment overrides this to return
+        that owner's own detail model instead, so
+        ``_10_apply_transfer`` never hard-codes the
+        enrollment-specific model name.
+
+        :return: model name string.
+        """
+        return "school_enrollment_payment_term_detail"
+
+    def _recompute_owner_summaries(self):
+        """Refresh the owner document's product summaries.
+
+        Extension point of ``_10_apply_transfer``: kept separate from
+        ``_get_owner_document`` because ``_recompute_product_
+        summaries`` only exists on ``school_enrollment`` -- an owner
+        document of another kind overrides this to replace (or drop)
+        that call without losing the ``message_post`` that follows it
+        in ``_10_apply_transfer``.
+
+        :return: None
+        """
+        # pylint: disable=protected-access
+        self._get_owner_document()._recompute_product_summaries()
+
     @api.constrains("source_term_id", "destination_term_id")
     def _check_term_distinct(self):
         """Enforce that the transfer really moves the amount somewhere.
@@ -377,8 +436,8 @@ Solution: Select a different payment term as the transfer destination
 
         :raises UserError: ``line_ids`` is empty; the source and
             destination terms are not both set and different; either
-            term does not belong to ``enrollment_id``; either term
-            already has a customer invoice; a line's source detail
+            term does not belong to ``_get_owner_document()``; either
+            term already has a customer invoice; a line's source detail
             does not belong to the source term, already has a
             customer invoice line, or is already voided; or a line's
             source detail has a UoM Quantity other than 1.
@@ -416,7 +475,7 @@ Solution: Select a Source Term and a Destination Term that differ
             raise UserError(error_message)
 
         for term in (source_term, destination_term):
-            if term.enrollment_id != self.enrollment_id:
+            if self._get_term_owner(term) != self._get_owner_document():
                 error_message = (
                     _(
                         """
@@ -426,7 +485,11 @@ Problem: Payment Term '%s' does not belong to Enrollment '%s'
 Solution: Select a Source/Destination Term that belongs to the same Enrollment
 """
                     )
-                    % (self.id, term.display_name, self.enrollment_id.display_name)
+                    % (
+                        self.id,
+                        term.display_name,
+                        self._get_owner_document().display_name,
+                    )
                 )
                 raise UserError(error_message)
             if term.customer_invoice_id:
@@ -444,7 +507,7 @@ Solution: Cancel this document; a term already invoiced can no longer be transfe
                 raise UserError(error_message)
 
         for line in self.line_ids:
-            detail = line.source_detail_id
+            detail = line._get_source_detail()
             if detail.term_id != source_term:
                 error_message = (
                     _(
@@ -530,27 +593,25 @@ Solution: Only source details with a UoM Quantity of exactly 1 can be transferre
         detail (``voided = True`` when ``full_transfer``, otherwise
         ``price_unit = amount_after``); (3) record
         ``destination_detail_id`` on the line. Afterwards
-        ``enrollment_id._recompute_product_summaries()`` is called and
-        a chatter message summarising the move is posted on the
-        enrollment.
+        ``_recompute_owner_summaries`` is called and a chatter message
+        summarising the move is posted on ``_get_owner_document()``.
 
         :return: None
         """
         self.ensure_one()
         context_self = self.sudo().with_context(bypass_addendum_lock=True)
         for line in context_self.line_ids:
-            detail = line.source_detail_id
+            detail = line._get_source_detail()
             destination_detail = context_self.env[
-                "school_enrollment_payment_term_detail"
+                context_self._get_destination_detail_model()
             ].create(context_self._prepare_destination_detail_vals(line))
             if line.full_transfer:
                 detail.write({"voided": True})
             else:
                 detail.write({"price_unit": line.amount_after})
             line.write({"destination_detail_id": destination_detail.id})
-        # pylint: disable=protected-access
-        context_self.enrollment_id._recompute_product_summaries()
-        context_self.enrollment_id.message_post(
+        context_self._recompute_owner_summaries()
+        context_self._get_owner_document().message_post(
             body=context_self._prepare_transfer_notification(),
             message_type="notification",
             subtype_xmlid="mail.mt_note",
@@ -573,7 +634,7 @@ Solution: Only source details with a UoM Quantity of exactly 1 can be transferre
             create values.
         """
         self.ensure_one()
-        detail = line.source_detail_id
+        detail = line._get_source_detail()
         return {
             "term_id": self._get_destination_term().id,
             "product_id": detail.product_id.id,

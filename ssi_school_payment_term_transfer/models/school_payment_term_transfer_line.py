@@ -122,24 +122,32 @@ class SchoolPaymentTermTransferLine(models.Model):
     def _compute_allowed_source_detail_ids(self):
         """Compute the source details selectable on this line.
 
-        Nothing is proposed until the owning document's
-        ``source_term_id`` is set; otherwise the
+        Nothing is proposed until the line has a ``transfer_id`` --
+        e.g. a standalone line form still being filled in -- or until
+        the owning document's ``source_term_id`` is set; otherwise the
         ``school_enrollment_payment_term_detail`` records matching
         ``_get_allowed_source_detail_criteria`` are collected. The
         view uses this field to restrict ``source_detail_id``.
+
+        ``transfer_id`` is guarded before ``_get_source_term()`` is
+        called on it: that method calls ``ensure_one()``, and an
+        empty ``transfer_id`` -- always empty on a line opened on its
+        own form -- would turn a merely-unset source term into a
+        raised ``ValueError`` instead of leaving this field empty.
 
         :return: None
         """
         for record in self:
             result = False
-            term = record.transfer_id.source_term_id
-            if term:
-                criteria = record._get_allowed_source_detail_criteria()
-                result = (
-                    self.env["school_enrollment_payment_term_detail"]
-                    .search(criteria)
-                    .ids
-                )
+            if record.transfer_id:
+                term = record.transfer_id._get_source_term()
+                if term:
+                    criteria = record._get_allowed_source_detail_criteria()
+                    result = (
+                        self.env["school_enrollment_payment_term_detail"]
+                        .search(criteria)
+                        .ids
+                    )
             record.allowed_source_detail_ids = result
 
     def _get_allowed_source_detail_criteria(self):
@@ -155,10 +163,26 @@ class SchoolPaymentTermTransferLine(models.Model):
         """
         self.ensure_one()
         return [
-            ("term_id", "=", self.transfer_id.source_term_id.id),
+            ("term_id", "=", self.transfer_id._get_source_term().id),
             ("customer_invoice_line_id", "=", False),
             ("voided", "=", False),
         ]
+
+    def _get_source_detail(self):
+        """Return the detail line this line moves the amount out of.
+
+        Extension point: a module giving this line an extra source
+        field overrides this to return that field instead. All other
+        code reads the source detail through this method rather than
+        ``source_detail_id`` directly, and it lives on the line model
+        (not the document model) so the line itself knows its own
+        source detail and both models can reuse the same logic.
+
+        :return: ``school_enrollment_payment_term_detail`` record.
+        :raises ValueError: ``self`` is not a single record.
+        """
+        self.ensure_one()
+        return self.source_detail_id
 
     @api.onchange("source_detail_id")
     def onchange_amount_before(self):
