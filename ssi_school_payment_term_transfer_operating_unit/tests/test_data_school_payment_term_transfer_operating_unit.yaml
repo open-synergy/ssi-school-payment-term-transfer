@@ -280,24 +280,27 @@ scenarios:
       # return None" branch (lines 27-28) only runs when
       # vals["enrollment_id"] is present as a key but falsy, which
       # only happens through a write() that sets enrollment_id to
-      # False. Before that write reaches the database,
-      # ssi_school_payment_term_transfer_admission's
-      # _check_single_source_term @api.constrains rejects it with
-      # ValidationError, since clearing enrollment_id leaves both
-      # Enrollment and Admission unset. The write runs inside a
-      # savepoint (see "Negative Path" above), so doc_explicit is left
-      # untouched by the rejected write. operating_unit_id is
-      # deliberately absent from values below: including it would
-      # make derive_operating_unit_from_enrollment_vals's early
-      # return (lines 47-48) fire first, and lines 27-28 would never
-      # run.
+      # False. Before that write reaches the database, the base
+      # module's own _check_source_document @api.constrains rejects
+      # it with ValidationError, since clearing enrollment_id leaves
+      # this Source Type "enrollment" document without a billing
+      # source (see ssi_school_payment_term_transfer_admission#18,
+      # which removed the old XOR-style _check_single_source_term
+      # this scenario used to exercise and routed billing-source
+      # requiredness through _check_source_document instead). The
+      # write runs inside a savepoint (see "Negative Path" above), so
+      # doc_explicit is left untouched by the rejected write.
+      # operating_unit_id is deliberately absent from values below:
+      # including it would make derive_operating_unit_from_
+      # enrollment_vals's early return (lines 47-48) fire first, and
+      # lines 27-28 would never run.
       # ---------------------------------------------------------------
       - step: "Clearing enrollment_id is rejected"
         action: "write"
         target: "doc_explicit"
         expect_error:
           type: "ValidationError"
-          message_contains: "Exactly one of Enrollment or Admission must be set"
+          message_contains: "No billing source record set for Source Type"
         values:
           enrollment_id: false
 

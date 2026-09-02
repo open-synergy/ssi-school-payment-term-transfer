@@ -19,9 +19,10 @@ class TestSchoolPaymentTermTransferOperatingUnit(YamlTransactionCase):
     passing by coincidence -- and the ``enrollment_id`` falsy branch
     of ``get_operating_unit_id_from_enrollment``, reached via a
     ``write()`` that clears ``enrollment_id`` on an existing document
-    and is rejected by
-    ``ssi_school_payment_term_transfer_admission``'s
-    ``_check_single_source_term`` constraint.
+    and is rejected by the base module's own
+    ``_check_source_document`` constraint (no billing source left
+    once ``enrollment_id`` is cleared on a Source Type "enrollment"
+    document).
     """
 
     def test_school_payment_term_transfer_operating_unit(self):
