@@ -22,6 +22,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_school_payment_term_transfer](ssi_school_payment_term_transfer/) | 14.0.1.2.0 |  | School Payment Term Transfer
+[ssi_school_payment_term_transfer_operating_unit](ssi_school_payment_term_transfer_operating_unit/) | 14.0.1.0.0 |  | School Payment Term Transfer - Operating Unit
 
 [//]: # (end addons)
 
