@@ -836,6 +836,6 @@ scenarios:
           destination_detail_id.price_unit:
             type: "value"
             expected: 25000.0
-          admission_destination_detail_id.id:
+          admission_destination_detail_id:
             type: "value"
             operator: "is_falsy"

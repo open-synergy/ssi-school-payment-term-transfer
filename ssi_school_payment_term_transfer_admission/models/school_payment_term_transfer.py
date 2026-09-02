@@ -117,6 +117,29 @@ Solution: Select either an Enrollment or an Admission, not both and not neither
                 )
                 raise ValidationError(_(error_message))
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Create records, then re-run the single-source-term check.
+
+        ``enrollment_id`` and ``admission_id`` are both optional
+        fields (see class docstring), so Odoo's ORM only calls
+        ``@api.constrains``-decorated methods whose trigger fields
+        appear in ``vals`` -- a ``create()`` that names neither field
+        never triggers ``_check_single_source_term`` on its own,
+        letting a record with no billing source through silently.
+        Calling the check explicitly here closes that gap without
+        widening the fields' ``required``-ness.
+
+        :param vals_list: list of value dicts for the new records
+        :return: the created recordset
+        :raises ValidationError: forwarded from
+            ``_check_single_source_term`` when a record sets both or
+            neither of Enrollment / Admission.
+        """
+        records = super().create(vals_list)
+        records._check_single_source_term()
+        return records
+
     def _get_source_term(self):
         """Return the Admission source term when one is set.
 
