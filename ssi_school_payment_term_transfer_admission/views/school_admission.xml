@@ -12,7 +12,9 @@
     <field name="res_model">school_payment_term_transfer</field>
     <field name="view_mode">tree,form</field>
     <field name="domain">[('admission_id', '=', active_id)]</field>
-    <field name="context">{'default_admission_id': active_id}</field>
+    <field
+            name="context"
+        >{'default_admission_id': active_id, 'default_source_type': 'admission'}</field>
 </record>
 
 <record id="school_admission_view_form_transfer" model="ir.ui.view">
@@ -35,23 +37,4 @@
     </field>
 </record>
 
-<record
-        id="school_payment_term_transfer_action_admission"
-        model="ir.actions.act_window"
-    >
-    <field name="name">Payment Term Transfers</field>
-    <field name="type">ir.actions.act_window</field>
-    <field name="res_model">school_payment_term_transfer</field>
-    <field name="view_mode">tree,form</field>
-    <field name="domain">[('admission_id', '!=', False)]</field>
-</record>
-
-<menuitem
-        id="school_payment_term_transfer_menu_admission"
-        name="Payment Term Transfers"
-        parent="ssi_school_admission.menu_school_admission"
-        action="school_payment_term_transfer_action_admission"
-        groups="ssi_school_payment_term_transfer.school_payment_term_transfer_viewer_group"
-        sequence="25"
-    />
 </odoo>

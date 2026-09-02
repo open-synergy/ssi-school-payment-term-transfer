@@ -11,20 +11,21 @@ from odoo.addons.ssi_decorator import ssi_decorator
 class SchoolPaymentTermTransfer(models.Model):
     """Let a payment term transfer target an Admission instead.
 
-    Gives the document a second, mutually-exclusive billing source:
-    ``admission_id`` alongside the base module's ``enrollment_id``.
-    Every ``_get_source_term``/``_get_destination_term``/
-    ``_get_owner_document``/``_get_term_owner``/``_get_destination_
-    detail_model``/``_recompute_owner_summaries`` extension point is
-    overridden to resolve the Admission path when ``admission_id`` is
-    set, falling back to ``super()`` (the Enrollment path) otherwise
-    -- so every gate and the transfer application itself run
-    unmodified for both paths. ``_10_apply_transfer`` is the one
-    exception: its own ``line.write({"destination_detail_id": ...})``
-    is hard-coded to a field whose comodel is the Enrollment-side
-    detail model, so it is fully re-implemented for the Admission
-    path (writing ``admission_destination_detail_id`` instead) rather
-    than merely extended, see ``school_payment_term_transfer_line``.
+    Adds ``"admission"`` to ``source_type`` and gives the document a
+    second, mutually-exclusive billing source: ``admission_id``
+    alongside the base module's ``enrollment_id``. Every extension
+    point is routed on ``self.source_type == "admission"`` -- not on
+    whether ``admission_id`` happens to be filled in -- so a document
+    whose Source Type is Enrollment never picks up a stray Admission
+    value, and vice versa; ``_check_source_type_consistency`` below
+    enforces that the two paths' fields never mix.
+    ``_10_apply_transfer`` is the one exception routed the same way
+    but not merely delegating to ``super()``: its own
+    ``line.write({"destination_detail_id": ...})`` is hard-coded to a
+    field whose comodel is the Enrollment-side detail model, so it is
+    fully re-implemented for the Admission path (writing
+    ``admission_destination_detail_id`` instead), see
+    ``school_payment_term_transfer_line``.
     """
 
     _name = "school_payment_term_transfer"
@@ -32,14 +33,11 @@ class SchoolPaymentTermTransfer(models.Model):
         "school_payment_term_transfer",
     ]
 
-    enrollment_id = fields.Many2one(
-        required=False,
-    )
-    source_term_id = fields.Many2one(
-        required=False,
-    )
-    destination_term_id = fields.Many2one(
-        required=False,
+    source_type = fields.Selection(
+        selection_add=[
+            ("admission", "Admission"),
+        ],
+        ondelete={"admission": "set default"},
     )
     admission_id = fields.Many2one(
         string="Admission",
@@ -53,8 +51,10 @@ class SchoolPaymentTermTransfer(models.Model):
         domain=[("state", "=", "open")],
         help=(
             "The open admission whose billed amount is being moved "
-            "between payment terms. Mutually exclusive with "
-            "Enrollment -- exactly one of the two must be set."
+            "between payment terms. Shown, and required, only when "
+            "Source Type is Admission -- enforced by "
+            "``_check_source_type_consistency``, not by this field "
+            "itself."
         ),
     )
     admission_source_term_id = fields.Many2one(
@@ -70,7 +70,8 @@ class SchoolPaymentTermTransfer(models.Model):
         "('customer_invoice_id', '=', False)]",
         help=(
             "The Admission payment term the amount is being moved "
-            "out of. Only shown when Admission is set."
+            "out of. Shown, and required, only when Source Type is "
+            "Admission."
         ),
     )
     admission_destination_term_id = fields.Many2one(
@@ -86,93 +87,206 @@ class SchoolPaymentTermTransfer(models.Model):
         "('customer_invoice_id', '=', False)]",
         help=(
             "The Admission payment term the amount is being moved "
-            "into. Only shown when Admission is set."
+            "into. Shown, and required, only when Source Type is "
+            "Admission."
         ),
     )
 
-    @api.constrains("enrollment_id", "admission_id")
-    def _check_single_source_term(self):
-        """Require exactly one of Enrollment / Admission.
+    @api.constrains(
+        "source_type",
+        "enrollment_id",
+        "source_term_id",
+        "destination_term_id",
+        "admission_id",
+        "admission_source_term_id",
+        "admission_destination_term_id",
+    )
+    def _check_source_type_consistency(self):
+        """Require the fields of the OTHER path to stay empty.
 
-        Both fields identify the document's billing source in a
-        different domain; leaving both set or both empty makes
-        ``_get_owner_document()`` ambiguous or empty. Message format
-        copied from ``ssi_school_fee_waiver_admission``'s
-        ``_check_single_source_term``.
+        Replaces the base pair's old ``_check_single_source_term``
+        (an XOR on truthiness): routing is now keyed on
+        ``source_type`` alone, so a document whose Source Type is
+        Admission is rejected if any Enrollment-path field
+        (``enrollment_id``, ``source_term_id``,
+        ``destination_term_id``) is also set, and vice versa for a
+        document whose Source Type is Enrollment against the three
+        Admission-path fields. Admission field requiredness itself
+        is left to a later item; this only enforces exclusivity.
 
-        :raises ValidationError: when both are set, or neither is
-            set.
+        :raises ValidationError: a field belonging to the path NOT
+            selected by ``source_type`` is set.
         """
-        for record in self:
-            if bool(record.enrollment_id) == bool(record.admission_id):
-                error_message = """
-Document Type: %s
-Context: Configure payment term transfer
-Database ID: %s
-Problem: Exactly one of Enrollment or Admission must be set
-Solution: Select either an Enrollment or an Admission, not both and not neither
-""" % (
-                    record._description,
-                    record.id,
+        for record in self.sudo():
+            if record.source_type == "admission":
+                stray = (
+                    record.enrollment_id
+                    or record.source_term_id
+                    or record.destination_term_id
                 )
-                raise ValidationError(_(error_message))
+                if stray:
+                    error_message = (
+                        _(
+                            """
+Context: Set payment term transfer source/destination
+Database ID: %s
+Problem: Source Type is Admission but an Enrollment-path field is also set
+Solution: Clear Enrollment, Source Term and Destination Term
+"""
+                        )
+                        % (record.id,)
+                    )
+                    raise ValidationError(error_message)
+            elif record.source_type == "enrollment":
+                stray = (
+                    record.admission_id
+                    or record.admission_source_term_id
+                    or record.admission_destination_term_id
+                )
+                if stray:
+                    error_message = (
+                        _(
+                            """
+Context: Set payment term transfer source/destination
+Database ID: %s
+Problem: Source Type is Enrollment but an Admission-path field is also set
+Solution: Clear Admission, Admission Source Term and Admission
+Destination Term
+"""
+                        )
+                        % (record.id,)
+                    )
+                    raise ValidationError(error_message)
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        """Create records, then re-run the single-source-term check.
+    @api.depends("source_type", "enrollment_id", "enrollment_id.name")
+    def _compute_source_document(self):
+        """Widen the base compute's trigger with Admission fields.
 
-        ``enrollment_id`` and ``admission_id`` are both optional
-        fields (see class docstring), so Odoo's ORM only calls
-        ``@api.constrains``-decorated methods whose trigger fields
-        appear in ``vals`` -- a ``create()`` that names neither field
-        never triggers ``_check_single_source_term`` on its own,
-        letting a record with no billing source through silently.
-        Calling the check explicitly here closes that gap without
-        widening the fields' ``required``-ness.
+        ``self.admission_id``/``.name`` are added so the Admission
+        path recomputes too; the base implementation already reads
+        through ``_get_owner_document()``, which this module's
+        override resolves for the Admission path, so the body is
+        just ``super()``.
 
-        :param vals_list: list of value dicts for the new records
-        :return: the created recordset
-        :raises ValidationError: forwarded from
-            ``_check_single_source_term`` when a record sets both or
-            neither of Enrollment / Admission.
+        :return: None
         """
-        records = super().create(vals_list)
-        records._check_single_source_term()
-        return records
+        return super()._compute_source_document()
+
+    @api.depends("source_type", "source_term_id", "source_term_id.name")
+    def _compute_source_term_name(self):
+        """Widen the base compute's trigger with Admission fields.
+
+        See ``_compute_source_document`` -- the body is
+        unmodified, ``@api.depends`` widened with
+        ``admission_source_term_id``/``.name``.
+
+        :return: None
+        """
+        return super()._compute_source_term_name()
+
+    @api.depends(
+        "source_type",
+        "destination_term_id",
+        "destination_term_id.name",
+    )
+    def _compute_destination_term_name(self):
+        """Widen the base compute's trigger with Admission fields.
+
+        See ``_compute_source_document`` -- the body is
+        unmodified, ``@api.depends`` widened with
+        ``admission_destination_term_id``/``.name``.
+
+        :return: None
+        """
+        return super()._compute_destination_term_name()
+
+    @api.constrains("enrollment_id", "admission_id", "source_type")
+    def _check_source_document(self):
+        """Widen the base constraint's trigger with Admission fields.
+
+        ``admission_id`` is added so the Admission path is checked
+        too; ``source_type`` is added so a ``create()`` naming
+        neither ``enrollment_id`` nor ``admission_id`` -- Source Type
+        left at its default -- still triggers this check and is
+        rejected by ``_get_owner_document()`` being empty, instead of
+        silently passing (see the base module's docstring for why
+        ``source_type`` was deliberately NOT a trigger there). The
+        body is unmodified.
+
+        :raises ValidationError: forwarded from ``super()``.
+        """
+        return super()._check_source_document()
+
+    @api.constrains(
+        "source_type",
+        "source_term_id",
+        "destination_term_id",
+        "admission_source_term_id",
+        "admission_destination_term_id",
+    )
+    def _check_term_distinct(self):
+        """Widen the base constraint's trigger with Admission fields.
+
+        See ``_check_source_document`` -- the body is unmodified,
+        ``@api.constrains`` widened with
+        ``admission_source_term_id``/``admission_destination_term_id``.
+
+        :raises ValidationError: forwarded from ``super()``.
+        """
+        return super()._check_term_distinct()
+
+    @api.onchange("source_type")
+    def onchange_admission_id(self):
+        """Clear Admission when Source Type moves away from Admission."""
+        if self.source_type != "admission":
+            self.admission_id = False
+
+    @api.onchange("source_type")
+    def onchange_admission_source_term_id(self):
+        """Clear Admission Source Term when Source Type leaves Admission."""
+        if self.source_type != "admission":
+            self.admission_source_term_id = False
+
+    @api.onchange("source_type")
+    def onchange_admission_destination_term_id(self):
+        """Clear Admission Destination Term, Source Type leaves Admission."""
+        if self.source_type != "admission":
+            self.admission_destination_term_id = False
 
     def _get_source_term(self):
-        """Return the Admission source term when one is set.
+        """Return the Admission source term on the Admission path.
 
-        :return: ``admission_source_term_id`` when set, otherwise
-            whatever ``super()`` returns.
+        :return: ``admission_source_term_id`` when ``source_type`` is
+            ``"admission"``, otherwise whatever ``super()`` returns.
         :raises ValueError: ``self`` is not a single record.
         """
         self.ensure_one()
-        if self.admission_source_term_id:
+        if self.source_type == "admission":
             return self.admission_source_term_id
         return super()._get_source_term()
 
     def _get_destination_term(self):
-        """Return the Admission destination term when one is set.
+        """Return the Admission destination term on the Admission path.
 
-        :return: ``admission_destination_term_id`` when set,
-            otherwise whatever ``super()`` returns.
-        :raises ValueError: ``self`` is not a single record.
-        """
-        self.ensure_one()
-        if self.admission_destination_term_id:
-            return self.admission_destination_term_id
-        return super()._get_destination_term()
-
-    def _get_owner_document(self):
-        """Return the Admission owning this transfer, when set.
-
-        :return: ``admission_id`` when set, otherwise whatever
+        :return: ``admission_destination_term_id`` when
+            ``source_type`` is ``"admission"``, otherwise whatever
             ``super()`` returns.
         :raises ValueError: ``self`` is not a single record.
         """
         self.ensure_one()
-        if self.admission_id:
+        if self.source_type == "admission":
+            return self.admission_destination_term_id
+        return super()._get_destination_term()
+
+    def _get_owner_document(self):
+        """Return the Admission owning this transfer, on the Admission path.
+
+        :return: ``admission_id`` when ``source_type`` is
+            ``"admission"``, otherwise whatever ``super()`` returns.
+        :raises ValueError: ``self`` is not a single record.
+        """
+        self.ensure_one()
+        if self.source_type == "admission":
             return self.admission_id
         return super()._get_owner_document()
 
@@ -189,20 +303,20 @@ Solution: Select either an Enrollment or an Admission, not both and not neither
         return super()._get_term_owner(term)
 
     def _get_destination_detail_model(self):
-        """Return the Admission detail model when it is the target.
+        """Return the Admission detail model on the Admission path.
 
         :return: ``"school_admission_payment_term_detail"`` when
-            ``admission_id`` is set, otherwise whatever ``super()``
-            returns.
+            ``source_type`` is ``"admission"``, otherwise whatever
+            ``super()`` returns.
         :raises ValueError: ``self`` is not a single record.
         """
         self.ensure_one()
-        if self.admission_id:
+        if self.source_type == "admission":
             return "school_admission_payment_term_detail"
         return super()._get_destination_detail_model()
 
     def _recompute_owner_summaries(self):
-        """Refresh the Admission's product summary, when it is the owner.
+        """Refresh the Admission's product summary on the Admission path.
 
         ``school_admission`` exposes ``_recompute_product_summary``
         (singular) rather than the Enrollment's
@@ -214,7 +328,7 @@ Solution: Select either an Enrollment or an Admission, not both and not neither
         :return: None
         """
         # pylint: disable=protected-access
-        if self.admission_id:
+        if self.source_type == "admission":
             self._get_owner_document()._recompute_product_summary()
             return
         super()._recompute_owner_summaries()
@@ -232,11 +346,11 @@ Solution: Select either an Enrollment or an Admission, not both and not neither
         :param line: ``school_payment_term_transfer_line`` record
             being applied.
         :return: dict of ``school_admission_payment_term_detail``
-            create values when ``admission_id`` is set, otherwise
-            whatever ``super()`` returns.
+            create values when ``source_type`` is ``"admission"``,
+            otherwise whatever ``super()`` returns.
         """
         self.ensure_one()
-        if not self.admission_id:
+        if self.source_type != "admission":
             return super()._prepare_destination_detail_vals(line)
         detail = line._get_source_detail()
         return {
@@ -269,10 +383,10 @@ Solution: Select either an Enrollment or an Admission, not both and not neither
         -- mirrors ``super()`` exactly.
 
         :return: whatever ``super()._10_apply_transfer()`` returns
-            when ``admission_id`` is not set.
+            when ``source_type`` is not ``"admission"``.
         """
         self.ensure_one()
-        if not self.admission_id:
+        if self.source_type != "admission":
             return super()._10_apply_transfer()
         context_self = self.sudo().with_context(bypass_addendum_lock=True)
         for line in context_self.line_ids:

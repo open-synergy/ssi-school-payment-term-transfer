@@ -2,7 +2,8 @@
 # Copyright 2026 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class SchoolPaymentTermTransferLine(models.Model):
@@ -10,9 +11,12 @@ class SchoolPaymentTermTransferLine(models.Model):
 
     Gives the line a second, mutually-exclusive source field,
     ``admission_source_detail_id``, alongside the base module's
-    ``source_detail_id``. ``_get_source_detail`` falls back to
-    ``super()`` whenever ``admission_source_detail_id`` is empty, so
+    ``source_detail_id``. ``_get_source_detail`` is routed on the
+    owning document's ``transfer_id.source_type`` -- not on whether
+    ``admission_source_detail_id`` happens to be filled in -- so
     Enrollment-sourced lines keep working unmodified.
+    ``_check_source_detail_consistency`` enforces that the field of
+    the path NOT selected by ``transfer_id.source_type`` stays empty.
 
     ``admission_destination_detail_id`` is the Admission-path mirror
     of ``destination_detail_id``: the base field's comodel is fixed
@@ -28,9 +32,6 @@ class SchoolPaymentTermTransferLine(models.Model):
         "school_payment_term_transfer_line",
     ]
 
-    source_detail_id = fields.Many2one(
-        required=False,
-    )
     admission_source_detail_id = fields.Many2one(
         string="Admission Source Detail",
         comodel_name="school_admission_payment_term_detail",
@@ -59,16 +60,69 @@ class SchoolPaymentTermTransferLine(models.Model):
     )
 
     def _get_source_detail(self):
-        """Return the Admission source detail when one is set.
+        """Return the Admission source detail on the Admission path.
 
-        :return: ``admission_source_detail_id`` when set, otherwise
+        :return: ``admission_source_detail_id`` when
+            ``transfer_id.source_type`` is ``"admission"``, otherwise
             whatever ``super()`` returns.
         :raises ValueError: ``self`` is not a single record.
         """
         self.ensure_one()
-        if self.admission_source_detail_id:
+        if self.transfer_id.source_type == "admission":
             return self.admission_source_detail_id
         return super()._get_source_detail()
+
+    @api.constrains("source_detail_id", "admission_source_detail_id", "transfer_id")
+    def _check_source_detail_consistency(self):
+        """Require the source field of the OTHER path to stay empty.
+
+        Mirrors ``school_payment_term_transfer._check_source_type_
+        consistency`` at the line level: a line whose document is on
+        the Admission path is rejected if ``source_detail_id`` is
+        also set, and vice versa for a line whose document is on the
+        Enrollment path against ``admission_source_detail_id``. A
+        line not yet attached to a document (``transfer_id`` empty,
+        e.g. a standalone line form still being filled in) is
+        skipped -- there is no ``source_type`` to route on yet.
+
+        :raises ValidationError: the source field of the path NOT
+            selected by ``transfer_id.source_type`` is set.
+        """
+        for record in self.sudo():
+            if not record.transfer_id:
+                continue
+            if (
+                record.transfer_id.source_type == "admission"
+                and record.source_detail_id
+            ):
+                error_message = (
+                    _(
+                        """
+Context: Set payment term transfer line source detail
+Database ID: %s
+Problem: Source Type is Admission but Source Detail is also set
+Solution: Clear Source Detail, or select Admission Source Detail instead
+"""
+                    )
+                    % (record.id,)
+                )
+                raise ValidationError(error_message)
+            if (
+                record.transfer_id.source_type == "enrollment"
+                and record.admission_source_detail_id
+            ):
+                error_message = (
+                    _(
+                        """
+Context: Set payment term transfer line source detail
+Database ID: %s
+Problem: Source Type is Enrollment but Admission Source Detail is also set
+Solution: Clear Admission Source Detail, or select Source Detail instead
+"""
+                    )
+                    % (record.id,)
+                )
+                raise ValidationError(error_message)
 
     @api.onchange("admission_source_detail_id")
     def onchange_admission_amount_before(self):

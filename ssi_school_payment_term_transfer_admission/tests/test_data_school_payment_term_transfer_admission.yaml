@@ -190,6 +190,7 @@ scenarios:
         save_as: "pta_a_doc"
         values:
           user_id: "REF: base.user_admin"
+          source_type: "admission"
           admission_id: "REC: pta_admission.id"
           reason_id: "REC: pta_reason.id"
           admission_source_term_id: "REC: pta_a_source_term.id"
@@ -330,6 +331,7 @@ scenarios:
         save_as: "pta_b_doc"
         values:
           user_id: "REF: base.user_admin"
+          source_type: "admission"
           admission_id: "REC: pta_admission.id"
           reason_id: "REC: pta_reason.id"
           admission_source_term_id: "REC: pta_b_source_term.id"
@@ -401,7 +403,7 @@ scenarios:
             type: "value"
             expected: 100000.0
 
-      # ── Group C: negative -- both Enrollment and Admission set ──────
+      # ── Group C: negative -- Source Type/field routing ───────────────
       - step: "Create the grade class needed by a minimal Enrollment fixture"
         action: "create"
         model: "school_grade_class"
@@ -431,7 +433,7 @@ scenarios:
 
       - step:
           "Create a minimal Enrollment (stays draft -- only its id is needed to exercise
-          the exclusivity constraint, not its own workflow)"
+          the routing constraints, not its own workflow)"
         action: "create"
         model: "school_enrollment"
         save_as: "pta_enrollment"
@@ -443,28 +445,193 @@ scenarios:
           grade_class_id: "REC: pta_grade_class.id"
           student_id: "REC: pta_enr_student.id"
 
-      - step: "Reject a document setting both Enrollment and Admission"
+      - step: "Reject Source Type Admission with no Admission set"
         action: "create"
         model: "school_payment_term_transfer"
         expect_error:
           type: "ValidationError"
-          message_contains: "Exactly one of Enrollment or Admission must be set"
+          message_contains: "No billing source record set for Source Type"
         values:
           user_id: "REF: base.user_admin"
+          source_type: "admission"
+          reason_id: "REC: pta_reason.id"
+
+      - step: "Reject Source Type Admission with Enrollment also set"
+        action: "create"
+        model: "school_payment_term_transfer"
+        expect_error:
+          type: "ValidationError"
+          message_contains:
+            "Source Type is Admission but an Enrollment-path field is also set"
+        values:
+          user_id: "REF: base.user_admin"
+          source_type: "admission"
+          admission_id: "REC: pta_admission.id"
+          enrollment_id: "REC: pta_enrollment.id"
+          reason_id: "REC: pta_reason.id"
+
+      - step: "Reject Source Type Enrollment with Admission also set"
+        action: "create"
+        model: "school_payment_term_transfer"
+        expect_error:
+          type: "ValidationError"
+          message_contains:
+            "Source Type is Enrollment but an Admission-path field is also set"
+        values:
+          user_id: "REF: base.user_admin"
+          source_type: "enrollment"
           enrollment_id: "REC: pta_enrollment.id"
           admission_id: "REC: pta_admission.id"
           reason_id: "REC: pta_reason.id"
 
-      # ── Group D: negative -- neither Enrollment nor Admission set ───
+      - step:
+          "Reject Admission set with Source Type left at its default (Enrollment, which
+          has no Enrollment of its own)"
+        action: "create"
+        model: "school_payment_term_transfer"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "No billing source record set for Source Type"
+        values:
+          user_id: "REF: base.user_admin"
+          admission_id: "REC: pta_admission.id"
+          reason_id: "REC: pta_reason.id"
+
       - step: "Reject a document setting neither Enrollment nor Admission"
         action: "create"
         model: "school_payment_term_transfer"
         expect_error:
           type: "ValidationError"
-          message_contains: "Exactly one of Enrollment or Admission must be set"
+          message_contains: "No billing source record set for Source Type"
         values:
           user_id: "REF: base.user_admin"
           reason_id: "REC: pta_reason.id"
+
+      - step: "Reject identical Admission Source/Destination Term"
+        action: "create"
+        model: "school_payment_term_transfer"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "is the same as the Source Term"
+        values:
+          user_id: "REF: base.user_admin"
+          source_type: "admission"
+          admission_id: "REC: pta_admission.id"
+          reason_id: "REC: pta_reason.id"
+          admission_source_term_id: "REC: pta_a_source_term.id"
+          admission_destination_term_id: "REC: pta_a_source_term.id"
+
+      - step: "Onchange - switching Source Type away from Admission clears its fields"
+        action: "form"
+        model: "school_payment_term_transfer"
+        save: false
+        ops:
+          - set: {source_type: "admission"}
+          - set: {admission_id: "REC: pta_admission"}
+          - set: {admission_source_term_id: "REC: pta_a_source_term"}
+          - set: {admission_destination_term_id: "REC: pta_a_dest_term"}
+          - set: {source_type: "enrollment"}
+          - assert:
+              admission_id:
+                type: "value"
+                operator: "is_falsy"
+              admission_source_term_id:
+                type: "value"
+                operator: "is_falsy"
+              admission_destination_term_id:
+                type: "value"
+                operator: "is_falsy"
+
+      - step: "Onchange - switching Source Type away from Enrollment clears its fields"
+        action: "form"
+        model: "school_payment_term_transfer"
+        save: false
+        ops:
+          - set: {source_type: "enrollment"}
+          - set: {enrollment_id: "REC: pta_enrollment"}
+          - set: {source_type: "admission"}
+          - assert:
+              enrollment_id:
+                type: "value"
+                operator: "is_falsy"
+
+      # ── Line cross-path negative: Admission document, but the line ──
+      # ── sets Source Detail (Enrollment field) alongside the correct ──
+      # ── Admission Source Detail ──────────────────────────────────
+      - step: "Create a source term for the line cross-path test"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "pta_c_source_term"
+        values:
+          admission_id: "REC: pta_admission.id"
+          name: "PTA C Source Term"
+
+      - step: "Create a destination term for the line cross-path test"
+        action: "create"
+        model: "school_admission_payment_term"
+        save_as: "pta_c_dest_term"
+        values:
+          admission_id: "REC: pta_admission.id"
+          name: "PTA C Destination Term"
+
+      - step: "Create the Admission source detail for the line cross-path test"
+        action: "create"
+        model: "school_admission_payment_term_detail"
+        save_as: "pta_c_admission_detail"
+        values:
+          term_id: "REC: pta_c_source_term.id"
+          product_id: "REC: pta_product_a.id"
+          name: "PTA C Admission Fee"
+          account_id: "REC: pta_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 50000.0
+
+      - step: "Create an Admission-path document for the line cross-path test"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "pta_c_doc"
+        values:
+          user_id: "REF: base.user_admin"
+          source_type: "admission"
+          admission_id: "REC: pta_admission.id"
+          reason_id: "REC: pta_reason.id"
+          admission_source_term_id: "REC: pta_c_source_term.id"
+          admission_destination_term_id: "REC: pta_c_dest_term.id"
+
+      - step: "Create the Enrollment payment term for the line cross-path test"
+        action: "create"
+        model: "school_enrollment_payment_term"
+        save_as: "pta_c_enr_term"
+        values:
+          enrollment_id: "REC: pta_enrollment.id"
+          name: "PTA C Enrollment Term"
+
+      - step: "Create the Enrollment detail for the line cross-path test"
+        action: "create"
+        model: "school_enrollment_payment_term_detail"
+        save_as: "pta_c_enr_detail"
+        values:
+          term_id: "REC: pta_c_enr_term.id"
+          product_id: "REC: pta_product_a.id"
+          name: "PTA C Enrollment Fee"
+          account_id: "REC: pta_income_account.id"
+          uom_id: "REF: uom.product_uom_unit"
+          uom_quantity: 1.0
+          price_unit: 50000.0
+
+      - step: "Reject an Admission-path line that also sets Source Detail"
+        action: "create"
+        model: "school_payment_term_transfer_line"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Source Type is Admission but Source Detail is also set"
+        values:
+          transfer_id: "REC: pta_c_doc.id"
+          admission_source_detail_id: "REC: pta_c_admission_detail.id"
+          source_detail_id: "REC: pta_c_enr_detail.id"
+          amount_before: 50000.0
+          amount: 10000.0
 
       # ── Invoice-capable admission (prefix ptainv), for Group E ──────
       - step: "Setup - get sale journal"
@@ -580,6 +747,7 @@ scenarios:
         save_as: "pta_e_doc"
         values:
           user_id: "REF: base.user_admin"
+          source_type: "admission"
           admission_id: "REC: ptainv_admission.id"
           reason_id: "REC: pta_reason.id"
           admission_source_term_id: "REC: pta_e_source_term.id"
@@ -778,6 +946,7 @@ scenarios:
         save_as: "ptae_doc"
         values:
           user_id: "REF: base.user_admin"
+          source_type: "enrollment"
           enrollment_id: "REC: ptae_enrollment.id"
           reason_id: "REC: ptae_reason.id"
           source_term_id: "REC: ptae_source_term.id"

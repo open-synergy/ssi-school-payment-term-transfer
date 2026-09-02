@@ -13,35 +13,56 @@
     <field name="arch" type="xml">
         <data>
             <xpath expr="//field[@name='enrollment_id']" position="after">
-                <field name="admission_id" />
+                <field
+                        name="admission_id"
+                        attrs="{'invisible': [('source_type', '!=', 'admission')], 'required': [('source_type', '=', 'admission')]}"
+                    />
             </xpath>
             <xpath expr="//field[@name='destination_term_id']" position="after">
-                <field name="admission_source_term_id" />
-                <field name="admission_destination_term_id" />
+                <field
+                        name="admission_source_term_id"
+                        attrs="{'invisible': [('source_type', '!=', 'admission')], 'required': [('source_type', '=', 'admission')]}"
+                    />
+                <field
+                        name="admission_destination_term_id"
+                        attrs="{'invisible': [('source_type', '!=', 'admission')], 'required': [('source_type', '=', 'admission')]}"
+                    />
             </xpath>
             <xpath
                     expr="//field[@name='line_ids']/tree/field[@name='source_detail_id']"
                     position="after"
                 >
-                <field name="admission_source_detail_id" />
+                <field
+                        name="admission_source_detail_id"
+                        attrs="{'column_invisible': [('parent.source_type', '!=', 'admission')], 'required': [('parent.source_type', '=', 'admission')]}"
+                    />
             </xpath>
             <xpath
                     expr="//field[@name='line_ids']/tree/field[@name='destination_detail_id']"
                     position="after"
                 >
-                <field name="admission_destination_detail_id" />
+                <field
+                        name="admission_destination_detail_id"
+                        attrs="{'column_invisible': [('parent.source_type', '!=', 'admission')]}"
+                    />
             </xpath>
             <xpath
                     expr="//field[@name='line_ids']/form//field[@name='source_detail_id']"
                     position="after"
                 >
-                <field name="admission_source_detail_id" />
+                <field
+                        name="admission_source_detail_id"
+                        attrs="{'invisible': [('parent.source_type', '!=', 'admission')], 'required': [('parent.source_type', '=', 'admission')]}"
+                    />
             </xpath>
             <xpath
                     expr="//field[@name='line_ids']/form//field[@name='destination_detail_id']"
                     position="after"
                 >
-                <field name="admission_destination_detail_id" />
+                <field
+                        name="admission_destination_detail_id"
+                        attrs="{'invisible': [('parent.source_type', '!=', 'admission')]}"
+                    />
             </xpath>
         </data>
     </field>
