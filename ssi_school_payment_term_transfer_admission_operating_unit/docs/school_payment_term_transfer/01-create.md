@@ -9,8 +9,8 @@
 
 - **Operating Unit** (added by `ssi_school_payment_term_transfer_operating_unit`, hidden
   unless the _Multiple Operating Unit_ group applies) is automatically set to the
-  selected **Admission**'s own Operating Unit as soon as Admission is selected in Flow
-  step 3, on the Admission path (see
+  selected **Admission**'s own Operating Unit as soon as Admission is selected, after
+  Source Type is set to Admission (see
   `ssi_school_payment_term_transfer_admission/docs/school_payment_term_transfer/ 01-create.md`).
   The field is read-only -- it cannot be changed manually on this form. If the selected
   Admission has no Operating Unit, the field is left unchanged (initially the current

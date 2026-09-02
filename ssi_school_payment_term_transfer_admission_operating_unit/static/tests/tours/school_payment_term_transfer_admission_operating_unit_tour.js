@@ -6,12 +6,16 @@ odoo.define(
         var tour = require("web_tour.tour");
 
         // IK: docs/school_payment_term_transfer/01-create.md
-        // Delta tour: navigation steps 1-3 are
-        // ssi_school_payment_term_transfer_admission's own Flow
-        // (docs/school_payment_term_transfer/01-create.md there), the
-        // assertion after is this module's Additional Post-Condition.
-        // Deliberately stops right after that assertion -- confirm/
-        // approve are out of scope for this delta.
+        // Delta tour: navigation steps 1-3 are the base module's Flow
+        // (docs/school_payment_term_transfer/01-create.md in
+        // ssi_school_payment_term_transfer -- the Admission module's
+        // own second menu has been removed, see its migration
+        // script), the Source Type/Admission steps are
+        // ssi_school_payment_term_transfer_admission's own delta, and
+        // the assertion after is this module's Additional
+        // Post-Condition. Deliberately stops right after that
+        // assertion -- confirm/approve are out of scope for this
+        // delta.
         tour.register(
             "ssi_school_payment_term_transfer_admission_operating_unit_create",
             {
@@ -19,22 +23,22 @@ odoo.define(
                 url: "/web",
             },
             [
-                // Flow 1 (admission module) — Open the School > Admission
-                // > Payment Term Transfers menu.
+                // Flow 1 (base) — Open the School > Student Activities >
+                // Payment Term Transfers menu.
                 tour.stepUtils.showAppsMenuItem(),
                 {
                     content: "Open the School app",
                     trigger: '.o_app[data-menu-xmlid="ssi_school.menu_school_root"]',
                 },
                 {
-                    content: "Open the Admission menu",
+                    content: "Open the Student Activities menu",
                     trigger:
-                        '.o_menu_sections [data-menu-xmlid="ssi_school_admission.menu_school_admission"]',
+                        '.o_menu_sections [data-menu-xmlid="ssi_school.menu_school_student_activity"]',
                 },
                 {
                     content: "Open the Payment Term Transfers menu",
                     trigger:
-                        '.o_menu_sections [data-menu-xmlid="ssi_school_payment_term_transfer_admission.school_payment_term_transfer_menu_admission"]',
+                        '.o_menu_sections [data-menu-xmlid="ssi_school_payment_term_transfer.school_payment_term_transfer_menu"]',
                 },
                 {
                     content: "Payment Term Transfers list is displayed",
@@ -46,7 +50,7 @@ odoo.define(
                     },
                 },
 
-                // Flow 2 (admission module) — Click the New button
+                // Flow 2 (base) — Click the New button
                 {
                     content: "Click New",
                     trigger: ".o_list_button_add",
@@ -60,7 +64,18 @@ odoo.define(
                     },
                 },
 
-                // Flow 3 (admission module) — Select the Admission
+                // Flow 3 (admission module) — Select Source Type
+                // Admission. 14.0's <select> carries the
+                // o_field_widget class itself, not a wrapping div
+                // (patterns-fields.md "Field selection").
+                {
+                    content: "Select Source Type Admission",
+                    trigger: "select.o_field_widget[name='source_type']",
+                    extra_trigger: ".o_form_view.o_form_editable",
+                    run: "text Admission",
+                },
+
+                // Flow 4 (admission module) — Select the Admission
                 {
                     content: "Select the Admission",
                     trigger: ".o_field_many2one[name='admission_id'] input",

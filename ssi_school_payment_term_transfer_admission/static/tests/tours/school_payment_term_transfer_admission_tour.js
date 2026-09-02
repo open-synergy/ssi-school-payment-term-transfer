@@ -6,8 +6,9 @@ odoo.define(
         var tour = require("web_tour.tour");
 
         // IK: docs/school_payment_term_transfer/01-create.md
-        // Additional Fields delta -- assert the Admission field appears,
-        // then stop. Does not continue to Confirm/Approve (E1 tour rule,
+        // Additional Fields delta -- select Source Type = Admission, then
+        // assert the Admission field appears, then stop. Does not
+        // continue to Confirm/Approve (E1 tour rule,
         // odoo-development-ui-test skill, scope-and-boundaries.md §3).
         tour.register(
             "ssi_school_payment_term_transfer_admission_create",
@@ -16,24 +17,24 @@ odoo.define(
                 url: "/web",
             },
             [
-                // Flow — Open the School > Admission > Payment Term
-                // Transfers menu. "Admission" is a level-2 menu (direct
-                // child of the app root), so unlike a level-3 grouping
-                // header it IS clickable.
+                // Flow — Open the School > Student Activities > Payment
+                // Term Transfers menu (base module's Flow -- the second
+                // "Admission" menu has been removed, see the migration
+                // script in this module).
                 tour.stepUtils.showAppsMenuItem(),
                 {
                     content: "Open the School app",
                     trigger: '.o_app[data-menu-xmlid="ssi_school.menu_school_root"]',
                 },
                 {
-                    content: "Open the Admission menu",
+                    content: "Open the Student Activities menu",
                     trigger:
-                        '.o_menu_sections [data-menu-xmlid="ssi_school_admission.menu_school_admission"]',
+                        '.o_menu_sections [data-menu-xmlid="ssi_school.menu_school_student_activity"]',
                 },
                 {
                     content: "Open the Payment Term Transfers menu",
                     trigger:
-                        '.o_menu_sections [data-menu-xmlid="ssi_school_payment_term_transfer_admission.school_payment_term_transfer_menu_admission"]',
+                        '.o_menu_sections [data-menu-xmlid="ssi_school_payment_term_transfer.school_payment_term_transfer_menu"]',
                 },
                 {
                     content: "Payment Term Transfers list is displayed",
@@ -59,8 +60,19 @@ odoo.define(
                     },
                 },
 
+                // Additional Fields — Select Source Type = Admission.
+                // 14.0's <select> carries the o_field_widget class
+                // itself, not a wrapping div (patterns-fields.md
+                // "Field selection").
+                {
+                    content: "Select Source Type Admission",
+                    trigger: "select.o_field_widget[name='source_type']",
+                    extra_trigger: ".o_form_view.o_form_editable",
+                    run: "text Admission",
+                },
+
                 // Additional Fields — the Admission field is visible
-                // alongside Enrollment on the create form.
+                // once Source Type is Admission; Enrollment is hidden.
                 {
                     content: "Admission field is visible",
                     trigger: ".o_field_many2one[name='admission_id']",
@@ -85,22 +97,23 @@ odoo.define(
                 url: "/web",
             },
             [
-                // Flow — Open the School > Admission > Payment Term
-                // Transfers menu
+                // Flow — Open the School > Student Activities > Payment
+                // Term Transfers menu (base module's Flow -- the second
+                // "Admission" menu has been removed).
                 tour.stepUtils.showAppsMenuItem(),
                 {
                     content: "Open the School app",
                     trigger: '.o_app[data-menu-xmlid="ssi_school.menu_school_root"]',
                 },
                 {
-                    content: "Open the Admission menu",
+                    content: "Open the Student Activities menu",
                     trigger:
-                        '.o_menu_sections [data-menu-xmlid="ssi_school_admission.menu_school_admission"]',
+                        '.o_menu_sections [data-menu-xmlid="ssi_school.menu_school_student_activity"]',
                 },
                 {
                     content: "Open the Payment Term Transfers menu",
                     trigger:
-                        '.o_menu_sections [data-menu-xmlid="ssi_school_payment_term_transfer_admission.school_payment_term_transfer_menu_admission"]',
+                        '.o_menu_sections [data-menu-xmlid="ssi_school_payment_term_transfer.school_payment_term_transfer_menu"]',
                 },
                 {
                     content: "Payment Term Transfers list is displayed",

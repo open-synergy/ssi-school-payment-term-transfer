@@ -120,6 +120,7 @@ class TestUiSchoolPaymentTermTransferAdmission(HttpSavepointCase):
         cls.tour_approve_doc = cls.env["school_payment_term_transfer"].create(
             {
                 "user_id": admin.id,
+                "source_type": "admission",
                 "admission_id": cls.tour_admission.id,
                 "reason_id": reason.id,
                 "admission_source_term_id": cls.tour_source_term.id,

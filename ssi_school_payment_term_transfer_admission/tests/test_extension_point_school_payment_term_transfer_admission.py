@@ -132,6 +132,7 @@ class TestExtensionPointSchoolPaymentTermTransferAdmission(YamlTransactionCase):
         )
         transfer = self.env["school_payment_term_transfer"].create(
             {
+                "source_type": "admission",
                 "admission_id": admission.id,
                 "reason_id": reason.id,
                 "admission_source_term_id": source_term.id,
