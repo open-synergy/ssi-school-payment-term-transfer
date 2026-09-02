@@ -56,6 +56,17 @@ odoo.define(
                     },
                 },
 
+                // Flow 3 — Source Type is left at its default (Enrollment,
+                // the only value this module offers)
+                {
+                    content: "Source Type shows Enrollment",
+                    trigger:
+                        "select.o_field_widget[name='source_type']:contains(Enrollment)",
+                    run: function () {
+                        // Assertion only.
+                    },
+                },
+
                 // Flow 3 — Fill in the required header fields
                 {
                     content: "Select the Enrollment",
