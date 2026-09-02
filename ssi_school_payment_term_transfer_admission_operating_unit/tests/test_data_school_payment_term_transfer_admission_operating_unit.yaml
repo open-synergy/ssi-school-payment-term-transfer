@@ -1,0 +1,387 @@
+scenarios:
+  - name:
+      "School Payment Term Transfer - Admission Operating Unit derivation and visibility"
+    steps:
+      # ---------------------------------------------------------------
+      # Fixtures — two Operating Units, two Schools, two Admissions,
+      # one Enrollment. Two different Operating Units are used
+      # throughout so the record rule is actually exercised, not
+      # passed by coincidence.
+      # ---------------------------------------------------------------
+      - step: "Create partner for Operating Unit A"
+        action: "create"
+        model: "res.partner"
+        save_as: "ou_a_partner"
+        values:
+          name: "PTTAOU Operating Unit A Partner"
+
+      - step: "Create Operating Unit A"
+        action: "create"
+        model: "operating.unit"
+        save_as: "operating_unit_a"
+        values:
+          name: "TOUR PTTAOU Operating Unit A"
+          code: "PTTAOUA"
+          partner_id: "REC: ou_a_partner.id"
+
+      - step: "Create partner for Operating Unit B"
+        action: "create"
+        model: "res.partner"
+        save_as: "ou_b_partner"
+        values:
+          name: "PTTAOU Operating Unit B Partner"
+
+      - step: "Create Operating Unit B"
+        action: "create"
+        model: "operating.unit"
+        save_as: "operating_unit_b"
+        values:
+          name: "PTTAOU Operating Unit B"
+          code: "PTTAOUB"
+          partner_id: "REC: ou_b_partner.id"
+
+      - step: "Create grade type"
+        action: "create"
+        model: "school_grade_type"
+        save_as: "grade_type"
+        values:
+          name: "PTTAOU Grade Type"
+          code: "PTTAOUGT"
+
+      - step: "Create School A, with exactly Operating Unit A"
+        action: "create"
+        model: "school"
+        save_as: "school_a"
+        values:
+          name: "PTTAOU School A"
+          code: "PTTAOUSCA"
+          grade_type_id: "REC: grade_type.id"
+          operating_unit_ids: [[6, 0, ["REC: operating_unit_a.id"]]]
+
+      - step: "Create School B, with exactly Operating Unit B"
+        action: "create"
+        model: "school"
+        save_as: "school_b"
+        values:
+          name: "PTTAOU School B"
+          code: "PTTAOUSCB"
+          grade_type_id: "REC: grade_type.id"
+          operating_unit_ids: [[6, 0, ["REC: operating_unit_b.id"]]]
+
+      - step: "Create academic year"
+        action: "create"
+        model: "school_academic_year"
+        save_as: "academic_year"
+        values:
+          name: "PTTAOU Academic Year"
+          code: "PTTAOUAY"
+          date_start: "2026-07-01"
+          date_end: "2027-06-30"
+
+      - step: "Create academic term"
+        action: "create"
+        model: "school_academic_term"
+        save_as: "academic_term"
+        values:
+          name: "PTTAOU Academic Term"
+          code: "PTTAOUTM"
+          date_start: "2026-07-01"
+          date_end: "2026-12-31"
+          year_id: "REC: academic_year.id"
+
+      - step: "Create grade"
+        action: "create"
+        model: "school_grade"
+        save_as: "grade"
+        values:
+          name: "PTTAOU Grade"
+          code: "PTTAOUGR"
+          type_id: "REC: grade_type.id"
+
+      # ---------------------------------------------------------------
+      # Admission A and B -- each derives its own Operating Unit from
+      # its School, via ssi_school_admission_operating_unit (#5's
+      # sibling module, already covering that derivation on its own).
+      # ---------------------------------------------------------------
+      - step: "Create Admission A's student"
+        action: "create"
+        model: "res.partner"
+        save_as: "student_a"
+        values:
+          name: "PTTAOU Student A"
+
+      - step: "Create Admission A, targeting School A"
+        action: "create"
+        model: "school_admission"
+        save_as: "admission_a"
+        as_user: "base.user_admin"
+        values:
+          academic_year_id: "REC: academic_year.id"
+          academic_term_id: "REC: academic_term.id"
+          school_id: "REC: school_a.id"
+          grade_id: "REC: grade.id"
+          student_id: "REC: student_a.id"
+
+      - step: "Admission A derives Operating Unit A from its School"
+        action: "assert"
+        target: "admission_a"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit_a"
+
+      - step: "Create Admission B's student"
+        action: "create"
+        model: "res.partner"
+        save_as: "student_b"
+        values:
+          name: "PTTAOU Student B"
+
+      - step: "Create Admission B, targeting School B"
+        action: "create"
+        model: "school_admission"
+        save_as: "admission_b"
+        as_user: "base.user_admin"
+        values:
+          academic_year_id: "REC: academic_year.id"
+          academic_term_id: "REC: academic_term.id"
+          school_id: "REC: school_b.id"
+          grade_id: "REC: grade.id"
+          student_id: "REC: student_b.id"
+
+      - step: "Admission B derives Operating Unit B from its School"
+        action: "assert"
+        target: "admission_b"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit_b"
+
+      # ---------------------------------------------------------------
+      # An Enrollment on School A, for the Enrollment-path scenario
+      # below -- proving this module does not disturb that path.
+      # ---------------------------------------------------------------
+      - step: "Create Student A's contact"
+        action: "create"
+        model: "res.partner"
+        save_as: "enrollment_contact_a"
+        values:
+          name: "PTTAOU Enrollment Contact A"
+
+      - step: "Create Enrollment Student A, in School A"
+        action: "create"
+        model: "school_student"
+        save_as: "enrollment_student_a"
+        values:
+          name: "PTTAOU Enrollment Student A"
+          code: "PTTAOUENSTA"
+          contact_id: "REC: enrollment_contact_a.id"
+          school_id: "REC: school_a.id"
+
+      - step: "Create Grade Class for School A"
+        action: "create"
+        model: "school_grade_class"
+        save_as: "grade_class_a"
+        values:
+          name: "PTTAOU Class A"
+          code: "PTTAOUCLA"
+          school_id: "REC: school_a.id"
+          grade_id: "REC: grade.id"
+
+      - step: "Create Enrollment A, targeting School A"
+        action: "create"
+        model: "school_enrollment"
+        save_as: "enrollment_a"
+        values:
+          academic_year_id: "REC: academic_year.id"
+          academic_term_id: "REC: academic_term.id"
+          school_id: "REC: school_a.id"
+          grade_id: "REC: grade.id"
+          grade_class_id: "REC: grade_class_a.id"
+          student_id: "REC: enrollment_student_a.id"
+
+      - step: "Enrollment A derives Operating Unit A from its School"
+        action: "assert"
+        target: "enrollment_a"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit_a"
+
+      - step: "Create shared transfer reason"
+        action: "create"
+        model: "school_payment_term_transfer_reason"
+        save_as: "reason"
+        values:
+          name: "PTTAOU Reason"
+          code: "/"
+
+      # ---------------------------------------------------------------
+      # Positive — deriving operating_unit_id from admission_id
+      # ---------------------------------------------------------------
+      - step: "Create a transfer on Admission A without operating_unit_id"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "doc_derive_a"
+        values:
+          admission_id: "REC: admission_a.id"
+          reason_id: "REC: reason.id"
+
+      - step: "It derived Operating Unit A from the Admission"
+        action: "assert"
+        target: "doc_derive_a"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit_a"
+
+      # ---------------------------------------------------------------
+      # Positive — an explicit operating_unit_id wins over derivation
+      # ---------------------------------------------------------------
+      - step:
+          "Create a transfer on Admission A with operating_unit_id set explicitly to B"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "doc_explicit"
+        values:
+          admission_id: "REC: admission_a.id"
+          reason_id: "REC: reason.id"
+          operating_unit_id: "REC: operating_unit_b.id"
+
+      - step: "The explicit value is kept, not overridden by derivation"
+        action: "assert"
+        target: "doc_explicit"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit_b"
+
+      # ---------------------------------------------------------------
+      # Positive — write() re-derives operating_unit_id when
+      # admission_id itself changes
+      # ---------------------------------------------------------------
+      - step: "Change doc_derive_a's Admission to Admission B"
+        action: "write"
+        target: "doc_derive_a"
+        values:
+          admission_id: "REC: admission_b.id"
+
+      - step: "operating_unit_id followed the Admission to B"
+        action: "assert"
+        target: "doc_derive_a"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit_b"
+
+      # ---------------------------------------------------------------
+      # Positive — @api.onchange mirrors the create/write derivation,
+      # so the form shows the right value before the record is saved
+      # ---------------------------------------------------------------
+      - step: "Selecting Admission A on the form derives Operating Unit A"
+        action: "form"
+        model: "school_payment_term_transfer"
+        save: false
+        values:
+          admission_id: "REC: admission_a"
+          reason_id: "REC: reason"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit_a"
+
+      # ---------------------------------------------------------------
+      # Positive — the Enrollment path still derives operating_unit_id
+      # from Enrollment, unaffected by this module
+      # ---------------------------------------------------------------
+      - step: "Create a transfer on Enrollment A without operating_unit_id"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "doc_enrollment_a"
+        values:
+          enrollment_id: "REC: enrollment_a.id"
+          reason_id: "REC: reason.id"
+
+      - step: "It still derived Operating Unit A from the Enrollment"
+        action: "assert"
+        target: "doc_enrollment_a"
+        asserts:
+          operating_unit_id:
+            type: "m2o"
+            expected: "REC: operating_unit_a"
+
+      # ---------------------------------------------------------------
+      # Fixtures for the record rule scenarios — one Admission-path
+      # document per Operating Unit, and a user restricted to
+      # Operating Unit A only.
+      # ---------------------------------------------------------------
+      - step: "Create the Operating Unit A visibility fixture document"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "doc_vis_a"
+        values:
+          admission_id: "REC: admission_a.id"
+          reason_id: "REC: reason.id"
+
+      - step: "Create the Operating Unit B visibility fixture document"
+        action: "create"
+        model: "school_payment_term_transfer"
+        save_as: "doc_vis_b"
+        values:
+          admission_id: "REC: admission_b.id"
+          reason_id: "REC: reason.id"
+
+      - step: "Create a user restricted to Operating Unit A only"
+        action: "create"
+        model: "res.users"
+        save_as: "user_ou_a"
+        values:
+          name: "PTTAOU User OU A"
+          login: "pttaou_user_ou_a@example.com"
+          groups_id:
+            [
+              [
+                6,
+                0,
+                [
+                  "REF: base.group_user",
+                  "REF:
+                  ssi_school_payment_term_transfer_operating_unit.school_payment_term_transfer_operating_unit_group",
+                ],
+              ],
+            ]
+          assigned_operating_unit_ids: [[6, 0, ["REC: operating_unit_a.id"]]]
+
+      # ---------------------------------------------------------------
+      # Positive — search as a user of Operating Unit A only returns
+      # the Operating Unit A document
+      # ---------------------------------------------------------------
+      - step: "Search both documents as User OU A"
+        action: "search"
+        model: "school_payment_term_transfer"
+        domain: [["id", "in", ["REC: doc_vis_a.id", "REC: doc_vis_b.id"]]]
+        as_user: "user_ou_a"
+        save_as: "visible_docs"
+        expect_count: 1
+
+      - step: "The one visible document is the Operating Unit A document"
+        action: "assert"
+        target: "visible_docs"
+        asserts:
+          id:
+            type: "value"
+            expected: "REC: doc_vis_a.id"
+
+      # ---------------------------------------------------------------
+      # Negative — reading the Operating Unit B document directly by
+      # id, as a user restricted to Operating Unit A, is denied
+      # ---------------------------------------------------------------
+      - step: "Reading the Operating Unit B document directly is denied"
+        action: "call"
+        target: "doc_vis_b"
+        method: "read"
+        as_user: "user_ou_a"
+        args:
+          - ["id"]
+        expect_error:
+          type: "AccessError"
