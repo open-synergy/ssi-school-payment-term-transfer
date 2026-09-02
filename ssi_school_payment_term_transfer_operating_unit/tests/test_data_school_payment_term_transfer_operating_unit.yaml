@@ -275,6 +275,33 @@ scenarios:
             expected: "REC: operating_unit_b"
 
       # ---------------------------------------------------------------
+      # Negative — clearing enrollment_id on an existing document.
+      # get_operating_unit_id_from_enrollment's "if not enrollment_id:
+      # return None" branch (lines 27-28) only runs when
+      # vals["enrollment_id"] is present as a key but falsy, which
+      # only happens through a write() that sets enrollment_id to
+      # False. Before that write reaches the database,
+      # ssi_school_payment_term_transfer_admission's
+      # _check_single_source_term @api.constrains rejects it with
+      # ValidationError, since clearing enrollment_id leaves both
+      # Enrollment and Admission unset. The write runs inside a
+      # savepoint (see "Negative Path" above), so doc_explicit is left
+      # untouched by the rejected write. operating_unit_id is
+      # deliberately absent from values below: including it would
+      # make derive_operating_unit_from_enrollment_vals's early
+      # return (lines 47-48) fire first, and lines 27-28 would never
+      # run.
+      # ---------------------------------------------------------------
+      - step: "Clearing enrollment_id is rejected"
+        action: "write"
+        target: "doc_explicit"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "Exactly one of Enrollment or Admission must be set"
+        values:
+          enrollment_id: false
+
+      # ---------------------------------------------------------------
       # Positive — write() re-derives operating_unit_id when
       # enrollment_id itself changes
       # ---------------------------------------------------------------
