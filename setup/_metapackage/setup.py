@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo14-addon-ssi_school_payment_term_transfer',
         'odoo14-addon-ssi_school_payment_term_transfer_admission',
+        'odoo14-addon-ssi_school_payment_term_transfer_admission_operating_unit',
         'odoo14-addon-ssi_school_payment_term_transfer_operating_unit',
     ],
     classifiers=[

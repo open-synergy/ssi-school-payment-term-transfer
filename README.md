@@ -23,6 +23,7 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_school_payment_term_transfer](ssi_school_payment_term_transfer/) | 14.0.1.2.1 |  | School Payment Term Transfer
 [ssi_school_payment_term_transfer_admission](ssi_school_payment_term_transfer_admission/) | 14.0.1.0.0 |  | School Payment Term Transfer - Admission
+[ssi_school_payment_term_transfer_admission_operating_unit](ssi_school_payment_term_transfer_admission_operating_unit/) | 14.0.1.0.0 |  | School Payment Term Transfer - Admission - Operating Unit
 [ssi_school_payment_term_transfer_operating_unit](ssi_school_payment_term_transfer_operating_unit/) | 14.0.1.0.0 |  | School Payment Term Transfer - Operating Unit
 
 [//]: # (end addons)
