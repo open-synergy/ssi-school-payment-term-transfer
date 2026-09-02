@@ -132,7 +132,7 @@ class SchoolPaymentTermTransferLine(models.Model):
         """
         for record in self:
             result = False
-            term = record.transfer_id.source_term_id
+            term = record.transfer_id._get_source_term()
             if term:
                 criteria = record._get_allowed_source_detail_criteria()
                 result = (
@@ -155,10 +155,26 @@ class SchoolPaymentTermTransferLine(models.Model):
         """
         self.ensure_one()
         return [
-            ("term_id", "=", self.transfer_id.source_term_id.id),
+            ("term_id", "=", self.transfer_id._get_source_term().id),
             ("customer_invoice_line_id", "=", False),
             ("voided", "=", False),
         ]
+
+    def _get_source_detail(self):
+        """Return the detail line this line moves the amount out of.
+
+        Extension point: a module giving this line an extra source
+        field overrides this to return that field instead. All other
+        code reads the source detail through this method rather than
+        ``source_detail_id`` directly, and it lives on the line model
+        (not the document model) so the line itself knows its own
+        source detail and both models can reuse the same logic.
+
+        :return: ``school_enrollment_payment_term_detail`` record.
+        :raises ValueError: ``self`` is not a single record.
+        """
+        self.ensure_one()
+        return self.source_detail_id
 
     @api.onchange("source_detail_id")
     def onchange_amount_before(self):
