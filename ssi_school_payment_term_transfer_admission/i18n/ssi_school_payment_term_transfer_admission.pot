@@ -1,0 +1,185 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_school_payment_term_transfer_admission
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_id
+msgid "Admission"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__admission_destination_detail_id
+msgid "Admission Destination Detail"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_destination_term_id
+msgid "Admission Destination Term"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__admission_source_detail_id
+msgid "Admission Source Detail"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_source_term_id
+msgid "Admission Source Term"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__destination_term_id
+msgid "Destination Term"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission__display_name
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__display_name
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__enrollment_id
+msgid "Enrollment"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission__id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission____last_update
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer____last_update
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_admission__transfer_count
+msgid ""
+"Number of payment term transfer documents targeting this admission, backing "
+"the Transfers smart button."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission__transfer_count
+msgid "Payment Term Transfer Count"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.actions.act_window,name:ssi_school_payment_term_transfer_admission.school_payment_term_transfer_action_admission
+#: model:ir.actions.act_window,name:ssi_school_payment_term_transfer_admission.school_payment_term_transfer_open_transfer_action_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission__transfer_ids
+#: model:ir.ui.menu,name:ssi_school_payment_term_transfer_admission.school_payment_term_transfer_menu_admission
+msgid "Payment Term Transfers"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_admission__transfer_ids
+msgid "Payment term transfer documents that target this admission."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model,name:ssi_school_payment_term_transfer_admission.model_school_admission
+msgid "School Admission"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model,name:ssi_school_payment_term_transfer_admission.model_school_payment_term_transfer
+msgid "School Payment Term Transfer"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model,name:ssi_school_payment_term_transfer_admission.model_school_payment_term_transfer_line
+msgid "School Payment Term Transfer Line"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__source_detail_id
+msgid "Source Detail"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__source_term_id
+msgid "Source Term"
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__admission_destination_detail_id
+msgid ""
+"The Admission fee line created on the Admission Destination Term to hold the"
+" moved amount. Left empty until the actual transfer is applied on Done -- "
+"the Admission-path mirror of Destination Detail."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_destination_term_id
+msgid ""
+"The Admission payment term the amount is being moved into. Only shown when "
+"Admission is set."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_source_term_id
+msgid ""
+"The Admission payment term the amount is being moved out of. Only shown when"
+" Admission is set."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_id
+msgid ""
+"The open admission whose billed amount is being moved between payment terms."
+" Mutually exclusive with Enrollment -- exactly one of the two must be set."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__enrollment_id
+msgid ""
+"The open enrollment whose billed amount is being moved between payment "
+"terms."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__admission_source_detail_id
+msgid ""
+"The original Admission fee line the amount is being moved from. Selecting it"
+" fills Amount Before automatically. Mutually exclusive with Source Detail."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__source_detail_id
+msgid ""
+"The original fee line the amount is being moved from. Selecting it fills "
+"Amount Before automatically."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__destination_term_id
+msgid "The payment term the amount is being moved into."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__source_term_id
+msgid "The payment term the amount is being moved out of."
+msgstr ""
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer_admission.school_admission_view_form_transfer
+msgid "Transfers"
+msgstr ""
