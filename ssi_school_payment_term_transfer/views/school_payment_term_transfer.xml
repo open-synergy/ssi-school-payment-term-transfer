@@ -81,13 +81,21 @@
     <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_form" />
     <field name="arch" type="xml">
         <data>
+            <!-- All transfer identity fields are intentionally grouped on the
+                 left side, following their driver `enrollment_id`, instead of
+                 being rebalanced into `header_right`: `source_type`,
+                 `enrollment_id`, `student_id`, `academic_year_id`, and
+                 `academic_term_id` (the latter three all `related` to
+                 `enrollment_id`) form one coherent chain, and splitting it
+                 across both sides would separate derived fields from the
+                 field that drives them. -->
             <xpath expr="//field[@name='user_id']" position="after">
-                <field name="student_id" />
                 <field name="source_type" />
                 <field
                         name="enrollment_id"
                         attrs="{'invisible': [('source_type', '!=', 'enrollment')]}"
                     />
+                <field name="student_id" />
                 <field name="academic_year_id" />
                 <field name="academic_term_id" />
                 <field name="reason_id" />
