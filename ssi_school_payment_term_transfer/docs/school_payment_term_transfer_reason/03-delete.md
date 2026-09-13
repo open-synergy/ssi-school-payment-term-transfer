@@ -1,6 +1,6 @@
 # Delete School Payment Term Transfer Reason
 
-> **Module:** ssi_school_payment_term_transfer
+> **Module:** `ssi_school_payment_term_transfer`
 >
 > **Model:** `school_payment_term_transfer_reason`
 >
