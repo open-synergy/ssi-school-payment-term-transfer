@@ -1,6 +1,6 @@
 # Create School Payment Term Transfer
 
-> **Module:** ssi_school_payment_term_transfer
+> **Module:** `ssi_school_payment_term_transfer`
 >
 > **Model:** `school_payment_term_transfer`
 >
