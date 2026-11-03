@@ -1,0 +1,1299 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_school_payment_term_transfer
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Document has no line\n"
+"Solution: Add at least one line before continuing\n"
+msgstr ""
+"\n"
+"Konteks: Konfirmasi/Selesaikan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Dokumen tidak memiliki baris\n"
+"Solusi: Tambahkan setidaknya satu baris sebelum melanjutkan\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Payment Term '%s' already has a Customer Invoice\n"
+"Solution: Cancel this document; a term already invoiced can no longer be transferred\n"
+msgstr ""
+"\n"
+"Konteks: Konfirmasi/Selesaikan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Termin Pembayaran '%s' sudah memiliki Faktur Pelanggan\n"
+"Solusi: Batalkan dokumen ini; termin yang sudah difakturkan tidak dapat ditransfer lagi\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Payment Term '%s' does not belong to Enrollment '%s'\n"
+"Solution: Select a Source/Destination Term that belongs to the same Enrollment\n"
+msgstr ""
+"\n"
+"Konteks: Konfirmasi/Selesaikan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Termin Pembayaran '%s' bukan milik Pendaftaran '%s'\n"
+"Solusi: Pilih Termin Sumber/Tujuan yang berasal dari Pendaftaran yang sama\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' already has a Customer Invoice Line\n"
+"Solution: Cancel this document; an already-invoiced line can no longer be transferred\n"
+msgstr ""
+"\n"
+"Konteks: Konfirmasi/Selesaikan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Detail Sumber '%s' sudah memiliki Baris Faktur Pelanggan\n"
+"Solusi: Batalkan dokumen ini; baris yang sudah difakturkan tidak dapat ditransfer lagi\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' does not belong to the Source Term\n"
+"Solution: Select a Source Detail that belongs to the Source Term\n"
+msgstr ""
+"\n"
+"Konteks: Konfirmasi/Selesaikan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Detail Sumber '%s' bukan milik Termin Sumber\n"
+"Solusi: Pilih Detail Sumber yang berasal dari Termin Sumber\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' has UoM Quantity %s, which is not 1\n"
+"Solution: Only source details with a UoM Quantity of exactly 1 can be transferred\n"
+msgstr ""
+"\n"
+"Konteks: Konfirmasi/Selesaikan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Detail Sumber '%s' memiliki Kuantitas UoM %s, yang bukan 1\n"
+"Solusi: Hanya detail sumber dengan Kuantitas UoM tepat 1 yang dapat ditransfer\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' is already voided\n"
+"Solution: Select a Source Detail that is not already voided\n"
+msgstr ""
+"\n"
+"Konteks: Konfirmasi/Selesaikan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Detail Sumber '%s' sudah dibatalkan\n"
+"Solusi: Pilih Detail Sumber yang belum dibatalkan\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Confirm/Done payment term transfer\n"
+"Database ID: %s\n"
+"Problem: Source Term and Destination Term must both be set and different\n"
+"Solution: Select a Source Term and a Destination Term that differ\n"
+msgstr ""
+"\n"
+"Konteks: Konfirmasi/Selesaikan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Termin Sumber dan Termin Tujuan harus sama-sama diisi dan berbeda\n"
+"Solusi: Pilih Termin Sumber dan Termin Tujuan yang berbeda\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer billing source\n"
+"Database ID: %s\n"
+"Problem: No billing source record set for Source Type '%s'\n"
+"Solution: Select the record matching the selected Source Type\n"
+msgstr ""
+"\n"
+"Konteks: Atur sumber penagihan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Tidak ada rekaman sumber penagihan yang diisi untuk Jenis Sumber '%s'\n"
+"Solusi: Pilih rekaman yang sesuai dengan Jenis Sumber yang dipilih\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line amount\n"
+"Database ID: %s\n"
+"Problem: Amount %s exceeds Amount Before %s\n"
+"Solution: Enter an amount no greater than Amount Before\n"
+msgstr ""
+"\n"
+"Konteks: Atur jumlah baris transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Jumlah %s melebihi Jumlah Sebelum %s\n"
+"Solusi: Masukkan jumlah yang tidak lebih besar dari Jumlah Sebelum\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line amount\n"
+"Database ID: %s\n"
+"Problem: Amount %s is not greater than zero\n"
+"Solution: Enter an amount greater than zero\n"
+msgstr ""
+"\n"
+"Konteks: Atur jumlah baris transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Jumlah %s tidak lebih besar dari nol\n"
+"Solusi: Masukkan jumlah yang lebih besar dari nol\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
+"Problem: No source detail set for this line\n"
+"Solution: Select the source detail this line moves the amount from\n"
+msgstr ""
+"\n"
+"Konteks: Atur detail sumber baris transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Detail sumber belum diisi untuk baris ini\n"
+"Solusi: Pilih detail sumber tempat baris ini memindahkan jumlahnya\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' is already targeted by open document '%s'\n"
+"Solution: Wait until the other document is Done/Cancelled, or pick a\n"
+"different Source Detail\n"
+msgstr ""
+"\n"
+"Konteks: Atur detail sumber baris transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Detail Sumber '%s' sudah menjadi target dokumen terbuka '%s'\n"
+"Solusi: Tunggu hingga dokumen lain Selesai/Dibatalkan, atau pilih\n"
+"Detail Sumber yang berbeda\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
+"Problem: Source Detail '%s' is already used by another line of this document\n"
+"Solution: Select a different Source Detail, or edit the existing line instead\n"
+msgstr ""
+"\n"
+"Konteks: Atur detail sumber baris transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Detail Sumber '%s' sudah digunakan oleh baris lain pada dokumen ini\n"
+"Solusi: Pilih Detail Sumber yang berbeda, atau ubah baris yang sudah ada\n"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer source/destination\n"
+"Database ID: %s\n"
+"Problem: Destination Term '%s' is the same as the Source Term\n"
+"Solution: Select a different payment term as the transfer destination\n"
+msgstr ""
+"\n"
+"Konteks: Atur sumber/tujuan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Termin Tujuan '%s' sama dengan Termin Sumber\n"
+"Solusi: Pilih termin pembayaran yang berbeda sebagai tujuan transfer\n"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__name
+msgid "# Document"
+msgstr "No. Dokumen"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid "<li>%s: %s %s</li>"
+msgstr "<li>%s: %s %s</li>"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__academic_term_id
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Academic Term"
+msgstr "Periode Akademik"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__academic_year_id
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Academic Year"
+msgstr "Tahun Akademik"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_needaction
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_needaction
+msgid "Action Needed"
+msgstr "Perlu Tindakan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__active
+msgid "Active"
+msgstr "Aktif"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__active_approval_ids
+msgid "Active Approvals"
+msgstr "Persetujuan Aktif"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__active_approver_partner_ids
+msgid "Active Partners"
+msgstr "Mitra Aktif"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__active_approver_user_ids
+msgid "Active Users"
+msgstr "Pengguna Aktif"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_ids
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_ids
+msgid "Activities"
+msgstr "Aktivitas"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_exception_decoration
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Dekorasi Pengecualian Aktivitas"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_state
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_state
+msgid "Activity State"
+msgstr "Status Aktivitas"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_type_icon
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Ikon Jenis Aktivitas"
+
+#. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_all_group
+msgid "All"
+msgstr "Semua"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__allowed_term_ids
+msgid "Allowed Payment Terms"
+msgstr "Termin Pembayaran yang Diizinkan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__allowed_policy_template_ids
+msgid "Allowed Policy Templates"
+msgstr "Templat Kebijakan yang Diizinkan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__allowed_source_detail_ids
+msgid "Allowed Source Details"
+msgstr "Detail Sumber yang Diizinkan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount
+msgid "Amount"
+msgstr "Jumlah"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount_after
+msgid "Amount After"
+msgstr "Jumlah Sesudah"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount_before
+msgid "Amount Before"
+msgstr "Jumlah Sebelum"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount_after
+msgid "Amount Before minus Amount: what stays on the source term."
+msgstr ""
+"Jumlah Sebelum dikurangi Jumlah: bagian yang tetap berada pada termin sumber."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approval_template_id
+msgid "Approval Configuration"
+msgstr "Konfigurasi Persetujuan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approval_template_id
+msgid "Approval Template"
+msgstr "Templat Persetujuan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approval_ids
+msgid "Approvals"
+msgstr "Persetujuan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approve_ok
+msgid ""
+"Approve policy\n"
+"\n"
+"* If active user can see and execute 'Approve' button"
+msgstr ""
+"Kebijakan menyetujui\n"
+"\n"
+"* Jika aktif, pengguna dapat melihat dan menekan tombol 'Setujui'"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approved
+msgid "Approved"
+msgstr "Disetujui"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_attachment_count
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_attachment_count
+msgid "Attachment Count"
+msgstr "Jumlah Lampiran"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_type
+msgid ""
+"Billing source this transfer moves an amount against. This module only "
+"registers Enrollment -- extension modules add further values with "
+"``selection_add`` and override the ``_get_*`` extension points to match."
+msgstr ""
+"Sumber penagihan yang menjadi dasar pemindahan jumlah pada transfer ini. Modul ini hanya mendaftarkan Pendaftaran -- modul ekstensi menambahkan nilai lain dengan ``selection_add`` dan menimpa titik ekstensi ``_get_*`` agar sesuai."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__approve_ok
+msgid "Can Approve"
+msgstr "Dapat Menyetujui"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__cancel_ok
+msgid "Can Cancel"
+msgstr "Dapat Membatalkan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__confirm_ok
+msgid "Can Confirm"
+msgstr "Dapat Mengonfirmasi"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__done_ok
+msgid "Can Finished"
+msgstr "Dapat Diselesaikan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__manual_number_ok
+msgid "Can Input Manual Document Number"
+msgstr "Dapat Memasukkan Nomor Dokumen Manual"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reject_ok
+msgid "Can Reject"
+msgstr "Dapat Menolak"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__restart_ok
+msgid "Can Restart"
+msgstr "Dapat Memulai Ulang"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__restart_approval_ok
+msgid "Can Restart Approval"
+msgstr "Dapat Memulai Ulang Persetujuan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__cancel_reason_id
+msgid "Cancel Reason"
+msgstr "Alasan Pembatalan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__cancel_ok
+msgid ""
+"Cancel policy\n"
+"\n"
+"* If active user can see and execute 'Cancel' button"
+msgstr ""
+"Kebijakan pembatalan\n"
+"\n"
+"* Jika aktif, pengguna dapat melihat dan menekan tombol 'Batal'"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__code
+msgid "Code"
+msgstr "Kode"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__company_id
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_company_group
+msgid "Company"
+msgstr "Perusahaan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__company_currency_id
+msgid "Company Currency"
+msgstr "Mata Uang Perusahaan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__company_partner_id
+msgid "Company Partner"
+msgstr "Mitra Perusahaan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_company_child_group
+msgid "Company and All Child Companies"
+msgstr "Perusahaan dan Semua Anak Perusahaan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__company_id
+msgid ""
+"Company that own the document\n"
+"\n"
+"* Automatically filled with user's company.\n"
+"  Default company can be changed"
+msgstr ""
+"Perusahaan pemilik dokumen\n"
+"\n"
+"* Terisi otomatis dengan perusahaan pengguna.\n"
+"  Perusahaan bawaan dapat diubah"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__confirm_ok
+msgid ""
+"Confirm policy\n"
+"\n"
+"* If active user can see and execute 'Confirm' button"
+msgstr ""
+"Kebijakan konfirmasi\n"
+"\n"
+"* Jika aktif, pengguna dapat melihat dan menekan tombol 'Konfirmasi'"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__create_uid
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__create_uid
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__create_uid
+msgid "Created by"
+msgstr "Dibuat oleh"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__create_date
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__create_date
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__create_date
+msgid "Created on"
+msgstr "Dibuat pada"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__currency_id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__currency_id
+msgid "Currency"
+msgstr "Mata Uang"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__date
+msgid "Date"
+msgstr "Tanggal"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__date
+msgid "Date this payment term transfer document was created."
+msgstr "Tanggal dokumen transfer termin pembayaran ini dibuat."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__destination_detail_id
+msgid "Destination Detail"
+msgstr "Detail Tujuan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_name
+msgid "Destination Term"
+msgstr "Termin Tujuan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__allowed_source_detail_ids
+msgid ""
+"Detail lines of the transfer's Source Term that are not yet invoiced and not"
+" already voided, eligible to be selected on this line."
+msgstr ""
+"Baris detail dari Termin Sumber transfer yang belum difakturkan dan belum dibatalkan, yang dapat dipilih pada baris ini."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment__display_name
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__display_name
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__display_name
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__display_name
+msgid "Display Name"
+msgstr "Nama Tampilan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_name
+msgid ""
+"Display name of the payment term returned by ``_get_destination_term()``. "
+"Shown on the tree instead of Destination Term so the column keeps working "
+"regardless of Source Type."
+msgstr ""
+"Nama tampilan termin pembayaran yang dikembalikan oleh ``_get_destination_term()``. Ditampilkan pada tampilan daftar sebagai pengganti Termin Tujuan agar kolom tetap berfungsi apa pun Jenis Sumbernya."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_name
+msgid ""
+"Display name of the payment term returned by ``_get_source_term()``. Shown "
+"on the tree instead of Source Term so the column keeps working regardless of"
+" Source Type."
+msgstr ""
+"Nama tampilan termin pembayaran yang dikembalikan oleh ``_get_source_term()``. Ditampilkan pada tampilan daftar sebagai pengganti Termin Sumber agar kolom tetap berfungsi apa pun Jenis Sumbernya."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_document
+msgid ""
+"Display name of this transfer's billing source -- the Enrollment today, "
+"whichever ``_get_owner_document()`` returns once an extension module adds "
+"another Source Type. Replaces the Enrollment column on the tree so a single "
+"column keeps working regardless of which Source Type a row uses."
+msgstr ""
+"Nama tampilan sumber penagihan transfer ini -- saat ini Pendaftaran, atau apa pun yang dikembalikan ``_get_owner_document()`` setelah modul ekstensi menambahkan Jenis Sumber lain. Menggantikan kolom Pendaftaran pada tampilan daftar agar satu kolom tetap berfungsi apa pun Jenis Sumber yang dipakai sebuah baris."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__done_ok
+msgid ""
+"Done policy\n"
+"\n"
+"* If active user can see and execute 'Done' button"
+msgstr ""
+"Kebijakan penyelesaian\n"
+"\n"
+"* Jika aktif, pengguna dapat melihat dan menekan tombol 'Selesai'"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__enrollment_id
+#: model:ir.model.fields.selection,name:ssi_school_payment_term_transfer.selection__school_payment_term_transfer__source_type__enrollment
+msgid "Enrollment"
+msgstr "Pendaftaran"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_follower_ids
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_follower_ids
+msgid "Followers"
+msgstr "Pengikut"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_channel_ids
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Pengikut (Saluran)"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_partner_ids
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Pengikut (Mitra)"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_type_icon
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Ikon Font Awesome, mis. fa-tasks"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__full_transfer
+msgid "Full Transfer"
+msgstr "Transfer Penuh"
+
+#. module: ssi_school_payment_term_transfer
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Group By"
+msgstr "Dikelompokkan berdasarkan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment__id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__id
+msgid "ID"
+msgstr "ID"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_exception_icon
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_exception_icon
+msgid "Icon"
+msgstr "Ikon"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_exception_icon
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Ikon untuk menunjukkan aktivitas pengecualian."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_needaction
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_unread
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_needaction
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_unread
+msgid "If checked, new messages require your attention."
+msgstr "Jika dicentang, pesan baru memerlukan perhatian Anda."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_has_error
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Jika dicentang, beberapa pesan mengalami kesalahan pengiriman."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_is_follower
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_is_follower
+msgid "Is Follower"
+msgstr "Adalah Pengikut"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment____last_update
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer____last_update
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line____last_update
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason____last_update
+msgid "Last Modified on"
+msgstr "Terakhir Diubah pada"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__write_uid
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__write_uid
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__write_uid
+msgid "Last Updated by"
+msgstr "Terakhir Diperbarui oleh"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__write_date
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__write_date
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__write_date
+msgid "Last Updated on"
+msgstr "Terakhir Diperbarui pada"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__line_ids
+msgid "Line"
+msgstr "Baris"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_main_attachment_id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "Lampiran Utama"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__manual_number_ok
+msgid ""
+"Manual number assignment policy\n"
+"\n"
+"* If active user can edit document number"
+msgstr ""
+"Kebijakan penetapan nomor manual\n"
+"\n"
+"* Jika aktif, pengguna dapat mengubah nomor dokumen"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__active
+msgid ""
+"Master data status\n"
+"\n"
+"* Inactive data can not be selected when creating new transaction\n"
+"* Transaction with inactive master data can still be viewed\n"
+"* Set master data as inactive if master data no longger needed,\n"
+"but master data already used on transaction"
+msgstr ""
+"Status data master\n"
+"\n"
+"* Data tidak aktif tidak dapat dipilih saat membuat transaksi baru\n"
+"* Transaksi dengan data master tidak aktif masih dapat dilihat\n"
+"* Jadikan data master tidak aktif jika tidak lagi diperlukan,\n"
+"tetapi data master tersebut sudah digunakan pada transaksi"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__code
+msgid ""
+"Master data unique identifier.\n"
+"\n"
+"* Fill with '/' if You do not need unique identifier\n"
+"* Click 'Generate Code' button to automatically assign code.\n"
+"  Sequence template mush be set to perform this action\n"
+"  Only master data with '/' code will be assign automatic code"
+msgstr ""
+"Pengidentifikasi unik data master.\n"
+"\n"
+"* Isi dengan '/' jika Anda tidak memerlukan pengidentifikasi unik\n"
+"* Klik tombol 'Buat Kode' untuk menetapkan kode secara otomatis.\n"
+"  Templat urutan harus diatur untuk melakukan tindakan ini\n"
+"  Hanya data master dengan kode '/' yang akan diberi kode otomatis"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_has_error
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_has_error
+msgid "Message Delivery error"
+msgstr "Kesalahan Pengiriman Pesan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_ids
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_ids
+msgid "Messages"
+msgstr "Pesan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__my_activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Batas Waktu Aktivitas Saya"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__name
+msgid "Name"
+msgstr "Nama"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__need_validation
+msgid "Need Validation"
+msgstr "Perlu Validasi"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_date_deadline
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Batas Waktu Aktivitas Berikutnya"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_summary
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_summary
+msgid "Next Activity Summary"
+msgstr "Ringkasan Aktivitas Berikutnya"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_type_id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_type_id
+msgid "Next Activity Type"
+msgstr "Jenis Aktivitas Berikutnya"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__next_approval_ids
+msgid "Next Approvals"
+msgstr "Persetujuan Berikutnya"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__note
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__note
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_form
+msgid "Note"
+msgstr "Catatan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_needaction_counter
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Jumlah Tindakan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_has_error_counter
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_has_error_counter
+msgid "Number of errors"
+msgstr "Jumlah Kesalahan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_needaction_counter
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Jumlah pesan yang memerlukan tindakan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_has_error_counter
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Jumlah pesan dengan kesalahan pengiriman"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_enrollment__transfer_count
+msgid ""
+"Number of payment term transfer documents targeting this enrollment, backing"
+" the Transfers smart button."
+msgstr ""
+"Jumlah dokumen transfer termin pembayaran yang menargetkan pendaftaran ini, sebagai dasar tombol pintar Transfer."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_unread_counter
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Jumlah pesan yang belum dibaca"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__note
+msgid "Optional free-form explanation for this transfer."
+msgstr "Penjelasan bebas (opsional) untuk transfer ini."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment__transfer_count
+msgid "Payment Term Transfer Count"
+msgstr "Jumlah Transfer Termin Pembayaran"
+
+#. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_reason_group
+msgid "Payment Term Transfer Reason"
+msgstr "Alasan Transfer Termin Pembayaran"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.actions.act_window,name:ssi_school_payment_term_transfer.school_payment_term_transfer_reason_action
+#: model:ir.ui.menu,name:ssi_school_payment_term_transfer.school_payment_term_transfer_reason_menu
+msgid "Payment Term Transfer Reasons"
+msgstr "Alasan Transfer Termin Pembayaran"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.actions.act_window,name:ssi_school_payment_term_transfer.school_payment_term_transfer_action
+#: model:ir.actions.act_window,name:ssi_school_payment_term_transfer.school_payment_term_transfer_open_transfer_action
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_enrollment__transfer_ids
+#: model:ir.ui.menu,name:ssi_school_payment_term_transfer.school_payment_term_transfer_menu
+msgid "Payment Term Transfers"
+msgstr "Transfer Termin Pembayaran"
+
+#. module: ssi_school_payment_term_transfer
+#: code:addons/ssi_school_payment_term_transfer/models/school_payment_term_transfer.py:0
+#, python-format
+msgid "Payment term transfer %s moved the following from %s to %s:<ul>%s</ul>"
+msgstr ""
+"Transfer termin pembayaran %s memindahkan berikut ini dari %s ke %s:<ul>%s</ul>"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_enrollment__transfer_ids
+msgid "Payment term transfer documents that target this enrollment."
+msgstr "Dokumen transfer termin pembayaran yang menargetkan pendaftaran ini."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__allowed_term_ids
+msgid ""
+"Payment terms of the selected enrollment that have no customer invoice yet, "
+"eligible as the source or destination of this transfer."
+msgstr ""
+"Termin pembayaran dari pendaftaran terpilih yang belum memiliki faktur pelanggan, yang dapat dipilih sebagai sumber atau tujuan transfer ini."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__policy_template_id
+msgid "Policy Template"
+msgstr "Templat Kebijakan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__product_id
+msgid "Product"
+msgstr "Produk"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reason_id
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Reason"
+msgstr "Alasan"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reject_ok
+msgid ""
+"Reject policy\n"
+"\n"
+"* If active user can see and execute 'Reject' button"
+msgstr ""
+"Kebijakan penolakan\n"
+"\n"
+"* Jika aktif, pengguna dapat melihat dan menekan tombol 'Tolak'"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__rejected
+msgid "Rejected"
+msgstr "Ditolak"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__user_id
+msgid "Responsible"
+msgstr "Penanggung Jawab"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_user_id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_user_id
+msgid "Responsible User"
+msgstr "Pengguna Penanggung Jawab"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__restart_approval_ok
+msgid ""
+"Restart approval policy\n"
+"\n"
+"* If active user can see and execute 'Restart Approval' button"
+msgstr ""
+"Kebijakan mulai ulang persetujuan\n"
+"\n"
+"* Jika aktif, pengguna dapat melihat dan menekan tombol 'Mulai Ulang Persetujuan'"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__restart_ok
+msgid ""
+"Restart policy\n"
+"\n"
+"* If active user can see and execute 'Restart' button"
+msgstr ""
+"Kebijakan mulai ulang\n"
+"\n"
+"* Jika aktif, pengguna dapat melihat dan menekan tombol 'Mulai Ulang'"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reviewer_id
+msgid "Reviewer"
+msgstr "Pemeriksa"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model,name:ssi_school_payment_term_transfer.model_school_enrollment
+msgid "School Enrollment"
+msgstr "Pendaftaran Sekolah"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model,name:ssi_school_payment_term_transfer.model_school_payment_term_transfer
+#: model:ir.module.category,name:ssi_school_payment_term_transfer.school_payment_term_transfer_data_ownership_module_category
+#: model:ir.module.category,name:ssi_school_payment_term_transfer.school_payment_term_transfer_workflow_module_category
+msgid "School Payment Term Transfer"
+msgstr "Transfer Termin Pembayaran Sekolah"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model,name:ssi_school_payment_term_transfer.model_school_payment_term_transfer_line
+msgid "School Payment Term Transfer Line"
+msgstr "Baris Transfer Termin Pembayaran Sekolah"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model,name:ssi_school_payment_term_transfer.model_school_payment_term_transfer_reason
+msgid "School Payment Term Transfer Reason"
+msgstr "Alasan Transfer Termin Pembayaran Sekolah"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount_before
+msgid ""
+"Snapshot of the source detail line's billed amount at the moment it was "
+"selected, filled automatically by onchange. Never changes afterwards, even "
+"if the source detail's own amount is later modified -- this is what keeps "
+"this line a reliable trace of where the amount moved from."
+msgstr ""
+"Cuplikan jumlah tagihan baris detail sumber pada saat dipilih, terisi otomatis oleh onchange. Tidak berubah setelahnya, meskipun jumlah detail sumber itu sendiri diubah kemudian -- inilah yang menjadikan baris ini jejak yang andal tentang asal jumlah yang dipindahkan."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__source_detail_id
+msgid "Source Detail"
+msgstr "Detail Sumber"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_document
+msgid "Source Document"
+msgstr "Dokumen Sumber"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_name
+msgid "Source Term"
+msgstr "Termin Sumber"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_type
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Source Type"
+msgstr "Jenis Sumber"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__state
+msgid "State"
+msgstr "Status"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_state
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"Status berdasarkan aktivitas\n"
+"Terlambat: Tanggal jatuh tempo sudah lewat\n"
+"Hari ini: Tanggal aktivitas adalah hari ini\n"
+"Direncanakan: Aktivitas mendatang."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__student_id
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_search
+msgid "Student"
+msgstr "Siswa"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__amount_total
+msgid "Sum of the amount moved by every line of this document."
+msgstr "Jumlah total yang dipindahkan oleh setiap baris dokumen ini."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__academic_term_id
+msgid "The academic term of the enrollment."
+msgstr "Periode akademik dari pendaftaran."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__academic_year_id
+msgid "The academic year of the enrollment."
+msgstr "Tahun akademik dari pendaftaran."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__currency_id
+msgid "The billing currency, taken from the enrollment."
+msgstr "Mata uang penagihan, diambil dari pendaftaran."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__currency_id
+msgid "The billing currency, taken from the transfer document."
+msgstr "Mata uang penagihan, diambil dari dokumen transfer."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__destination_detail_id
+msgid ""
+"The fee line created on the Destination Term to hold the moved amount. Left "
+"empty by this item -- it is only filled once the actual transfer is applied,"
+" added by a later item in this repository."
+msgstr ""
+"Baris biaya yang dibuat pada Termin Tujuan untuk menampung jumlah yang dipindahkan. Dibiarkan kosong oleh item ini -- baru terisi setelah transfer sebenarnya diterapkan, yang ditambahkan oleh item berikutnya di repositori ini."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__line_ids
+msgid "The individual fee lines being moved by this transfer."
+msgstr "Baris-baris biaya yang dipindahkan oleh transfer ini."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__enrollment_id
+msgid ""
+"The open enrollment whose billed amount is being moved between payment "
+"terms. Must be set for a document whose billing source is not otherwise "
+"resolved -- enforced by ``_check_source_document``, not by this field "
+"itself, so an extension module's own billing source is not forced to also be"
+" a required field. Source Term/Destination Term requiredness is not yet "
+"enforced here; that follows in a later item."
+msgstr ""
+"Pendaftaran terbuka yang jumlah tagihannya dipindahkan antar termin pembayaran. Harus diisi untuk dokumen yang sumber penagihannya tidak ditentukan dengan cara lain -- ditegakkan oleh ``_check_source_document``, bukan oleh field ini sendiri, sehingga sumber penagihan milik modul ekstensi tidak dipaksa menjadi field wajib. Kewajiban pengisian Termin Sumber/Termin Tujuan belum ditegakkan di sini; hal itu menyusul pada item berikutnya."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__source_detail_id
+msgid ""
+"The original fee line the amount is being moved from. Selecting it fills "
+"Amount Before automatically. Required when the owning document's Source Type"
+" is Enrollment -- enforced by ``_check_source_detail``, not by this field "
+"itself, so an extension module's own source detail is not forced to also be "
+"a required field."
+msgstr ""
+"Baris biaya asal tempat jumlah dipindahkan. Memilihnya akan mengisi Jumlah Sebelum secara otomatis. Wajib diisi bila Jenis Sumber dokumen pemiliknya adalah Pendaftaran -- ditegakkan oleh ``_check_source_detail``, bukan oleh field ini sendiri, sehingga detail sumber milik modul ekstensi tidak dipaksa menjadi field wajib."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__destination_term_id
+msgid ""
+"The payment term the amount is being moved into. Not yet enforced as "
+"required here -- that follows in a later item; the Confirm/Done "
+"prerequisites in ``_check_transfer_prerequisites`` still require it."
+msgstr ""
+"Termin pembayaran tujuan pemindahan jumlah. Belum ditegakkan sebagai wajib di sini -- hal itu menyusul pada item berikutnya; prasyarat Konfirmasi/Selesai di ``_check_transfer_prerequisites`` tetap mewajibkannya."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__source_term_id
+msgid ""
+"The payment term the amount is being moved out of. Not yet enforced as "
+"required here -- that follows in a later item; the Confirm/Done "
+"prerequisites in ``_check_transfer_prerequisites`` still require it."
+msgstr ""
+"Termin pembayaran asal pemindahan jumlah. Belum ditegakkan sebagai wajib di sini -- hal itu menyusul pada item berikutnya; prasyarat Konfirmasi/Selesai di ``_check_transfer_prerequisites`` tetap mewajibkannya."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__transfer_id
+msgid "The payment term transfer document that owns this line."
+msgstr "Dokumen transfer termin pembayaran yang memiliki baris ini."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__amount
+msgid "The portion of Amount Before being moved to the destination term."
+msgstr "Bagian dari Jumlah Sebelum yang dipindahkan ke termin tujuan."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__product_id
+msgid "The product of the source detail line, shown for reference."
+msgstr "Produk dari baris detail sumber, ditampilkan sebagai acuan."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__student_id
+msgid "The student being billed, taken from the enrollment."
+msgstr "Siswa yang ditagih, diambil dari pendaftaran."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__amount_total
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_tree
+msgid "Total"
+msgstr "Total"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__name
+msgid ""
+"Transaction/document number\n"
+"\n"
+"* Unique indentifer of transaction\n"
+"* Leave '/' to automatically generate number\n"
+"* Change '/' into any number/identifier to manually assign number.\n"
+"  Manual number assignment can be done in 'Draft' state\n"
+"  Only user with 'Can Manualy Assign Number' policy can manually assign number.\n"
+"* Transaction with number other than '/' can not be deleted."
+msgstr ""
+"Nomor transaksi/dokumen\n"
+"\n"
+"* Pengenal unik transaksi\n"
+"* Biarkan '/' untuk menghasilkan nomor secara otomatis\n"
+"* Ubah '/' menjadi nomor/pengenal apa pun untuk menetapkan nomor secara manual.\n"
+"  Penetapan nomor manual dapat dilakukan pada status 'Draf'\n"
+"  Hanya pengguna dengan kebijakan 'Dapat Menetapkan Nomor Secara Manual' yang dapat menetapkan nomor secara manual.\n"
+"* Transaksi dengan nomor selain '/' tidak dapat dihapus."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__transfer_id
+msgid "Transfer"
+msgstr "Transfer"
+
+#. module: ssi_school_payment_term_transfer
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_payment_term_transfer_view_form
+msgid "Transfer Detail"
+msgstr "Detail Transfer"
+
+#. module: ssi_school_payment_term_transfer
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer.school_enrollment_view_form_transfer
+msgid "Transfers"
+msgstr "Transfer"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__activity_exception_decoration
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Jenis aktivitas pengecualian pada catatan."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_unread
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_unread
+msgid "Unread Messages"
+msgstr "Pesan yang Belum Dibaca"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__message_unread_counter
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Penghitung Pesan Belum Dibaca"
+
+#. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_user_group
+msgid "User"
+msgstr "Pengguna"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__user_id
+msgid ""
+"User that responsible for document\n"
+"\n"
+"* Create user can be different with responsible user\n"
+"* Automatically filled with user that initiate document creation.\n"
+"  Default responsible can be changed."
+msgstr ""
+"Pengguna yang bertanggung jawab atas dokumen\n"
+"\n"
+"* Pengguna pembuat dapat berbeda dengan pengguna penanggung jawab\n"
+"* Terisi otomatis dengan pengguna yang memulai pembuatan dokumen.\n"
+"  Penanggung jawab bawaan dapat diubah."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reviewer_id
+msgid ""
+"User that responsible to review document\n"
+"\n"
+"* Unless it configured to approve reviewer does not equal to approver"
+msgstr ""
+"Pengguna yang bertanggung jawab memeriksa dokumen\n"
+"\n"
+"* Kecuali dikonfigurasi untuk menyetujui, pemeriksa tidak sama dengan penyetuju"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__active_approver_user_ids
+msgid "Users that can approve/reject document"
+msgstr "Pengguna yang dapat menyetujui/menolak dokumen"
+
+#. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_validator_group
+msgid "Validator"
+msgstr "Validator"
+
+#. module: ssi_school_payment_term_transfer
+#: model:res.groups,name:ssi_school_payment_term_transfer.school_payment_term_transfer_viewer_group
+msgid "Viewer"
+msgstr "Pemirsa"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer__website_message_ids
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__website_message_ids
+msgid "Website Messages"
+msgstr "Pesan Situs Web"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__website_message_ids
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_reason__website_message_ids
+msgid "Website communication history"
+msgstr "Riwayat komunikasi situs web"
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer_line__full_transfer
+msgid "Whether Amount After is zero: the entire line was moved."
+msgstr "Apakah Jumlah Sesudah bernilai nol: seluruh baris telah dipindahkan."
+
+#. module: ssi_school_payment_term_transfer
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer.field_school_payment_term_transfer__reason_id
+msgid "Why this amount is being moved between payment terms."
+msgstr "Alasan jumlah ini dipindahkan antar termin pembayaran."
