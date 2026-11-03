@@ -1,0 +1,228 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_school_payment_term_transfer_admission
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: code:addons/ssi_school_payment_term_transfer_admission/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
+"Problem: Source Type is Admission but Source Detail is also set\n"
+"Solution: Clear Source Detail, or select Admission Source Detail instead\n"
+msgstr ""
+"\n"
+"Konteks: Atur detail sumber baris transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Jenis Sumber adalah Penerimaan tetapi Detail Sumber juga diisi\n"
+"Solusi: Kosongkan Detail Sumber, atau pilih Detail Sumber Penerimaan\n"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: code:addons/ssi_school_payment_term_transfer_admission/models/school_payment_term_transfer_line.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer line source detail\n"
+"Database ID: %s\n"
+"Problem: Source Type is Enrollment but Admission Source Detail is also set\n"
+"Solution: Clear Admission Source Detail, or select Source Detail instead\n"
+msgstr ""
+"\n"
+"Konteks: Atur detail sumber baris transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Jenis Sumber adalah Pendaftaran tetapi Detail Sumber Penerimaan juga diisi\n"
+"Solusi: Kosongkan Detail Sumber Penerimaan, atau pilih Detail Sumber\n"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: code:addons/ssi_school_payment_term_transfer_admission/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer source/destination\n"
+"Database ID: %s\n"
+"Problem: Source Type is Admission but an Enrollment-path field is also set\n"
+"Solution: Clear Enrollment, Source Term and Destination Term\n"
+msgstr ""
+"\n"
+"Konteks: Atur sumber/tujuan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Jenis Sumber adalah Penerimaan tetapi isian jalur Pendaftaran juga diisi\n"
+"Solusi: Kosongkan Pendaftaran, Termin Sumber dan Termin Tujuan\n"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: code:addons/ssi_school_payment_term_transfer_admission/models/school_payment_term_transfer.py:0
+#, python-format
+msgid ""
+"\n"
+"Context: Set payment term transfer source/destination\n"
+"Database ID: %s\n"
+"Problem: Source Type is Enrollment but an Admission-path field is also set\n"
+"Solution: Clear Admission, Admission Source Term and Admission\n"
+"Destination Term\n"
+msgstr ""
+"\n"
+"Konteks: Atur sumber/tujuan transfer termin pembayaran\n"
+"ID Basis Data: %s\n"
+"Masalah: Jenis Sumber adalah Pendaftaran tetapi isian jalur Penerimaan juga diisi\n"
+"Solusi: Kosongkan Penerimaan, Termin Sumber Penerimaan dan Termin\n"
+"Tujuan Penerimaan\n"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_id
+#: model:ir.model.fields.selection,name:ssi_school_payment_term_transfer_admission.selection__school_payment_term_transfer__source_type__admission
+msgid "Admission"
+msgstr "Penerimaan"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__admission_destination_detail_id
+msgid "Admission Destination Detail"
+msgstr "Detail Tujuan Penerimaan"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_destination_term_id
+msgid "Admission Destination Term"
+msgstr "Termin Tujuan Penerimaan"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__admission_source_detail_id
+msgid "Admission Source Detail"
+msgstr "Detail Sumber Penerimaan"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_source_term_id
+msgid "Admission Source Term"
+msgstr "Termin Sumber Penerimaan"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__source_type
+msgid ""
+"Billing source this transfer moves an amount against. This module only "
+"registers Enrollment -- extension modules add further values with "
+"``selection_add`` and override the ``_get_*`` extension points to match."
+msgstr ""
+"Sumber penagihan yang menjadi dasar pemindahan jumlah pada transfer ini. Modul ini hanya mendaftarkan Pendaftaran -- modul ekstensi menambahkan nilai lain dengan ``selection_add`` dan menimpa titik ekstensi ``_get_*`` agar sesuai."
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission__display_name
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__display_name
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__display_name
+msgid "Display Name"
+msgstr "Nama Tampilan"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission__id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__id
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission____last_update
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer____last_update
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line____last_update
+msgid "Last Modified on"
+msgstr "Terakhir Diubah pada"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_admission__transfer_count
+msgid ""
+"Number of payment term transfer documents targeting this admission, backing "
+"the Transfers smart button."
+msgstr ""
+"Jumlah dokumen transfer termin pembayaran yang menargetkan penerimaan ini, sebagai dasar tombol pintar Transfer."
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission__transfer_count
+msgid "Payment Term Transfer Count"
+msgstr "Jumlah Transfer Termin Pembayaran"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.actions.act_window,name:ssi_school_payment_term_transfer_admission.school_payment_term_transfer_open_transfer_action_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_admission__transfer_ids
+msgid "Payment Term Transfers"
+msgstr "Transfer Termin Pembayaran"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_admission__transfer_ids
+msgid "Payment term transfer documents that target this admission."
+msgstr "Dokumen transfer termin pembayaran yang menargetkan penerimaan ini."
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model,name:ssi_school_payment_term_transfer_admission.model_school_admission
+msgid "School Admission"
+msgstr "Penerimaan Sekolah"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model,name:ssi_school_payment_term_transfer_admission.model_school_payment_term_transfer
+msgid "School Payment Term Transfer"
+msgstr "Transfer Termin Pembayaran Sekolah"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model,name:ssi_school_payment_term_transfer_admission.model_school_payment_term_transfer_line
+msgid "School Payment Term Transfer Line"
+msgstr "Baris Transfer Termin Pembayaran Sekolah"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,field_description:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__source_type
+msgid "Source Type"
+msgstr "Jenis Sumber"
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__admission_destination_detail_id
+msgid ""
+"The Admission fee line created on the Admission Destination Term to hold the"
+" moved amount. Left empty until the actual transfer is applied on Done -- "
+"the Admission-path mirror of Destination Detail."
+msgstr ""
+"Baris biaya Penerimaan yang dibuat pada Termin Tujuan Penerimaan untuk menampung jumlah yang dipindahkan. Dibiarkan kosong hingga transfer sebenarnya diterapkan saat Selesai -- padanan jalur Penerimaan dari Detail Tujuan."
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_destination_term_id
+msgid ""
+"The Admission payment term the amount is being moved into. Shown, and "
+"required, only when Source Type is Admission."
+msgstr ""
+"Termin pembayaran Penerimaan tujuan pemindahan jumlah. Ditampilkan, dan wajib diisi, hanya bila Jenis Sumber adalah Penerimaan."
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_source_term_id
+msgid ""
+"The Admission payment term the amount is being moved out of. Shown, and "
+"required, only when Source Type is Admission."
+msgstr ""
+"Termin pembayaran Penerimaan asal pemindahan jumlah. Ditampilkan, dan wajib diisi, hanya bila Jenis Sumber adalah Penerimaan."
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer__admission_id
+msgid ""
+"The open admission whose billed amount is being moved between payment terms."
+" Shown, and required, only when Source Type is Admission -- enforced by "
+"``_check_source_type_consistency``, not by this field itself."
+msgstr ""
+"Penerimaan terbuka yang jumlah tagihannya dipindahkan antar termin pembayaran. Ditampilkan, dan wajib diisi, hanya bila Jenis Sumber adalah Penerimaan -- ditegakkan oleh ``_check_source_type_consistency``, bukan oleh field ini sendiri."
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model:ir.model.fields,help:ssi_school_payment_term_transfer_admission.field_school_payment_term_transfer_line__admission_source_detail_id
+msgid ""
+"The original Admission fee line the amount is being moved from. Selecting it"
+" fills Amount Before automatically. Mutually exclusive with Source Detail."
+msgstr ""
+"Baris biaya Penerimaan asal tempat jumlah dipindahkan. Memilihnya akan mengisi Jumlah Sebelum secara otomatis. Saling eksklusif dengan Detail Sumber."
+
+#. module: ssi_school_payment_term_transfer_admission
+#: model_terms:ir.ui.view,arch_db:ssi_school_payment_term_transfer_admission.school_admission_view_form_transfer
+msgid "Transfers"
+msgstr "Transfer"
