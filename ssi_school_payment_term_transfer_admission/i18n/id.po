@@ -163,7 +163,7 @@ msgstr "Dokumen transfer termin pembayaran yang menargetkan penerimaan ini."
 #. module: ssi_school_payment_term_transfer_admission
 #: model:ir.model,name:ssi_school_payment_term_transfer_admission.model_school_admission
 msgid "School Admission"
-msgstr "Penerimaan Sekolah"
+msgstr "Penerimaan Siswa"
 
 #. module: ssi_school_payment_term_transfer_admission
 #: model:ir.model,name:ssi_school_payment_term_transfer_admission.model_school_payment_term_transfer
